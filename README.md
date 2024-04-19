@@ -20,6 +20,7 @@
 > #### Nguồn tài liệu BE
 1. [Nestjs](https://nestjs.com/)
 2. [TypeORM](https://typeorm.io/)
+3. [Role Auth](https://shpota.com/2022/07/16/role-based-authorization-with-jwt-using-nestjs.html)
 
 > #### Nguồn tài liệu quan trọng
 1. [Google](https://www.google.com/)
@@ -29,5 +30,8 @@
 5. [Dev.to](https://dev.to/)
 
 > #### Cơ sở dữ liệu
+[dbdiagram ecom](https://dbdiagram.io/d/ecom-65e2736dcd45b569fb554fbe)
 ![markdown](https://media.discordapp.net/attachments/708602979250470944/1230782632955215872/image.png?ex=663492a6&is=66221da6&hm=e43d97fcafcbcc461f3b813cbd6f54d1d2f4d86540d4785dc4b2c87173f71d7c&=&format=webp&quality=lossless&width=621&height=441)
+
+>
 
