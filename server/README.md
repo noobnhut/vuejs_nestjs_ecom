@@ -81,3 +81,6 @@ export class CreateUserDto {
 
 6. tại user.module.ts
  imports:[TypeOrmModule.forFeature([User])], // khai báo để qli
+
+
+ https://www.elvisduru.com/blog/nestjs-jwt-authentication-refresh-token

@@ -15,6 +15,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDto) {
     try {
       const check_user = await this.userRepository.findOneBy({ email: createUserDto.email });
+      
       if (check_user) {
         return 'Trùng tài khoản vui lòng tạo lại ?'
       }
@@ -47,8 +48,8 @@ export class UsersService {
     return `This action removes a #${id} user`;
   }
 
-  async findByEmail(email: string) {
-    return await this.userRepository.findOneBy({ email:email });
+  async findByEmail(email_get: string) {
+    return await this.userRepository.findOneBy({ email:email_get });
   }
 
 
