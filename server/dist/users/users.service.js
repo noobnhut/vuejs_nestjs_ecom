@@ -24,18 +24,25 @@ let UsersService = class UsersService {
     }
     async create(createUserDto) {
         try {
-            const saltOrRounds = 10;
-            const password = createUserDto.password;
-            const hash = await bcrypt.hash(password, saltOrRounds);
-            createUserDto.password = hash;
-            return await this.userRepository.save(createUserDto);
+            const check_user = await this.userRepository.findOneBy({ email: createUserDto.email });
+            if (check_user) {
+                return 'Trùng tài khoản vui lòng tạo lại ?';
+            }
+            else {
+                const saltOrRounds = 10;
+                const password = createUserDto.password;
+                const hash = await bcrypt.hash(password, saltOrRounds);
+                createUserDto.password = hash;
+                await this.userRepository.save(createUserDto);
+                return 'Tạo tài khoản thành công';
+            }
         }
         catch (error) {
             console.log(error);
         }
     }
-    findAll() {
-        return `This action returns all users`;
+    async findAll() {
+        return await this.userRepository.find();
     }
     findOne(id) {
         return `This action returns a #${id} user`;
@@ -47,7 +54,7 @@ let UsersService = class UsersService {
         return `This action removes a #${id} user`;
     }
     async findByEmail(email) {
-        return await this.userRepository.findBy({ email });
+        return await this.userRepository.findOneBy({ email: email });
     }
 };
 exports.UsersService = UsersService;

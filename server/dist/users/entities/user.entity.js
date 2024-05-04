@@ -39,6 +39,10 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ nullable: false }),
+    __metadata("design:type", String)
+], User.prototype, "address", void 0);
+__decorate([
     (0, typeorm_1.Column)({
         type: "enum",
         enum: Role,
