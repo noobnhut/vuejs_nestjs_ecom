@@ -23,12 +23,14 @@ let ProductsService = class ProductsService {
     }
     async create(createProductDto) {
         try {
-            let product = await this.productoRepository.create({
-                name_product: createProductDto.name_product,
-                des_product: createProductDto.des_product,
-                price: createProductDto.price
-            });
-            return `product`;
+            const check_name = await this.productoRepository.findOneBy({ name_product: createProductDto.name_product });
+            if (check_name) {
+                return 'Đã tồn tại tên sản phẩm này';
+            }
+            else {
+                const product = await this.productoRepository.save(createProductDto);
+                return product;
+            }
         }
         catch (error) {
             console.log(error);
@@ -40,8 +42,28 @@ let ProductsService = class ProductsService {
     findOne(id) {
         return `This action returns a #${id} product`;
     }
-    update(id, updateProductDto) {
-        return `This action updates a #${id} product`;
+    async update(id, updateProductDto) {
+        try {
+            const check_id = await this.productoRepository.findOne({ where: { id } });
+            if (check_id) {
+                if (updateProductDto.name_product !== check_id.name_product) {
+                    const check_name = await this.productoRepository.findOneBy({ name_product: updateProductDto.name_product });
+                    if (!check_name) {
+                        await this.productoRepository.update(id, updateProductDto);
+                        return `Đã cập nhật`;
+                    }
+                    else {
+                        return `Đã tồn tại tên sản phẩm này`;
+                    }
+                }
+            }
+            else {
+                return `Không tìm thấy sản phẩm`;
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
     remove(id) {
         return `This action removes a #${id} product`;

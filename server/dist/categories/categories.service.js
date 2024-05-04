@@ -22,10 +22,21 @@ let CategoriesService = class CategoriesService {
         this.catRepository = catRepository;
     }
     async create(createCategoryDto) {
-        let cat = await this.catRepository.create({
-            name_cat: createCategoryDto.name_cat
-        });
-        return cat;
+        try {
+            const check_name = await this.catRepository.findOneBy({ name_cat: createCategoryDto.name_cat });
+            if (check_name) {
+                return 'Đã tồn tại tên cat này';
+            }
+            else {
+                let cat = await this.catRepository.save({
+                    name_cat: createCategoryDto.name_cat
+                });
+                return cat;
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
     findAll() {
         return this.catRepository.find();
@@ -34,7 +45,11 @@ let CategoriesService = class CategoriesService {
         return `This action returns a #${id} category`;
     }
     update(id, updateCategoryDto) {
-        return `This action updates a #${id} category`;
+        try {
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
     remove(id) {
         return `This action removes a #${id} category`;

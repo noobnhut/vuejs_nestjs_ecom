@@ -12,6 +12,7 @@ import { OrdersModule } from './orders/orders.module';
 import { OrderDetailsModule } from './order_details/order_details.module';
 import { CouponsModule } from './coupons/coupons.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     CustomTypeOrmModule,
@@ -27,6 +28,7 @@ import { ReviewsModule } from './reviews/reviews.module';
     OrderDetailsModule,
     CouponsModule,
     ReviewsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

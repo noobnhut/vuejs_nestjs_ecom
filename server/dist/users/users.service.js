@@ -17,15 +17,32 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const user_entity_1 = require("./entities/user.entity");
+const bcrypt = require("bcrypt");
 let UsersService = class UsersService {
     constructor(userRepository) {
         this.userRepository = userRepository;
     }
     async create(createUserDto) {
-        return await this.userRepository.save(createUserDto);
+        try {
+            const check_user = await this.userRepository.findOneBy({ email: createUserDto.email });
+            if (check_user) {
+                return 'Trùng tài khoản vui lòng tạo lại ?';
+            }
+            else {
+                const saltOrRounds = 10;
+                const password = createUserDto.password;
+                const hash = await bcrypt.hash(password, saltOrRounds);
+                createUserDto.password = hash;
+                await this.userRepository.save(createUserDto);
+                return 'Tạo tài khoản thành công';
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
-    findAll() {
-        return this.userRepository.find();
+    async findAll() {
+        return await this.userRepository.find();
     }
     findOne(id) {
         return `This action returns a #${id} user`;
@@ -35,6 +52,9 @@ let UsersService = class UsersService {
     }
     remove(id) {
         return `This action removes a #${id} user`;
+    }
+    async findByEmail(email) {
+        return await this.userRepository.findOneBy({ email: email });
     }
 };
 exports.UsersService = UsersService;

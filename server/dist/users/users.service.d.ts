@@ -5,9 +5,10 @@ import { User } from './entities/user.entity';
 export declare class UsersService {
     private userRepository;
     constructor(userRepository: Repository<User>);
-    create(createUserDto: CreateUserDto): Promise<CreateUserDto & User>;
+    create(createUserDto: CreateUserDto): Promise<"Trùng tài khoản vui lòng tạo lại ?" | "Tạo tài khoản thành công">;
     findAll(): Promise<User[]>;
     findOne(id: number): string;
     update(id: number, updateUserDto: UpdateUserDto): string;
     remove(id: number): string;
+    findByEmail(email: string): Promise<User>;
 }
