@@ -4,8 +4,8 @@ import { UpdateProductDto } from './dto/update-product.dto';
 export declare class ProductsController {
     private readonly productsService;
     constructor(productsService: ProductsService);
-    create(createProductDto: CreateProductDto): string;
-    findAll(): string;
+    create(createProductDto: CreateProductDto): Promise<string>;
+    findAll(): Promise<import("./entities/product.entity").Product[]>;
     findOne(id: string): string;
     update(id: string, updateProductDto: UpdateProductDto): string;
     remove(id: string): string;

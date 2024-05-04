@@ -10,13 +10,18 @@ export class CategoriesService {
     @InjectRepository(Category)
     private catRepository: Repository<Category>,
   ) {}
-async create(CreateCategoryDto: CreateCategoryDto) {
-    return await this.catRepository.save(CreateCategoryDto);
+async create(createCategoryDto: CreateCategoryDto) {
+    // return await this.catRepository.save(CreateCategoryDto);
+    let cat = await this.catRepository.create({
+      name_cat: createCategoryDto.name_cat
+    })
+    return cat;
   }
   
 
   findAll() {
-    return `This action returns all categories`;
+    // return `This action returns all categories`;
+    return this.catRepository.find();
   }
 
   findOne(id: number) {

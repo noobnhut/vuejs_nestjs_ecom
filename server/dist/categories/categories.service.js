@@ -21,11 +21,14 @@ let CategoriesService = class CategoriesService {
     constructor(catRepository) {
         this.catRepository = catRepository;
     }
-    async create(CreateCategoryDto) {
-        return await this.catRepository.save(CreateCategoryDto);
+    async create(createCategoryDto) {
+        let cat = await this.catRepository.create({
+            name_cat: createCategoryDto.name_cat
+        });
+        return cat;
     }
     findAll() {
-        return `This action returns all categories`;
+        return this.catRepository.find();
     }
     findOne(id) {
         return `This action returns a #${id} category`;

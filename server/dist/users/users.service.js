@@ -25,7 +25,7 @@ let UsersService = class UsersService {
         return await this.userRepository.save(createUserDto);
     }
     findAll() {
-        return `This action returns all users`;
+        return this.userRepository.find();
     }
     findOne(id) {
         return `This action returns a #${id} user`;

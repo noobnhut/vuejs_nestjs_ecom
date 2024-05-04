@@ -5,8 +5,8 @@ import { Category } from './entities/category.entity';
 export declare class CategoriesService {
     private catRepository;
     constructor(catRepository: Repository<Category>);
-    create(CreateCategoryDto: CreateCategoryDto): Promise<CreateCategoryDto & Category>;
-    findAll(): string;
+    create(createCategoryDto: CreateCategoryDto): Promise<Category>;
+    findAll(): Promise<Category[]>;
     findOne(id: number): string;
     update(id: number, updateCategoryDto: UpdateCategoryDto): string;
     remove(id: number): string;
