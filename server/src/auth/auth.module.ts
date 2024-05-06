@@ -7,6 +7,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import {JwtStrategy } from './passport/jwt.strategy'
 import {RefreshTokenStrategy} from './passport/refreshToken.strategy'
+import { AuthController } from './auth.controller';
+import ms = require('ms');
 @Module({
   imports: [
     UsersModule,
@@ -16,12 +18,13 @@ import {RefreshTokenStrategy} from './passport/refreshToken.strategy'
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_ACCESS_SECRET'),
         signOptions: {
-          expiresIn: (configService.get<string>('JWT_ACCESS_EXPIRED_IN')),
+          expiresIn: ms(configService.get<string>('JWT_ACCESS_EXPIRED_IN')),
         },
       }),
       inject: [ConfigService],
     }),],
   providers: [AuthService, LocalStrategy,JwtStrategy,RefreshTokenStrategy],
   exports: [AuthService],
+  controllers: [AuthController],
 })
 export class AuthModule { }

@@ -33,7 +33,10 @@ export class User {
 
     @Column({ nullable: false })
     address: string;
-    
+
+    @Column({ nullable: false })
+    refresh_token: string;
+
     @Column({
         type: "enum",
         enum: Role,

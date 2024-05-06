@@ -51,5 +51,12 @@ export class UsersService {
     return await this.userRepository.findOneBy({ email:email_get });
   }
 
+  async updateUserToken(token:string,id:number)
+  {
+    const existingUser = await this.userRepository.findOneBy({ id });
+     existingUser.refresh_token = token
+     await this.userRepository.save(existingUser)
+  }
+
 
 }
