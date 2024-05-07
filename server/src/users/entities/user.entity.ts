@@ -34,7 +34,7 @@ export class User {
     @Column({ nullable: false })
     address: string;
 
-    @Column({ nullable: false })
+    @Column({default:'thisisrefreshtoken'})
     refresh_token: string;
 
     @Column({

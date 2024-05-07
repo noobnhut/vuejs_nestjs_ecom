@@ -74,6 +74,7 @@ export default {
 
       if (result.data.user.role == 'user') {
         localStorage.setItem("token", JSON.stringify(result.data.access_token));
+        localStorage.setItem("user", JSON.stringify(result.data.user))
         this.$router.push({ name: "home" });
       }
       else if (result.data.user.role == 'admin') {

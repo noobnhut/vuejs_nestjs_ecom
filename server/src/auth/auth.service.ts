@@ -48,6 +48,7 @@ export class AuthService {
       access_token: this.jwtService.sign(payload),
       refresh_token: refresh_token,
       user: {
+        id:user.id,
         email: user.email,
         fullname: user.fullname,
         role: user.role
@@ -71,7 +72,7 @@ export class AuthService {
 
   processNewToken = async (refresh_token: string, response: Response) => {
     try {
-      
+
       this.jwtService.verify(refresh_token,
         {
           secret: this.configService.get(<string>("JWT_REFRESH_SECRET"))
@@ -81,7 +82,7 @@ export class AuthService {
       if (user) {
         // update refresh_token
         response.clearCookie("refresh_token")
-        return this.login(user,response)
+        return this.login(user, response)
       }
       else {
         throw new BadGatewayException(`Chỗ này có vaasnd dề`)
@@ -90,6 +91,12 @@ export class AuthService {
       // xử lý lỗi 1 trong 2, 1 là refresh token hết date 2 là sai định dạng từ jwt
       throw new BadGatewayException(`Refresh token không hợp lệ, Vui lòng login lại`)
     }
+  }
+
+  logout = async (id:number, responsse: Response) => {
+    await this.usersService.updateUserToken(null,id);
+    responsse.clearCookie("refresh_token")
+    return "ok"
   }
 }
 

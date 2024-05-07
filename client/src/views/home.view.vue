@@ -55,9 +55,14 @@
             </div>
           </div>
 
-          <div v-if="user == null"
+          <div v-if="user == null" @click="goToLogin()"
             class="ml-2 flex cursor-pointer items-center gap-x-1 rounded-md border py-2 px-2 md:px-4 hover:bg-gray-100">
             <span class="text-sm font-medium">Đăng nhập</span>
+          </div>
+
+          <div v-if="user != null" @click="logout()"
+            class="ml-2 flex cursor-pointer items-center gap-x-1 rounded-md border py-2 px-2 md:px-4 hover:bg-gray-100">
+            <span class="text-sm font-medium">Đăng xuất</span>
           </div>
         </div>
 
@@ -289,13 +294,24 @@ export default {
       this.isOpenCart = !this.isOpenCart
     },
 
+    goToLogin()
+    {
+      this.$router.push({name:'login'})
+    },
+
     async getProfile() {
       let token = localStorage.getItem("token");
       if (token) {
       const result = await userController.getProfile()
-      console.log(result.data)
-      this.user = result.data
+      this.user = JSON.parse(localStorage.getItem("user"));
+      console.log(this.user.email)
       }
+    },
+
+    async logout()
+    {
+      const result = await userController.logout()
+      console.log(result.data)
     }
   },
 };

@@ -1,6 +1,6 @@
 // UserController.js
 
-import axios from 'axios';
+import axios from "axios";
 
 const API_URL = `${import.meta.env.VITE_API_BASE_URL}`; // Đặt URL của backend API ở đây
 axios.defaults.withCredentials = true;
@@ -10,7 +10,7 @@ export default {
     try {
       return axios.get(`${API_URL}/users`);
     } catch (error) {
-      console.error('Lỗi lấy list user', error);
+      console.error("Lỗi lấy list user", error);
       throw error;
     }
   },
@@ -20,7 +20,7 @@ export default {
     try {
       return axios.get(`${API_URL}/users/${userId}`);
     } catch (error) {
-      console.error('Lỗi lấy list user theo id', error);
+      console.error("Lỗi lấy list user theo id", error);
       throw error;
     }
   },
@@ -33,16 +33,15 @@ export default {
       const email = formData.get("email");
       const numberphone = formData.get("numberphone");
       const password = formData.get("password");
-      return axios.post(`${API_URL}/users`,
-        {
-          email: email,
-          password: password,
-          address: address,
-          fullname: fullname,
-          numberphone: numberphone,
-        })
+      return axios.post(`${API_URL}/users`, {
+        email: email,
+        password: password,
+        address: address,
+        fullname: fullname,
+        numberphone: numberphone,
+      });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   },
 
@@ -50,32 +49,34 @@ export default {
     try {
       const email = formData.get("email");
       const password = formData.get("password");
-      return axios.post(`${API_URL}/auth/login`,
-        {
-          username: email,
-          password: password,
-        })
+      return axios.post(`${API_URL}/auth/login`, {
+        username: email,
+        password: password,
+      });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   },
   getProfile() {
     let token = localStorage.getItem("token");
     if (token) {
-      var replace_token = token.replace(/"/g, '');
+      var replace_token = token.replace(/"/g, "");
       const headers = {
-        'Authorization': `Bearer ${replace_token}`,
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${replace_token}`,
+        "Content-Type": "application/json",
       };
 
-      return axios.get(`${API_URL}/auth/profile`, { headers })
-        .then(response => {
+      return axios
+        .get(`${API_URL}/auth/profile`, { headers })
+        .then((response) => {
           return response;
         })
-        .catch(error => {
+        .catch((error) => {
           if (error.response && error.response.status === 401) {
             // Refresh token
-            this.refreshToken()
+            alert('Phiên đăng nhập đã quá hạn, hay tải lại trang')
+            this.refreshToken();
+            window.location.reload();
           } else {
             console.error("Lỗi khi gửi yêu cầu:", error);
             throw error;
@@ -86,36 +87,55 @@ export default {
     }
   },
 
+  logout() {
+    try {
+      let token = localStorage.getItem("token");
+      if (token) {
+        var replace_token = token.replace(/"/g, "");
+        const headers = {
+          Authorization: `Bearer ${replace_token}`,
+          "Content-Type": "application/json",
+        };
+        return axios.get(`${API_URL}/auth/logout`, { headers });
+      } else {
+        console.log("không tồn tại user");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   async refreshToken() {
     try {
       // Gọi API để refresh token
       const refreshResponse = await axios.get(`${API_URL}/auth/refresh`);
-      
+
       // Lưu token mới vào local storage
-      localStorage.setItem("token", JSON.stringify(refreshResponse.data.access_token));
-      
+      localStorage.setItem(
+        "token",
+        JSON.stringify(refreshResponse.data.access_token)
+      );
+
       // Lấy token mới từ local storage
       let newToken = localStorage.getItem("token");
-      var replace_newToken = newToken.replace(/"/g, '');
-      
+      var replace_newToken = newToken.replace(/"/g, "");
+
       // Cấu hình header với token mới
       const newHeaders = {
-        'Authorization': `Bearer ${replace_newToken}`,
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${replace_newToken}`,
+        "Content-Type": "application/json",
       };
-      
+
       // Gửi lại yêu cầu với token mới
-      const profileResponse = await axios.get(`${API_URL}/auth/profile`, { headers: newHeaders });
-      
+      const profileResponse = await axios.get(`${API_URL}/auth/profile`, {
+        headers: newHeaders,
+      });
+
       // Trả về kết quả từ yêu cầu gửi với token mới
       return profileResponse;
     } catch (error) {
       console.error("Lỗi khi gửi yêu cầu:", error);
       throw error;
     }
-  }
-  
-
-
-
+  },
 };

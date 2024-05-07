@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './passport/local-auth.guard';
 import { JwtAuthGuard } from './passport/jwt-auth.guard';
@@ -28,6 +28,11 @@ export class AuthController {
     refreshToken(@Req() request:Request,@Res({ passthrough: true }) response: Response){
         const refresh_token = request.cookies["refresh_token"];
         return this.authService.processNewToken(refresh_token,response)
+    }
+    
+    @Get('logout')
+    Logout(@Param('id') id: number,@Res({ passthrough: true }) response: Response){
+     return this.authService.logout(id,response)
     }
     
     // @HasRoles(Role.Admin)
