@@ -12,9 +12,15 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
 
-  var cors = require('cors')
-
-  app.use(cors())
+  const cors = require('cors');
+  app.use(cors(
+    {
+      "origin":true,
+      "methods":"GET,HEAD,PUT,PATCH,POST,DELETE",
+      "preflightContinue":false,
+       credentials:true
+    }
+  ));
 
   app.use(cookieParser());
   

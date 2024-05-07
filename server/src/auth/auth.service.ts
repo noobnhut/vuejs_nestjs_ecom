@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadGatewayException, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -39,10 +39,9 @@ export class AuthService {
     this.updateUserToken(refresh_token, user.id)
 
     // set cookie
-    const maxAgeNumber = Number(ms(this.configService.get<string>("JWT_REFRESH_EXPIRED_IN")));
-     response.cookie('refresh_token', refresh_token, {
+    response.cookie('refresh_token', refresh_token, {
       httpOnly: true,
-      maxAge: maxAgeNumber
+      maxAge: ms(this.configService.get<string>("JWT_REFRESH_EXPIRED_IN")),
     })
 
     return {
@@ -60,17 +59,38 @@ export class AuthService {
     const refresh_token = this.jwtService.sign(payload,
       {
         secret: this.configService.get(<string>("JWT_REFRESH_SECRET")),
-        expiresIn: ms(this.configService.get(<string>("JWT_REFRESH_EXPIRED_IN"))/1000),
+        expiresIn: ms(this.configService.get<string>("JWT_REFRESH_EXPIRED_IN")) / 1000,
       }
     )
     return refresh_token
   }
 
-
   updateUserToken = (token: string, id: number) => {
     this.usersService.updateUserToken(token, id)
   }
 
+  processNewToken = async (refresh_token: string, response: Response) => {
+    try {
+      
+      this.jwtService.verify(refresh_token,
+        {
+          secret: this.configService.get(<string>("JWT_REFRESH_SECRET"))
+        }
+      )
+      let user = await this.usersService.findUserByToken(refresh_token)
+      if (user) {
+        // update refresh_token
+        response.clearCookie("refresh_token")
+        return this.login(user,response)
+      }
+      else {
+        throw new BadGatewayException(`Chỗ này có vaasnd dề`)
+      }
+    } catch (error) {
+      // xử lý lỗi 1 trong 2, 1 là refresh token hết date 2 là sai định dạng từ jwt
+      throw new BadGatewayException(`Refresh token không hợp lệ, Vui lòng login lại`)
+    }
+  }
 }
 
 

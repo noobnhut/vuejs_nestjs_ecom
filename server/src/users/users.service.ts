@@ -58,5 +58,9 @@ export class UsersService {
      await this.userRepository.save(existingUser)
   }
 
+  findUserByToken = async(token:string)=>
+    {
+      return await this.userRepository.findOneBy({ refresh_token:token });
 
+    }
 }
