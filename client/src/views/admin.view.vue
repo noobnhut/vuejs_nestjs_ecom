@@ -1,5 +1,6 @@
 <template>
-  <div class="flex min-h-screen w-full bg-gray-800 font-san">
+
+  <div class="flex min-h-screen w-full bg-gray-800 font-san" @click="setRefreshToken()">
     <!--backview mờ ảo-->
     <div
       :class="isOpen ? 'block' : 'hidden'"
@@ -83,9 +84,12 @@
     </main>
     
   </div>
+
 </template>
 
 <script>
+import userController from "../controllers/user.controller";
+
 export default {
   data() {
     return {
@@ -99,9 +103,34 @@ export default {
         { name: "Quản lý đơn hàng", to: "/admin/order" },
       ],
       isOpen: false,
+      user:null
     };
   },
-  methods: {},
+  methods: {
+
+    async setRefreshToken()
+    {
+     const result = await userController.refreshToken()
+     this.user = JSON.parse(localStorage.getItem("admin"));
+    },
+
+    async getProfile() {
+      let token = localStorage.getItem("token");
+      if (token) {
+      const result = await userController.getProfile()
+      this.user = JSON.parse(localStorage.getItem("admin"));
+      }
+    },
+
+    async logout()
+    {
+      const result = await userController.logout()
+      this.user = null
+      localStorage.removeItem("admin");
+      localStorage.removeItem("token");
+      this.$router.push({name:'login'})
+    }
+  },
   components: {},
 };
 </script>
