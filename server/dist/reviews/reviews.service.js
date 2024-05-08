@@ -22,19 +22,43 @@ let ReviewsService = class ReviewsService {
         this.reviewRepository = reviewRepository;
     }
     async create(createReviewDto) {
-        return await this.reviewRepository.save(createReviewDto);
+        try {
+            const review = await this.reviewRepository.save(createReviewDto);
+            return review;
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
     findAll() {
-        return `This action returns all reviews`;
+        return this.reviewRepository.find();
     }
     findOne(id) {
         return `This action returns a #${id} review`;
     }
-    update(id, updateReviewDto) {
-        return `This action updates a #${id} review`;
+    async update(id, updateReviewDto) {
+        try {
+            const review = await this.reviewRepository.update(id, updateReviewDto);
+            return review;
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
-    remove(id) {
-        return `This action removes a #${id} review`;
+    async remove(id) {
+        try {
+            const check_id = await this.reviewRepository.findOne({ where: { id } });
+            if (check_id) {
+                await this.reviewRepository.delete({ id });
+                return 'Xóa coupon thành công';
+            }
+            else {
+                return 'Không tìm thấy coupon';
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
 };
 exports.ReviewsService = ReviewsService;

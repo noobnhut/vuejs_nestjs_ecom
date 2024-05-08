@@ -8,6 +8,6 @@ export declare class ProductsService {
     create(createProductDto: CreateProductDto): Promise<"Đã tồn tại tên sản phẩm này" | (CreateProductDto & Product)>;
     findAll(): Promise<Product[]>;
     findOne(id: number): string;
-    update(id: number, updateProductDto: UpdateProductDto): Promise<"Đã tồn tại tên sản phẩm này" | "Đã cập nhật" | "Không tìm thấy sản phẩm">;
+    update(id: number, updateProductDto: UpdateProductDto): Promise<"Đã cập nhật" | "Đã tồn tại tên sản phẩm này" | "Không tìm thấy sản phẩm">;
     remove(id: number): string;
 }

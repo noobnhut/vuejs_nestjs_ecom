@@ -46,15 +46,13 @@ let ProductsService = class ProductsService {
         try {
             const check_id = await this.productoRepository.findOne({ where: { id } });
             if (check_id) {
-                if (updateProductDto.name_product !== check_id.name_product) {
-                    const check_name = await this.productoRepository.findOneBy({ name_product: updateProductDto.name_product });
-                    if (!check_name) {
-                        await this.productoRepository.update(id, updateProductDto);
-                        return `Đã cập nhật`;
-                    }
-                    else {
-                        return `Đã tồn tại tên sản phẩm này`;
-                    }
+                const check_name = await this.productoRepository.findOneBy({ name_product: updateProductDto.name_product });
+                if (!check_name) {
+                    await this.productoRepository.update(id, updateProductDto);
+                    return `Đã cập nhật`;
+                }
+                else {
+                    return `Đã tồn tại tên sản phẩm này`;
                 }
             }
             else {

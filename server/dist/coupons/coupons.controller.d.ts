@@ -4,9 +4,9 @@ import { UpdateCouponDto } from './dto/update-coupon.dto';
 export declare class CouponsController {
     private readonly couponsService;
     constructor(couponsService: CouponsService);
-    create(createCouponDto: CreateCouponDto): Promise<CreateCouponDto & import("./entities/coupon.entity").Coupon>;
-    findAll(): string;
+    create(createCouponDto: CreateCouponDto): Promise<"Không được để trống" | "Đã tồn tại tên coupon này" | (CreateCouponDto & import("./entities/coupon.entity").Coupon)>;
+    findAll(): Promise<import("./entities/coupon.entity").Coupon[]>;
     findOne(id: string): string;
-    update(id: string, updateCouponDto: UpdateCouponDto): string;
-    remove(id: string): string;
+    update(id: string, updateCouponDto: UpdateCouponDto): Promise<"Đã cập nhật" | "Đã tồn tại tên coupon này" | "Không tìm thấy coupon">;
+    remove(id: string): Promise<"Không tìm thấy coupon" | "Xóa coupon thành công">;
 }
