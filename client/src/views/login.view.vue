@@ -75,11 +75,13 @@ export default {
       if (result.data.user.role == 'user') {
         localStorage.setItem("token", JSON.stringify(result.data.access_token));
         localStorage.setItem("user", JSON.stringify(result.data.user))
-        this.$router.push({ name: "home" });
+        window.location.href = 'http://localhost:5173/'
+
       }
       else if (result.data.user.role == 'admin') {
         localStorage.setItem("token", JSON.stringify(result.data.access_token));
-        this.$router.push({ name: "admin" });
+        localStorage.setItem("admin", JSON.stringify(result.data.user))
+        window.location.href = 'http://localhost:5173/admin'
       }
     }
   },

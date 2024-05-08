@@ -1,6 +1,6 @@
 <template>
   <!-- navbar -->
-  <div class="fixed top-0 w-full z-20 bg-white">
+  <div class="fixed top-0 w-full z-20 bg-white" @click="setRefreshToken">
     <div class="border shadow-md py-3 px-6">
       <!--header 1-->
       <div class="flex justify-between">
@@ -111,14 +111,14 @@
     </div>
   </div>
 
-  <div style="background-image: url('https://mixivivu.com/section-background.png');">
+  <div style="background-image: url('https://mixivivu.com/section-background.png');"  @click="setRefreshToken">
     <div class="container mx-auto mt-[7.1rem] main">
       <router-view></router-view>
     </div>
   </div>
 
   <!--footer-->
-  <footer class="bg-white ">
+  <footer class="bg-white "  @click="setRefreshToken">
     <div class="mx-auto mb-4 max-w-screen-xl px-4 sm:px-6 lg:px-8">
       <div class="mt-4 grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-32">
         <div class="mx-auto max-w-sm lg:max-w-none">
@@ -276,6 +276,7 @@
 <script>
 import MiniCart from "../components/client/minicart.component.vue";
 import userController from "../controllers/user.controller";
+
 export default {
   data() {
     return {
@@ -286,7 +287,6 @@ export default {
   },
   mounted() {
     this.getProfile()
-
   },
   components: { MiniCart },
   methods: {
@@ -299,19 +299,27 @@ export default {
       this.$router.push({name:'login'})
     },
 
+   async setRefreshToken()
+    {
+     const result = await userController.refreshToken()
+     this.user = JSON.parse(localStorage.getItem("user"));
+    },
+
     async getProfile() {
       let token = localStorage.getItem("token");
       if (token) {
       const result = await userController.getProfile()
       this.user = JSON.parse(localStorage.getItem("user"));
-      console.log(this.user.email)
       }
     },
 
     async logout()
     {
       const result = await userController.logout()
-      console.log(result.data)
+      this.user = null
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+      this.$router.push({name:'login'})
     }
   },
 };
