@@ -315,7 +315,7 @@ export default {
 
     async logout()
     {
-      const result = await userController.logout()
+      const result = await userController.logout(this.user.id)
       this.user = null
       localStorage.removeItem("user");
       localStorage.removeItem("token");

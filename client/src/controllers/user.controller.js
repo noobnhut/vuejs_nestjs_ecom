@@ -109,16 +109,17 @@ export default {
     }
   }, 
 
-  logout() {
+  logout(id) {
     try {
       let token = localStorage.getItem("token");
+      
       if (token) {
         var replace_token = token.replace(/"/g, "");
         const headers = {
           Authorization: `Bearer ${replace_token}`,
           "Content-Type": "application/json",
         };
-        return axios.get(`${API_URL}/auth/logout`, { headers });
+        return axios.get(`${API_URL}/auth/logout/${id}`, { headers });
       } else {
         console.log("không tồn tại user");
       }
