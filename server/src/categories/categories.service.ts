@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,12 +9,11 @@ import { ProductsService } from 'src/products/products.service';
 @Injectable()
 export class CategoriesService {
   constructor(
-    private productService: ProductsService,
 
     @InjectRepository(Category)
     private catRepository: Repository<Category>,
+    private productService: ProductsService,
 
-    
   ) 
   
 
@@ -45,7 +44,8 @@ export class CategoriesService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} category`;
+    // return `This action returns a #${id} category`;
+    return this.catRepository.findOneBy({id});
   }
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {

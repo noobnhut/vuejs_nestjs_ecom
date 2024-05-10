@@ -1,4 +1,5 @@
 import {IsNotEmpty } from 'class-validator';
+import { Category } from 'src/categories/entities/category.entity';
 
 export class CreateProductDto {
     @IsNotEmpty({
@@ -12,4 +13,6 @@ export class CreateProductDto {
         message: 'Vui lòng nhập giá tiền',
     })
     price:number;
+
+    cat: Category
 }

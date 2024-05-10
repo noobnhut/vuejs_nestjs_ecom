@@ -4,26 +4,32 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
-import { checkPrime } from 'crypto';
+// import { CategoriesService } from 'src/categories/categories.service';
 
 
 @Injectable()
 export class ProductsService {
   constructor(
+    // private categoriesService: CategoriesService,
+
     @InjectRepository(Product)
     private productoRepository: Repository<Product>,
   ) {}
 
-  async create(createProductDto: CreateProductDto) {
+  async create(createProductDto: CreateProductDto, id: number) {
     // return 'This action adds a new product';
     try {
       const check_name = await this.productoRepository.findOneBy({name_product: createProductDto.name_product})
+      // const
       if(check_name){
         return 'Đã tồn tại tên sản phẩm này'
       }else{
-        const product = await this.productoRepository.save(createProductDto)
+        // createProductDto.cat = cat;
+        const result = this.productoRepository.create(createProductDto)
+        await this.productoRepository.save(result)
         return "Thêm thành công";
       }
+      
     } catch (error) {
       console.log(error)
     }
