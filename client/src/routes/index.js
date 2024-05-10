@@ -88,12 +88,7 @@ import {
             path: 'user',
             name: 'user',
             component: () => import('../pages/admin.page/user.page.vue'),
-          },
-          {
-            path: 'role',
-            name: 'role',
-            component: () => import('../pages/admin.page/role.page.vue'),
-          },
+          }, 
           {
             path: 'cat',
             name: 'cat',

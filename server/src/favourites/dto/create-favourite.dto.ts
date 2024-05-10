@@ -1,6 +1,6 @@
 import { IsNotEmpty } from "class-validator";
 
 export class CreateFavouriteDto {
-    @IsNotEmpty({ message: 'Password không được để trống', })
+    @IsNotEmpty({ message: 'Trạng thái không được để trống', })
     status:boolean
 }

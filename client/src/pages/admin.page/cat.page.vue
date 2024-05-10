@@ -4,7 +4,7 @@
     <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
       <!-- Start coding here -->
       <div
-        class="relative shadow-md sm:rounded-lg overflow-hidden bg-gray-900 px-2 py-2"
+        class="relative shadow-md sm:rounded-lg overflow-hidden  px-2 py-2"
       >
         <div
           class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4"
@@ -46,7 +46,7 @@
         <!--nội dung-->
         <!--title add-->
         <div class="flex items-center justify-between mt-2 mb-2">
-          <h2 class="text-[20px] font-medium text-white">Quản lý danh mục</h2>
+          <h2 class="text-[20px] font-medium ">Quản lý danh mục</h2>
           <button
             class="inline-flex items-center gap-x-1 rounded-10 bg-white py-2 px-4 text-sm"
           >

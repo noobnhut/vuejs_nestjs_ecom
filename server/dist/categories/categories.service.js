@@ -21,20 +21,67 @@ let CategoriesService = class CategoriesService {
     constructor(catRepository) {
         this.catRepository = catRepository;
     }
-    async create(CreateCategoryDto) {
-        return await this.catRepository.save(CreateCategoryDto);
+    async create(createCategoryDto) {
+        try {
+            const check_name = await this.catRepository.findOneBy({
+                name_cat: createCategoryDto.name_cat,
+            });
+            if (check_name) {
+                return 'Đã tồn tại tên cat này';
+            }
+            else {
+                const cat = await this.catRepository.save(createCategoryDto);
+                return cat;
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
     findAll() {
-        return `This action returns all categories`;
+        return this.catRepository.find();
     }
     findOne(id) {
         return `This action returns a #${id} category`;
     }
-    update(id, updateCategoryDto) {
-        return `This action updates a #${id} category`;
+    async update(id, updateCategoryDto) {
+        try {
+            const check_id = await this.catRepository.findOne({ where: { id } });
+            if (check_id) {
+                const check_name = await this.catRepository.findOneBy({
+                    name_cat: updateCategoryDto.name_cat,
+                    id: (0, typeorm_2.Not)(id)
+                });
+                if (!check_name) {
+                    await this.catRepository.update(id, updateCategoryDto);
+                    return `Đã cập nhật`;
+                }
+                else {
+                    return `Đã tồn tại tên cat này`;
+                }
+            }
+            else {
+                return `Không tìm thấy cat`;
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
-    remove(id) {
-        return `This action removes a #${id} category`;
+    async remove(id) {
+        try {
+            const check_id = await this.catRepository.findOne({ where: { id } });
+            if (check_id) {
+                await this.catRepository.delete({ id });
+                return 'Xóa danh mục thành công';
+            }
+            else {
+                return 'không tìm thấy danh mục';
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
 };
 exports.CategoriesService = CategoriesService;

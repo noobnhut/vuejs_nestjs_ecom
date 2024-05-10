@@ -12,7 +12,11 @@ export class FavouritesService {
   ) {}
 
   async create(createFavouriteDto: CreateFavouriteDto) {
-    return await this.favouriteRepository.save(createFavouriteDto);
+    try {
+      return await this.favouriteRepository.save(createFavouriteDto);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   findAll() {

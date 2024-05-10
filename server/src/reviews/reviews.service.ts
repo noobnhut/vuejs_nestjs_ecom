@@ -11,24 +11,48 @@ export class ReviewsService {
     @InjectRepository(Review)
     private reviewRepository: Repository<Review>,
   ) {}
-  
+
   async create(createReviewDto: CreateReviewDto) {
-    return await this.reviewRepository.save(createReviewDto);
+    // return await this.reviewRepository.save(createReviewDto);
+    try {
+      const review = await this.reviewRepository.save(createReviewDto);
+      return "Thêm thành công";
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   findAll() {
-    return `This action returns all reviews`;
+    // return `This action returns all reviews`;
+    return this.reviewRepository.find();
   }
 
   findOne(id: number) {
     return `This action returns a #${id} review`;
   }
 
-  update(id: number, updateReviewDto: UpdateReviewDto) {
-    return `This action updates a #${id} review`;
+  async update(id: number, updateReviewDto: UpdateReviewDto) {
+    // return `This action updates a #${id} review`;
+    try {
+      const review = await this.reviewRepository.update(id, updateReviewDto);
+      return "Cập nhật thành công";
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} review`;
+  async remove(id: number) {
+    // return `This action removes a #${id} review`;
+    try {
+      const check_id = await this.reviewRepository.findOne({ where: { id } });
+      if (check_id) {
+        await this.reviewRepository.delete({ id });
+        return 'Xóa review thành công';
+      } else {
+        return 'Không tìm thấy review';
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

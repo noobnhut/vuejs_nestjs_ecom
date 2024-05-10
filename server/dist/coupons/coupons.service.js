@@ -22,19 +22,71 @@ let CouponsService = class CouponsService {
         this.couponRepository = couponRepository;
     }
     async create(createCouponDto) {
-        return await this.couponRepository.save(createCouponDto);
+        try {
+            const check_name = await this.couponRepository.findOneBy({
+                coupon_name: createCouponDto.coupon_name,
+            });
+            if (createCouponDto.coupon_name.length == 0) {
+                return 'Không được để trống';
+            }
+            else {
+                if (check_name) {
+                    return 'Đã tồn tại tên coupon này';
+                }
+                else {
+                    const coupon = await this.couponRepository.save(createCouponDto);
+                    return coupon;
+                }
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
-    findAll() {
-        return `This action returns all coupons`;
+    async findAll() {
+        return this.couponRepository.find();
     }
     findOne(id) {
         return `This action returns a #${id} coupon`;
     }
-    update(id, updateCouponDto) {
-        return `This action updates a #${id} coupon`;
+    async update(id, updateCouponDto) {
+        try {
+            const check_id = await this.couponRepository.findOne({ where: { id } });
+            if (check_id) {
+                const check_name = await this.couponRepository.findOneBy({
+                    coupon_name: updateCouponDto.coupon_name,
+                    id: (0, typeorm_2.Not)(id),
+                });
+                if (!check_name) {
+                    await this.couponRepository.update(id, updateCouponDto);
+                    return `Đã cập nhật`;
+                }
+                else {
+                    return `Đã tồn tại tên coupon này`;
+                }
+            }
+            else {
+                return `Không tìm thấy coupon`;
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
-    remove(id) {
-        return `This action removes a #${id} coupon`;
+    async remove(id) {
+        try {
+            const check_id = await this.couponRepository.findOne({ where: { id } });
+            if (check_id) {
+                await this.couponRepository.delete({ id });
+                return 'Xóa coupon thành công';
+            }
+            else {
+                return 'Không tìm thấy coupon';
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
 };
 exports.CouponsService = CouponsService;

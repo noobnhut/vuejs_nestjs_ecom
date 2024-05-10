@@ -22,16 +22,26 @@ let ImgProductsService = class ImgProductsService {
         this.imgProductRepository = imgProductRepository;
     }
     async create(createImgProductDto) {
-        return await this.imgProductRepository.save(createImgProductDto);
+        try {
+            await this.imgProductRepository.save(createImgProductDto);
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
     findAll() {
-        return `This action returns all imgProducts`;
+        return this.imgProductRepository.find();
     }
     findOne(id) {
         return `This action returns a #${id} imgProduct`;
     }
-    update(id, updateImgProductDto) {
-        return `This action updates a #${id} imgProduct`;
+    async update(id, updateImgProductDto) {
+        try {
+            await this.imgProductRepository.update(id, updateImgProductDto);
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
     remove(id) {
         return `This action removes a #${id} imgProduct`;

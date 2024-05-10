@@ -15,7 +15,7 @@ class CreateFavouriteDto {
 }
 exports.CreateFavouriteDto = CreateFavouriteDto;
 __decorate([
-    (0, class_validator_1.IsNotEmpty)({ message: 'Password không được để trống', }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Trạng thái không được để trống', }),
     __metadata("design:type", Boolean)
 ], CreateFavouriteDto.prototype, "status", void 0);
 //# sourceMappingURL=create-favourite.dto.js.map

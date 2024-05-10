@@ -9,7 +9,7 @@ export class ImgProduct {
     img_url: string;
 
     @Column({nullable: false})
-    img_name: string;
+    img_public_key: string;
 
     @ManyToOne(() => Product, product => product.imgs)
     product: Product;
