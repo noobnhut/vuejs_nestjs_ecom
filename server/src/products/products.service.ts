@@ -26,7 +26,7 @@ export class ProductsService {
           if(check_name){
             return 'Đã tồn tại tên sản phẩm này'
           }else{
-            // createProductDto.cat = cat;
+            createProductDto.cat = check_cat;
             const result = this.productoRepository.create(createProductDto)
             await this.productoRepository.save(result)
             return "Thêm thành công";
