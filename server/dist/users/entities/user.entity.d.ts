@@ -10,6 +10,7 @@ export declare class User {
     fullname: string;
     email: string;
     password: string;
+    numberphone: string;
     address: string;
     role: Role;
     favourites: Favourite[];

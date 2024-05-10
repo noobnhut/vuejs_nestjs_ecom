@@ -9,4 +9,6 @@ export class CreateUserDto {
     fullname: string;
     
     address: string;
+
+    numberphone:string;
 }

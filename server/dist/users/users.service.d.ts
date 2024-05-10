@@ -10,5 +10,5 @@ export declare class UsersService {
     findOne(id: number): string;
     update(id: number, updateUserDto: UpdateUserDto): string;
     remove(id: number): string;
-    findByEmail(email: string): Promise<User>;
+    findByEmail(email_get: string): Promise<User>;
 }

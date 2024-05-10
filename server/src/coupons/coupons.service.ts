@@ -17,14 +17,14 @@ export class CouponsService {
       const check_name = await this.couponRepository.findOneBy({
         coupon_name: createCouponDto.coupon_name,
       });
-      if (createCouponDto.coupon_name.length == 0) {
+      if (createCouponDto.coupon_name.length === 0) {
         return 'Không được để trống';
       } else {
         if (check_name) {
           return 'Đã tồn tại tên coupon này';
         } else {
           const coupon = await this.couponRepository.save(createCouponDto);
-          return coupon;
+          return 'Thêm coupon thành công';
         }
       }
     } catch (error) {
@@ -39,6 +39,7 @@ export class CouponsService {
 
   findOne(id: number) {
     return `This action returns a #${id} coupon`;
+    
   }
 
   async update(id: number, updateCouponDto: UpdateCouponDto) {

@@ -53,8 +53,8 @@ let UsersService = class UsersService {
     remove(id) {
         return `This action removes a #${id} user`;
     }
-    async findByEmail(email) {
-        return await this.userRepository.findOneBy({ email: email });
+    async findByEmail(email_get) {
+        return await this.userRepository.findOneBy({ email: email_get });
     }
 };
 exports.UsersService = UsersService;

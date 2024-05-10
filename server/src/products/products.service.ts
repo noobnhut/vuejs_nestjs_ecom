@@ -5,12 +5,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
 import { checkPrime } from 'crypto';
+import { Category } from 'src/categories/entities/category.entity';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private productoRepository: Repository<Product>,
+
+    @InjectRepository(Category)
+    private catRepository: Repository<Category>,
   ) {}
 
   async create(createProductDto: CreateProductDto) {
@@ -21,7 +25,7 @@ export class ProductsService {
         return 'Đã tồn tại tên sản phẩm này'
       }else{
         const product = await this.productoRepository.save(createProductDto)
-        return product;
+        return "Thêm thành công";
       }
     } catch (error) {
       console.log(error)
@@ -31,6 +35,17 @@ export class ProductsService {
   findAll() {
     // return `This action returns all products`;
     return this.productoRepository.find();
+  }
+
+  async findAllProCat(catpro: Category){
+    try {
+      const procat = await this.productoRepository.find({
+        where: {cat: catpro}
+      });
+      return procat;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   findOne(id: number) {
@@ -57,7 +72,37 @@ export class ProductsService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: number) {
+    // return `This action removes a #${id} product`;
+    try {
+      const check_id = await this.productoRepository.findOne({ where: {id}})
+      if(check_id){
+        await this.productoRepository.delete({ id });
+        return 'Xóa sản phẩm thành công';
+      }else{
+        return 'Không tìm thấy sản phẩm';
+      }
+      
+    } catch (error) {
+      console.log(error);
+    }
   }
+
+  // async removeProductFromCat(product: Product){
+  //   try {
+  //       const check_products = await this.productoRepository.find({
+  //         where: {cat: catProduct}
+  //       });
+  //       if (check_products && check_products.length > 0) { // Kiểm tra xem có sản phẩm thuộc danh mục này không
+  //           await Promise.all(check_products.map(async product => {
+  //             await this.productoRepository.delete(product.id);
+  //         }));
+  //         return 'Xóa thành công';
+  //     } else {
+  //         return 'Không tìm thấy sản phẩm thuộc danh mục này';
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 }

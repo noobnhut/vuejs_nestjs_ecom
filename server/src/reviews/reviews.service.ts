@@ -16,7 +16,7 @@ export class ReviewsService {
     // return await this.reviewRepository.save(createReviewDto);
     try {
       const review = await this.reviewRepository.save(createReviewDto);
-      return review;
+      return "Thêm thành công";
     } catch (error) {
       console.log(error);
     }
@@ -35,7 +35,7 @@ export class ReviewsService {
     // return `This action updates a #${id} review`;
     try {
       const review = await this.reviewRepository.update(id, updateReviewDto);
-      return review;
+      return "Cập nhật thành công";
     } catch (error) {
       console.log(error);
     }
@@ -47,9 +47,9 @@ export class ReviewsService {
       const check_id = await this.reviewRepository.findOne({ where: { id } });
       if (check_id) {
         await this.reviewRepository.delete({ id });
-        return 'Xóa coupon thành công';
+        return 'Xóa review thành công';
       } else {
-        return 'Không tìm thấy coupon';
+        return 'Không tìm thấy review';
       }
     } catch (error) {
       console.log(error);
