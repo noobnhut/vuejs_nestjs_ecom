@@ -87,3 +87,4 @@ export class CreateUserDto {
  npm i --save-dev nodemon ts-node
  https://gist.github.com/sravan464/609a8c58e746d5391922c11f6a0b3381
  https://docs.nestjs.com/techniques/cookies
+ https://docs.nestjs.com/techniques/file-upload
