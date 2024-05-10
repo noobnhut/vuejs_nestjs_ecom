@@ -1,6 +1,6 @@
 <template>
 
-  <div class="flex min-h-screen w-full bg-gray-800 font-san" @click="setRefreshToken()">
+  <div class="flex min-h-screen w-full bg-white-800 font-san" @click="setRefreshToken()">
     <!--backview mờ ảo-->
     <div
       :class="isOpen ? 'block' : 'hidden'"
@@ -11,22 +11,22 @@
     <!--sidebar-->
     <aside
       :class="isOpen ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'"
-      class="flex w-64 flex-col px-4 pt-10 pb-6 bg-gray-800 inset-y-0 left-0 z-30 fixed transition duration-300 transform lg:translate-x-0 lg:static lg:inset-0"
+      class="flex w-64 flex-col px-4 pt-10 pb-6 bg-white-800 inset-y-0 left-0 z-30 fixed transition duration-300 transform lg:translate-x-0 lg:static lg:inset-0"
     >
       <!--title adminpage-->
       <a
         href=""
-        class="text-white flex items-center gap-x-4 px-8 text-2xl font-medium focus:outline-none"
+        class=" flex items-center gap-x-4 px-8 text-2xl font-medium focus:outline-none"
       >
         <!-- <h1 class="h-6 w-6 stroke-current" /> -->
         <span>ADMIN PAGE</span>
       </a>
       <!--list nav-->
       <ul class="flex flex-1 flex-col gap-y-10 px-8 pt-14">
-        <li v-for="item in menu" :key="item.name">
+        <li v-for="item in menu" :key="item.name" >
           <router-link
             :to="item.to"
-            class="flex items-center gap-x-4 text-gray-200 hover:font-medium hover:text-white focus:font-medium focus:text-white focus:outline-none"
+            class="flex items-center gap-x-4 text-black hover:font-medium hover:text-gray-500 focus:font-medium focus:text-gray-900 focus:outline-non"
           >
             <span>{{ item.name }}</span>
           </router-link>
@@ -36,13 +36,13 @@
 
     <!--main -->
     <main
-      class="flex min-h-screen flex-1 flex-col rounded-l-[48px] bg-gray-800 md:p-8"
+      class="flex min-h-screen flex-1 flex-col rounded-l-[48px] bg-white-800 md:p-8"
     >
       <!--navbar-->
       <nav class="flex items-center gap-x-6 justify-between">
         <!--reponsive button-->
         <button
-          class="text-gray-500 focus:outline-none lg:hidden ml-2"
+          class="text-black focus:outline-none lg:hidden ml-2"
           @click="isOpen = true"
         >
           <svg
@@ -62,14 +62,14 @@
         </button>
 
         <div class="flex items-center md:pl-0 pl-10">
-          <h1 class="text-[30px] font-bold text-white">404NFP</h1>
+          <h1 class="text-[30px] font-bold ">404NFP</h1>
         </div>
         <!--avatar-->
         <button
-          class="md:pr-0 pr-10 flex h-11 items-center justify-center rounded-full bg-gray-900 px-2 text-gray-200 hover:text-white"
+          class="md:pr-0 pr-10 flex h-11 items-center justify-center rounded-full bg-white-900 px-2 text-black hover:text-gray-500"
         >
           <img
-            src="https://media.discordapp.net/attachments/1137648162677456956/1143370950683930675/IMG_20230822_092740.jpg?ex=66271cad&is=6625cb2d&hm=7e5077f9279d52b83a9eb3902cfd8009a8bc6d6709e9fe54567abc02d43e39c3&=&format=webp&width=441&height=441"
+            src="https://mcdn.coolmate.me/image/May2022/wibu-la-gi-weeaboo-la-gi-su-khac-nhau-giua-wibu-va-otaku_494.jpg"
             alt=""
             class="h-8 w-8 rounded-full object-cover"
           />
@@ -95,7 +95,6 @@ export default {
     return {
       menu: [
         { name: "Trang chủ", to: "/admin" },
-        { name: "Quản lý role", to: "/admin/role" },
         { name: "Quản lý user", to: "/admin/user" },
         { name: "Quản lý danh mục", to: "/admin/cat" },
         { name: "Quản lý sản phẩm", to: "/admin/product" },
