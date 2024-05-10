@@ -7,6 +7,7 @@ import { Product } from './entities/product.entity';
 import { checkPrime } from 'crypto';
 import { Category } from 'src/categories/entities/category.entity';
 
+
 @Injectable()
 export class ProductsService {
   constructor(
@@ -49,7 +50,7 @@ export class ProductsService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} product`;
+    return this.productoRepository.findOneBy({id:id});
   }
 
   async update(id: number, updateProductDto: UpdateProductDto) {

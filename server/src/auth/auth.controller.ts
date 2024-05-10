@@ -15,7 +15,7 @@ export class AuthController {
     async login(
         @Req() req,
         @Res({ passthrough: true }) response: Response) {
-        return this.authService.login(req.user,response);
+        return this.authService.login(req.user, response);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -25,16 +25,17 @@ export class AuthController {
     }
 
     @Get('refresh')
-    refreshToken(@Req() request:Request,@Res({ passthrough: true }) response: Response){
+    refreshToken(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
         const refresh_token = request.cookies["refresh_token"];
-        return this.authService.processNewToken(refresh_token,response)
+        return this.authService.processNewToken(refresh_token, response)
     }
-    
-    @Get('logout')
-    Logout(@Param('id') id: number,@Res({ passthrough: true }) response: Response){
-     return this.authService.logout(id,response)
+
+    @Get('logout/:id')
+    Logout(@Param('id') id: number,
+        @Res({ passthrough: true }) response: Response) {
+        return this.authService.logout(id, response)
     }
-    
+
     // @HasRoles(Role.Admin)
     // @UseGuards(JwtAuthGuard, RolesGuard)
     // @Get('admin')

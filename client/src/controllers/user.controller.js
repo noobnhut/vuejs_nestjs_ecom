@@ -57,6 +57,7 @@ export default {
       console.log(error);
     }
   },
+
   getProfile() {
     let token = localStorage.getItem("token");
     if (token) {
@@ -68,40 +69,9 @@ export default {
 
       return axios
         .get(`${API_URL}/auth/profile`, { headers })
-        .then((response) => {
-          return response;
-        })
-        .catch((error) => {
-          if (error.response && error.response.status === 401) {
-            // Refresh token
-            alert('Phiên đăng nhập đã quá hạn, hay tải lại trang')
-            this.refreshToken();
-            window.location.reload();
-          } else {
-            console.error("Lỗi khi gửi yêu cầu:", error);
-            throw error;
-          }
-        });
+
     } else {
       return Promise.reject(new Error("Không có token"));
-    }
-  },
-
-  logout() {
-    try {
-      let token = localStorage.getItem("token");
-      if (token) {
-        var replace_token = token.replace(/"/g, "");
-        const headers = {
-          Authorization: `Bearer ${replace_token}`,
-          "Content-Type": "application/json",
-        };
-        return axios.get(`${API_URL}/auth/logout`, { headers });
-      } else {
-        console.log("không tồn tại user");
-      }
-    } catch (error) {
-      console.log(error);
     }
   },
 
@@ -137,5 +107,25 @@ export default {
       console.error("Lỗi khi gửi yêu cầu:", error);
       throw error;
     }
+  }, 
+
+  logout(id) {
+    try {
+      let token = localStorage.getItem("token");
+      
+      if (token) {
+        var replace_token = token.replace(/"/g, "");
+        const headers = {
+          Authorization: `Bearer ${replace_token}`,
+          "Content-Type": "application/json",
+        };
+        return axios.get(`${API_URL}/auth/logout/${id}`, { headers });
+      } else {
+        console.log("không tồn tại user");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   },
+
 };
