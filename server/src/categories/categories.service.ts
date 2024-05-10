@@ -9,17 +9,11 @@ import { ProductsService } from 'src/products/products.service';
 @Injectable()
 export class CategoriesService {
   constructor(
-
-    @InjectRepository(Category)
-    private catRepository: Repository<Category>,
+    @Inject(forwardRef(() => ProductsService))
     private productService: ProductsService,
-
-  ) 
-  
-
-  // @InjectRepository(ImgProduct)
-  // private imgProductRepository: Repository<ImgProduct>,
-  {}
+    @InjectRepository(Category)
+    private catRepository: Repository<Category>
+  ){}
 
   async create(createCategoryDto: CreateCategoryDto) {
     // return await this.catRepository.save(CreateCategoryDto);
