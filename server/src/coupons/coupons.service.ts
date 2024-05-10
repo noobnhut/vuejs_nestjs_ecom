@@ -21,7 +21,12 @@ export class CouponsService {
         return 'Không được để trống';
       } else {
         if (check_name) {
-          return 'Đã tồn tại tên coupon này';
+          // return 'Đã tồn tại tên coupon này';
+          const errorResponse = {
+            message: 'Đã tồn tại tên coupon này',
+            statusCode: 400 
+          };
+          return errorResponse;
         } else {
           const coupon = await this.couponRepository.save(createCouponDto);
           return 'Thêm coupon thành công';
@@ -38,8 +43,8 @@ export class CouponsService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} coupon`;
-    
+    // return `This action returns a #${id} coupon`;
+    return this.couponRepository.findOneBy({id});
   }
 
   async update(id: number, updateCouponDto: UpdateCouponDto) {
@@ -55,10 +60,20 @@ export class CouponsService {
           await this.couponRepository.update(id, updateCouponDto);
           return `Đã cập nhật`;
         } else {
-          return `Đã tồn tại tên coupon này`;
+          // return `Đã tồn tại tên coupon này`;
+          const errorResponse = {
+            message: `Đã tồn tại tên coupon này`,
+            statusCode: 400 
+          };
+          return errorResponse;
         }
       } else {
-        return `Không tìm thấy coupon`;
+        // return `Không tìm thấy coupon`;
+        const errorResponse = {
+          message: `Không tìm thấy coupon`,
+          statusCode: 404 
+        };
+        return errorResponse;
       }
     } catch (error) {
       console.log(error);
@@ -73,7 +88,12 @@ export class CouponsService {
         await this.couponRepository.delete({ id });
         return 'Xóa coupon thành công';
       } else {
-        return 'Không tìm thấy coupon';
+        // return `Không tìm thấy coupon`;
+        const errorResponse = {
+          message: `Không tìm thấy coupon`,
+          statusCode: 404 
+        };
+        return errorResponse;
       }
     } catch (error) {
       console.log(error);

@@ -97,6 +97,7 @@ export default {
         { name: "Trang chủ", to: "/admin" },
         { name: "Quản lý user", to: "/admin/user" },
         { name: "Quản lý danh mục", to: "/admin/cat" },
+        { name: "Quản lý coupon", to: "/admin/coupon" },
         { name: "Quản lý sản phẩm", to: "/admin/product" },
         { name: "Quản lý ảnh", to: "/admin/img" },
         { name: "Quản lý đơn hàng", to: "/admin/order" },

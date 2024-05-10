@@ -3,12 +3,13 @@
 import axios from "axios";
 
 const API_URL = `${import.meta.env.VITE_API_BASE_URL}`; // Đặt URL của backend API ở đây
+axios.defaults.withCredentials = true;
 
 export default {
   // lấy list cat
   getCats() {
     try {
-      return axios.get(`${API_URL}/cats`);
+      return axios.get(`${API_URL}/categories`);
     } catch (error) {
       console.error("Lỗi lấy list cat", error);
       throw error;
@@ -17,7 +18,7 @@ export default {
 
   createCat(dataCat) {
     try {
-      return axios.post(`${API_URL}/cats`, dataCat);
+      return axios.post(`${API_URL}/categories`, dataCat);
     } catch (error) {
       console.error("Thêm cat thất bại", error);
       throw error;
@@ -26,7 +27,7 @@ export default {
 
   updateCat(id, dataCat) {
     try {
-      return axios.patch(`${API_URL}/cats/${id}`, dataCat);
+      return axios.patch(`${API_URL}/categories/${id}`, dataCat);
     } catch (error) {
       console.error("Cập nhập cat thất bại", error);
       throw error;
@@ -35,7 +36,7 @@ export default {
 
   deleteCat(id) {
     try {
-      return axios.delete(`${API_URL}/cats/${id}`);
+      return axios.delete(`${API_URL}/categories/${id}`);
     } catch (error) {
       console.error("Xóa cat thất bại", error);
       throw error;

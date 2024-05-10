@@ -46,7 +46,7 @@
         <!--nội dung-->
         <!--title add-->
         <div class="flex items-center justify-between mt-2 mb-2">
-          <h2 class="text-[20px] font-medium ">Quản lý danh mục</h2>
+          <h2 class="text-[20px] font-medium ">Quản lý coupon</h2>
           <button @click="openAdd()" type="button"
             class="inline-flex items-center gap-x-1 rounded-10 bg-white py-2 px-4 text-sm"
           >
@@ -72,12 +72,14 @@
               <tr>
                 <th scope="col" class="px-4 py-4">STT</th>
                 <th scope="col" class="px-4 py-3">Tên danh mục</th>
+                <th scope="col" class="px-4 py-3">Phần trăm %</th>
+                <th scope="col" class="px-4 py-3">Số lượng</th>
                 <th scope="col" class="px-4 py-3"></th>
                 <th scope="col" class="px-4 py-3"></th>
               </tr>
             </thead>
 
-            <tbody v-for="(cat, index) in cats" :key="index">
+            <tbody v-for="(coupon, index) in coupons" :key="index">
               <tr class="border-b border-gray-700">
                 <th
                   scope="row"
@@ -86,11 +88,17 @@
                   {{ index + 1 }}
                 </th>
                 <td class="px-4 py-3">
-                  {{ cat.name_cat }}
+                  {{ coupon.coupon_name }}
+                </td>
+                <td class="px-4 py-3">
+                  {{ coupon.coupon_percent }}
+                </td>
+                <td class="px-4 py-3">
+                  {{ coupon.coupon_quantity }}
                 </td>
 
                 <td class="px-4 py-3">
-                  <button @click="openUpdate(); selectCat(cat)" type="button"
+                  <button @click="openUpdate(); selectCoupon(coupon)" type="button"
                     class="flex items-center justify-center gap-x-2 rounded-10 border py-2 px-1 border-blue-400/10 bg-blue-700/20 text-blue-400"
                   >
                     <span class="h-2 w-2 rounded-full bg-blue-400"></span
@@ -99,7 +107,7 @@
                 </td>
 
                 <td class="px-4 py-3">
-                  <button @click="openDelete(); selectCat(cat)" type="button"
+                  <button @click="openDelete(); selectCoupon(coupon)" type="button"
                     class="flex items-center justify-center gap-x-2 rounded-10 border py-2 px-1 border-red-400/10 bg-red-700/20 text-red-400"
                   >
                     <span class="h-2 w-2 rounded-full bg-red-400"></span
@@ -120,14 +128,30 @@
     <div class="p-8">
       <div class="mb-2">
           <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Tên danh mục
+              Mã coupon
           </label>
-          <input v-model="name_cat" type="text" 
+          <input v-model="coupon_name" type="text" 
+          id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+      </div>
+
+      <div class="mb-2">
+          <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Phần trăm %
+          </label>
+          <input v-model="coupon_percent" type="number" 
+          id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+      </div>
+
+      <div class="mb-2">
+          <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Số lượng
+          </label>
+          <input v-model="coupon_quantity" type="number" 
           id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
       </div>
 
       <div class="flex justify-between items-center">
-        <button @click="createCat()" type="button" 
+        <button @click="createCoupon()" type="button" 
         class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
             Thêm
         </button>
@@ -146,14 +170,30 @@
     <div class="p-8">
       <div class="mb-2">
           <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Tên danh mục
+              Mã coupon
           </label>
-          <input v-model="name_cat" type="text" 
+          <input v-model="coupon_name" type="text" 
+          id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+      </div>
+
+      <div class="mb-2">
+          <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Phần trăm %
+          </label>
+          <input v-model="coupon_percent" type="number" 
+          id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+      </div>
+
+      <div class="mb-2">
+          <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Số lượng
+          </label>
+          <input v-model="coupon_quantity" type="number" 
           id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
       </div>
 
       <div class="flex justify-between items-center">
-        <button @click="updateCat()" type="button" 
+        <button @click="updateCoupon()" type="button" 
         class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
             Cập nhật
         </button>
@@ -173,7 +213,7 @@
         <p class="text-center text-gray-700 mb-4">Bạn có muốn xóa không?</p>
 
         <div class="flex justify-between items-center">
-            <button @click="deleteCat()" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            <button @click="deleteCoupon()" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                 Xóa
             </button>
             <button @click="openDelete()" type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
@@ -192,19 +232,19 @@
 </template>
 
 <script>
-import catController from '../../controllers/category.controller';
+import couponController from '../../controllers/coupon.controller';
 import toast from "../../components/toast.component.vue";
 export default {
   data() {
     return {
-      cats: [], cat: "",
+      coupons: [], coupon: "",
       value_search: "",
-      name_cat:null,select_cat:null,
+      coupon_name:null, coupon_percent: null, coupon_quantity: null, select_coupon:null,
       isAdd:false,isUpdate:false,isDelete:false
     };
   },
   mounted() {
-    this.getCat();
+    this.getCoupon();
   },
   components: {
     toast,
@@ -212,7 +252,9 @@ export default {
   methods: {
     openAdd() {
         this.isAdd = !this.isAdd
-        this.name_cat = ""
+        this.coupon_name = "";
+        this.coupon_percent = 0;
+        this.coupon_quantity = 0;
     },
 
     openDelete() {
@@ -223,27 +265,31 @@ export default {
       this.isUpdate = !this.isUpdate
     },
 
-    selectCat(select) {
-      this.cat = select;
-      this.name_cat = select.name_cat;
+    selectCoupon(select) {
+      this.coupon = select;
+      this.coupon_name = select.coupon_name;
+      this.coupon_percent = select.coupon_percent;
+      this.coupon_quantity = select.coupon_quantity
     },
 
-    async getCat() {
+    async getCoupon() {
       try {
-        const result = await catController.getCats();
-        this.cats = result.data;
+        const result = await couponController.getCoupons();
+        this.coupons = result.data;
       } catch (error) {
         console.log(error);
       }
     },
 
-    async createCat() {
+    async createCoupon() {
       try {
         const requestData = {
-          name_cat: this.name_cat
+          coupon_name: this.coupon_name,
+          coupon_percent: this.coupon_percent,
+          coupon_quantity: this.coupon_quantity
         };
-        console.log(this.name_cat);
-        const result = await catController.createCat(requestData);
+        console.log(this.coupon_name);
+        const result = await couponController.createCoupon(requestData);
         console.log(result);
 
         if(result.status == 201){
@@ -252,7 +298,7 @@ export default {
           //    location.reload()
           // }, 1000);
           this.openAdd();
-          this.getCat();
+          this.getCoupon();
         }else{
           this.$refs.toast.showToast(result.data.message);
         }
@@ -262,18 +308,20 @@ export default {
       }
     },
 
-    async updateCat() {
+    async updateCoupon() {
       try {
         const requestData = {
-          name_cat: this.name_cat
+          coupon_name: this.coupon_name,
+          coupon_percent: this.coupon_percent,
+          coupon_quantity: this.coupon_quantity
         };
-        const result = await catController.updateCat(this.cat.id, requestData);
+        const result = await couponController.updateCoupon(this.coupon.id, requestData);
         if(result.status == 201){
           setTimeout(() => {
              location.reload()
           }, 1000);
           this.openUpdate();
-          this.getCat();
+          this.getCoupon();
           this.$refs.toast.showToast(result.data.message);
         }else{
           this.$refs.toast.showToast(result.data.message);
@@ -283,11 +331,11 @@ export default {
       }
     },
 
-    async deleteCat() {
+    async deleteCoupon() {
       try {
-        const result = await catController.deleteCat(this.cat.id);
+        const result = await couponController.deleteCoupon(this.coupon.id);
         this.openDelete();
-        this.getCat();
+        this.getCoupon();
       } catch (error) {
         console.log(error);
       }

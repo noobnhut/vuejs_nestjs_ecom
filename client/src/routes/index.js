@@ -95,6 +95,11 @@ import {
             component: () => import('../pages/admin.page/cat.page.vue'),
           },
           {
+            path: 'coupon',
+            name: 'coupon',
+            component: () => import('../pages/admin.page/coupon.page.vue'),
+          },
+          {
             path: 'product',
             name: 'product',
             component: () => import('../pages/admin.page/product.page.vue'),

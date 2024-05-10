@@ -59,9 +59,11 @@
 </template>
 
 <script>
+import userController from '../../controllers/user.controller';
 
 export default
 {
+    
   data(){
     return {
         users: [], 
@@ -77,7 +79,8 @@ export default
   methods: {
     async getUser() {
        try {
-          
+        const result = await userController.getUsers();
+        this.users = result.data;
        } catch (error) {
            console.log(error)
        }

@@ -22,7 +22,11 @@ export class CategoriesService {
         name_cat: createCategoryDto.name_cat,
       });
       if (check_name) {
-        return 'Đã tồn tại tên cat này';
+        const errorResponse = {
+          message: 'Đã tồn tại tên cat này',
+          statusCode: 400 
+        };
+        return errorResponse;
       } else {
         const cat = await this.catRepository.save(createCategoryDto);
         return 'Đã thêm thành công';
@@ -55,10 +59,18 @@ export class CategoriesService {
           await this.catRepository.update(id, updateCategoryDto);
           return `Đã cập nhật`;
         } else {
-          return `Đã tồn tại tên cat này`;
+          const errorResponse = {
+            message: 'Đã tồn tại tên cat này',
+            statusCode: 400 
+          };
+          return errorResponse;
         }
       } else {
-        return `Không tìm thấy cat`;
+        const errorResponse = {
+          message: `Không tìm thấy cat`,
+          statusCode: 404
+        };
+        return errorResponse;
       }
     } catch (error) {
       console.log(error);
@@ -74,12 +86,16 @@ export class CategoriesService {
          const products = await this.productService.findProductByCat(id)
          if(products.length > 0)
            {
-             return 'coook'
+             const errorResponse = {
+              message: 'Không thể xóa vì cat này chứ product',
+              statusCode: 400 
+            };
+            return errorResponse;
            }
            else
            {
              await this.catRepository.delete(check_cat)
-             return 'ok'
+             return 'Xóa thành công'
            }
        }
        else
