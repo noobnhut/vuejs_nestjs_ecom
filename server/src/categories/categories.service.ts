@@ -4,20 +4,17 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Not, Repository } from 'typeorm';
 import { Category } from './entities/category.entity';
-import { ImgProduct } from 'src/img_products/entities/img_product.entity';
-import { Product } from 'src/products/entities/product.entity';
 import { ProductsService } from 'src/products/products.service';
 
 @Injectable()
 export class CategoriesService {
   constructor(
-    private productsService: ProductsService,
+    private productService: ProductsService,
 
     @InjectRepository(Category)
     private catRepository: Repository<Category>,
 
-    @InjectRepository(Product)
-    private productoRepository: Repository<Product>,
+    
   ) 
   
 
@@ -75,29 +72,29 @@ export class CategoriesService {
   }
 
   async remove(id: number) {
-    // return `This action removes a #${id} category`; 
     try {
-      const check_id = await this.catRepository.findOne({ where: { id } });
-      if (check_id) {
-        // const check_product = await this.productsService.findAllProCat(check_id);
-        // if(check_product.length > 0){
-        //   // await this.productsService.removeProductFromCat(check_product);
-        // }else{
-        //   await this.catRepository.delete({ id });
-        //   return 'Xóa danh mục thành công'; 
-        // }
-        const has_product = await this.productoRepository.findOne({where: {cat: check_id}})
-        if(!has_product){
-          await this.catRepository.delete({ id });
-          return 'Xóa danh mục thành công';
-        }else{
-          return 'không thể xóa vì danh mục này còn sản phẩm';
-        }
-      } else {
-        return 'không tìm thấy danh mục';
-      }
+     const check_cat = await this.catRepository.findOneBy({id:id})
+     if(check_cat)
+       {
+         // check product
+         const products = await this.productService.findProductByCat(id)
+         if(products.length > 0)
+           {
+             return 'coook'
+           }
+           else
+           {
+             await this.catRepository.delete(check_cat)
+             return 'ok'
+           }
+       }
+       else
+       {
+         return 'khong ton tai'
+       }
+ 
     } catch (error) {
-      console.log(error);
+     console.log(error)
     }
-  }
+   }
 }

@@ -21,7 +21,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     UsersModule,
     CategoriesModule,
-    ProductsModule,
+   // ProductsModule,
     ImgProductsModule,
     FavouritesModule,
     OrdersModule,

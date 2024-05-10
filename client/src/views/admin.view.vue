@@ -106,6 +106,9 @@ export default {
       user:null
     };
   },
+  mounted(){
+    this.getProfile()
+  },
   methods: {
 
     async setRefreshToken()
@@ -119,6 +122,10 @@ export default {
       if (token) {
       const result = await userController.getProfile()
       this.user = JSON.parse(localStorage.getItem("admin"));
+      }
+      else
+      {
+        this.$router.push({name:'login'})
       }
     },
 

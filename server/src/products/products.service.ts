@@ -5,7 +5,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
 import { checkPrime } from 'crypto';
-import { Category } from 'src/categories/entities/category.entity';
 
 
 @Injectable()
@@ -13,9 +12,6 @@ export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private productoRepository: Repository<Product>,
-
-    @InjectRepository(Category)
-    private catRepository: Repository<Category>,
   ) {}
 
   async create(createProductDto: CreateProductDto) {
@@ -38,16 +34,16 @@ export class ProductsService {
     return this.productoRepository.find();
   }
 
-  async findAllProCat(catpro: Category){
-    try {
-      const procat = await this.productoRepository.find({
-        where: {cat: catpro}
-      });
-      return procat;
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // async findAllProCat(catpro: Category){
+  //   try {
+  //     const procat = await this.productoRepository.find({
+  //       where: {cat: catpro}
+  //     });
+  //     return procat;
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   findOne(id: number) {
     return this.productoRepository.findOneBy({id:id});
@@ -87,6 +83,14 @@ export class ProductsService {
     } catch (error) {
       console.log(error);
     }
+  } 
+
+  findProductByCat(id:number)
+  {
+    return this.productoRepository.find({
+      relations:['cat'],
+      where:{cat:{id:id}}
+    })
   }
 
   // async removeProductFromCat(product: Product){
