@@ -2,9 +2,10 @@ import { Inject, Injectable,forwardRef } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { Like, Not, Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
 import { CategoriesService } from 'src/categories/categories.service';
+import { ImgProductsService } from 'src/img_products/img_products.service';
 
 
 @Injectable()
@@ -12,13 +13,18 @@ export class ProductsService {
   constructor(
     @Inject(forwardRef(() => CategoriesService))
     private readonly categoriesService: CategoriesService,
+    @Inject(forwardRef(() => ImgProductsService))
+    private readonly imgProductsService: ImgProductsService,
     @InjectRepository(Product)
     private productoRepository: Repository<Product>
   ){}
 
   async create(createProductDto: CreateProductDto, id: number) {
     try {
-      const check_name = await this.productoRepository.findOneBy({name_product: createProductDto.name_product})
+      const check_name = await this.productoRepository.findOneBy({
+        name_product: createProductDto.name_product,
+        id: Not(id) 
+      })
       // check cat tồn tại
       const check_cat =  await this.categoriesService.findOne(id)
       if(check_cat)
@@ -63,12 +69,15 @@ export class ProductsService {
     return this.productoRepository.findOneBy({id:id});
   }
 
-  // có cần đổi danh mục ko ?
+  // có cần đổi danh mục ko ? // không
   async update(id: number, updateProductDto: UpdateProductDto) {
     try {
       const check_id = await this.productoRepository.findOne({where: {id}});
       if(check_id){
-        const check_name = await this.productoRepository.findOneBy({name_product: updateProductDto.name_product})
+        const check_name = await this.productoRepository.findOneBy({
+          name_product: updateProductDto.name_product,
+          id: Not(id) 
+        })
         if(!check_name){
           await this.productoRepository.update(id, updateProductDto);
           return `Đã cập nhật`
@@ -88,12 +97,20 @@ export class ProductsService {
     try {
       const check_id = await this.productoRepository.findOne({ where: {id}})
       if(check_id){
-        await this.productoRepository.delete({ id });
-        return 'Xóa sản phẩm thành công';
+        const cats = await this.imgProductsService.findByProduct(id);
+        if(cats.length > 0){
+          for (const cat of cats) {
+            await this.imgProductsService.remove(cat.id);
+          }
+          await this.productoRepository.delete({ id });
+          return 'Xóa sản phẩm thành công';
+        }else{
+          await this.productoRepository.delete({ id });
+          return 'Xóa sản phẩm thành công';
+        }
       }else{
         return 'Không tìm thấy sản phẩm';
       }
-      
     } catch (error) {
       console.log(error);
     }
