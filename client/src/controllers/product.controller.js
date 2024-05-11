@@ -82,5 +82,14 @@ export default {
     }
   },
 
+  searchProduct(value)
+  {
+    try {
+      return axios.get(`${API_URL}/products/search?name=${value}`);
+    } catch (error) {
+      console.error("Xóa product thất bại", error);
+      throw error;
+    }
+  }
   
 };

@@ -419,7 +419,7 @@
           </h3>
 
           <button
-            @click="isAdd = false;"
+            @click="isAdd = false"
             type="button"
             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
             data-modal-target="createProductModal"
@@ -456,7 +456,9 @@
             >
               <option disabled>Loại danh mục</option>
 
-              <option v-for="cat in cats" :value="cat.id">{{ cat.name_cat }}</option>
+              <option v-for="cat in cats" :value="cat.id">
+                {{ cat.name_cat }}
+              </option>
             </select>
           </div>
           <div class="name_product">
@@ -554,7 +556,7 @@ export default {
       isDelete: false,
       isUpdate: false,
       isAdd: false,
-      catId: '',
+      catId: "",
       name_product: "",
       des_product: "",
       price: "",
@@ -588,7 +590,7 @@ export default {
       const result = await productController.deleteProduct(id);
       if (result.status == 200) {
         this.getProduct();
-        this.isDelete= false
+        this.isDelete = false;
       } else {
         console.log(result);
       }
@@ -617,11 +619,10 @@ export default {
       const result = await productController.createProduct(formData);
       if (result.status == 201) {
         this.getProduct();
-        this.isAdd= false
+        this.isAdd = false;
       } else {
         console.log(result);
       }
-      
     },
 
     formatPrice(value) {
@@ -630,6 +631,18 @@ export default {
 
     formatTime(value) {
       return extensiveController.formatTime(value);
+    },
+
+    async search() {
+      if(this.value_search == '')
+      {
+        this.getProduct()
+      }
+      else
+      {
+        const result  = await productController.searchProduct(this.value_search)
+        this.products = result.data;
+      }
     },
   },
 };
