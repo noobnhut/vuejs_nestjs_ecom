@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, UploadedFiles } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, UploadedFiles, Query } from '@nestjs/common';
 import { ImgProductsService } from './img_products.service';
 import { CreateImgProductDto } from './dto/create-img_product.dto';
 import { UpdateImgProductDto } from './dto/update-img_product.dto';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { Product } from 'src/products/entities/product.entity';
 
 @Controller('img-products')
 export class ImgProductsController {
@@ -25,7 +26,7 @@ export class ImgProductsController {
 
   @Get(':id')
   findOne(@Param('id') id: number) {
-    return this.imgProductsService.findOne(+id);
+    return this.imgProductsService.findOne(id);
   }
 
   @Patch(':id')
@@ -38,6 +39,11 @@ export class ImgProductsController {
     return this.imgProductsService.remove(id);
   }
 
+  @Get('product/:id')
+  findByProduct(@Param('id') id: number)
+  {
+    return this.imgProductsService.findByProduct(id)
+  }
   // // 1 file
   // @Post('upload')
   // @UseInterceptors(FileInterceptor('file')) // biến truyền vào

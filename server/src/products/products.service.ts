@@ -45,7 +45,6 @@ export class ProductsService {
   }
 
   findAll() {
-    // return `This action returns all products`;
     return this.productoRepository.find();
   }
 
@@ -53,8 +52,8 @@ export class ProductsService {
     return this.productoRepository.findOneBy({id:id});
   }
 
+  // có cần đổi danh mục ko ?
   async update(id: number, updateProductDto: UpdateProductDto) {
-    // return `This action updates a #${id} product`;
     try {
       const check_id = await this.productoRepository.findOne({where: {id}});
       if(check_id){
@@ -73,8 +72,8 @@ export class ProductsService {
     }
   }
 
+  // vui long xóa ảnh ?
   async remove(id: number) {
-    // return `This action removes a #${id} product`;
     try {
       const check_id = await this.productoRepository.findOne({ where: {id}})
       if(check_id){

@@ -56,7 +56,7 @@ export class ImgProductsService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} imgProduct`;
+    return 'hahah'
   }
 
   async update(id: number, updateImgProductDto: UpdateImgProductDto) {
@@ -83,4 +83,11 @@ export class ImgProductsService {
     }
   }
 
+  findByProduct(id:number)
+  {
+    return this.imgProductRepository.find({
+      relations:['product'],
+      where:{product:{id:id}}
+    })
+  }
 }
