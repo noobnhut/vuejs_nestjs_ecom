@@ -15,7 +15,11 @@ async create(createOrderDto: CreateOrderDto) {
   }
 
   findAll() {
-    return `This action returns all orders`;
+    return this.orderRepository.find(
+      {
+        relations:['user','ods','ods.product'],
+      }
+    )
   }
 
   findOne(id: number) {
