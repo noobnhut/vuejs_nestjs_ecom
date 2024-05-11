@@ -14,8 +14,11 @@ export class ProductsController {
   }
 
   @Get()
-  findAll() {
-    return this.productsService.findAll();
+  findAll(
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    return this.productsService.findAll(page,limit);
   }
 
   @Get('/search')

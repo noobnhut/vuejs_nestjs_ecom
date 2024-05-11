@@ -44,8 +44,19 @@ export class ProductsService {
     }
   }
 
-  findAll() {
-    return this.productoRepository.find();
+  async findAll(page: number = 1, limit: number = 10) {
+    const skip = (page - 1) * limit;
+    const [products, total] = await this.productoRepository.findAndCount({
+      skip,
+      take: limit,
+    });
+    return {
+      products,
+      total,
+      currentPage: page,
+      perPage: limit,
+      lastPage: Math.ceil(total / limit),
+    };
   }
 
   findOne(id: number) {
