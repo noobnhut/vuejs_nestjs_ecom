@@ -34,22 +34,19 @@ export default {
       throw error;
     }
   },
-  // thêm 1 Img 
-  createImg(data) {
+  // thêm 1 Img
+  createImg(data, id) {
     try {
-      return axios.post(`${API_URL}/img-products`, data);
+      const avatar = data.get("avatar");
+      const formData = new FormData();
+      formData.append("file", avatar);
+      return axios.post(`${API_URL}/img-products/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
     } catch (error) {
       console.error("Thêm Img thất bại", error);
-      throw error;
-    }
-  },
-
-  // update 1 Img
-  updateImg(id, data) {
-    try {
-      return axios.patch(`${API_URL}/img-products/${id}`, data);
-    } catch (error) {
-      console.error("Cập nhập Img thất bại", error);
       throw error;
     }
   },
