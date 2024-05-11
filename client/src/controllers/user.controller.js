@@ -58,8 +58,14 @@ export default {
     }
   },
 
-  getProfile() {
-    let token = localStorage.getItem("token");
+  getProfile(value) {
+    let token = "";
+    if (value == "admin") {
+      token = localStorage.getItem("token_admin");
+    } else if ((value = "user")) {
+      token = localStorage.getItem("token");
+    }
+
     if (token) {
       var replace_token = token.replace(/"/g, "");
       const headers = {
@@ -67,27 +73,35 @@ export default {
         "Content-Type": "application/json",
       };
 
-      return axios
-        .get(`${API_URL}/auth/profile`, { headers })
-
+      return axios.get(`${API_URL}/auth/profile`, { headers });
     } else {
       return Promise.reject(new Error("Không có token"));
     }
   },
 
-  async refreshToken() {
+  async refreshToken(value) {
     try {
       // Gọi API để refresh token
       const refreshResponse = await axios.get(`${API_URL}/auth/refresh`);
 
       // Lưu token mới vào local storage
-      localStorage.setItem(
-        "token",
-        JSON.stringify(refreshResponse.data.access_token)
-      );
+      let newToken = ''
+      if (value == "admin") {
+        localStorage.setItem(
+          "token_admin",
+          JSON.stringify(refreshResponse.data.access_token)
+        );
+         newToken = localStorage.getItem("token_admin");
+      } else if ((value = "user")) {
+        localStorage.setItem(
+          "token",
+          JSON.stringify(refreshResponse.data.access_token)
+        );
+        newToken = localStorage.getItem("token");
+      }
 
       // Lấy token mới từ local storage
-      let newToken = localStorage.getItem("token");
+     
       var replace_newToken = newToken.replace(/"/g, "");
 
       // Cấu hình header với token mới
@@ -107,12 +121,17 @@ export default {
       console.error("Lỗi khi gửi yêu cầu:", error);
       throw error;
     }
-  }, 
+  },
 
-  logout(id) {
+  logout(id,value) {
     try {
-      let token = localStorage.getItem("token");
-      
+      let token = "";
+      if (value == "admin") {
+        token = localStorage.getItem("token_admin");
+      } else if ((value = "user")) {
+        token = localStorage.getItem("token");
+      }
+
       if (token) {
         var replace_token = token.replace(/"/g, "");
         const headers = {
@@ -127,5 +146,4 @@ export default {
       console.log(error);
     }
   },
-
 };

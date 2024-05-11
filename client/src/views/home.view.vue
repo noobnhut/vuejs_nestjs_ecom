@@ -301,21 +301,21 @@ export default {
 
    async setRefreshToken()
     {
-     const result = await userController.refreshToken()
+     const result = await userController.refreshToken('user')
      this.user = JSON.parse(localStorage.getItem("user"));
     },
 
     async getProfile() {
       let token = localStorage.getItem("token");
       if (token) {
-      const result = await userController.getProfile()
+      const result = await userController.getProfile('user')
       this.user = JSON.parse(localStorage.getItem("user"));
       }
     },
 
     async logout()
     {
-      const result = await userController.logout(this.user.id)
+      const result = await userController.logout(this.user.id,'user')
       this.user = null
       localStorage.removeItem("user");
       localStorage.removeItem("token");

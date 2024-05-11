@@ -113,14 +113,14 @@ export default {
 
     async setRefreshToken()
     {
-     const result = await userController.refreshToken()
+     const result = await userController.refreshToken('admin')
      this.user = JSON.parse(localStorage.getItem("admin"));
     },
 
     async getProfile() {
-      let token = localStorage.getItem("token");
+      let token = localStorage.getItem("token_admin");
       if (token) {
-      const result = await userController.getProfile()
+      const result = await userController.getProfile('admin')
       this.user = JSON.parse(localStorage.getItem("admin"));
       }
       else
@@ -131,7 +131,7 @@ export default {
 
     async logout()
     {
-      const result = await userController.logout()
+      const result = await userController.logout(this.user.id,'admin')
       this.user = null
       localStorage.removeItem("admin");
       localStorage.removeItem("token");

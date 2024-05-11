@@ -79,7 +79,7 @@ export default {
 
       }
       else if (result.data.user.role == 'admin') {
-        localStorage.setItem("token", JSON.stringify(result.data.access_token));
+        localStorage.setItem("token_admin", JSON.stringify(result.data.access_token));
         localStorage.setItem("admin", JSON.stringify(result.data.user))
         window.location.href = 'http://localhost:5173/admin'
       }
