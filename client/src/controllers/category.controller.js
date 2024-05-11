@@ -18,7 +18,12 @@ export default {
 
   createCat(dataCat) {
     try {
-      return axios.post(`${API_URL}/categories`, dataCat);
+      const name_cat = dataCat.get('name_cat');
+      return axios.post(`${API_URL}/categories`, 
+        {
+          name_cat: name_cat
+        }
+      );
     } catch (error) {
       console.error("Thêm cat thất bại", error);
       throw error;
@@ -27,7 +32,12 @@ export default {
 
   updateCat(id, dataCat) {
     try {
-      return axios.patch(`${API_URL}/categories/${id}`, dataCat);
+      const name_cat = dataCat.get('name_cat');
+      return axios.patch(`${API_URL}/categories/${id}`, 
+        {
+          name_cat: name_cat
+        }
+      );
     } catch (error) {
       console.error("Cập nhập cat thất bại", error);
       throw error;
