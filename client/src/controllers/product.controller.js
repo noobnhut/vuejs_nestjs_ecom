@@ -34,10 +34,20 @@ export default {
       throw error;
     }
   },
+
   // thêm 1 product 
-  createProduct(data,catid) {
+  createProduct(data) {
     try {
-      return axios.post(`${API_URL}/product?catid=${catid}`, data);
+      const name_product = data.get("name_product");
+      const des_product = data.get("des_product");
+      const price = data.get("price");
+      const catID = data.get("catID");
+
+      return axios.post(`${API_URL}/products/${catID}`, {
+        name_product:name_product,
+        des_product:des_product,
+        price:price
+      });;
     } catch (error) {
       console.error("Thêm product thất bại", error);
       throw error;
@@ -47,7 +57,15 @@ export default {
   // update 1 product
   updateProduct(id, data) {
     try {
-      return axios.patch(`${API_URL}/product?id=${id}&&catid=${catid}`, data);
+      const name_product = data.get("name_product");
+      const des_product = data.get("des_product");
+      const price = data.get("price");
+
+      return axios.patch(`${API_URL}/products/${id}`, {
+        name_product:name_product,
+        des_product:des_product,
+        price:price
+      });
     } catch (error) {
       console.error("Cập nhập product thất bại", error);
       throw error;
@@ -57,10 +75,12 @@ export default {
   // xóa 1 product
   deleteProduct(id) {
     try {
-      return axios.delete(`${API_URL}/product/${id}`);
+      return axios.delete(`${API_URL}/products/${id}`);
     } catch (error) {
       console.error("Xóa product thất bại", error);
       throw error;
     }
   },
+
+  
 };

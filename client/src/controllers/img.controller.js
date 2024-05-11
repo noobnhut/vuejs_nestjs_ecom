@@ -8,7 +8,7 @@ export default {
   // lấy list Img
   getImgs() {
     try {
-      return axios.get(`${API_URL}/imgs`);
+      return axios.get(`${API_URL}/img-products`);
     } catch (error) {
       console.error("Lỗi lấy list Img", error);
       throw error;
@@ -18,7 +18,7 @@ export default {
   // lấy Img theo id
   getImg(id) {
     try {
-      return axios.get(`${API_URL}/imgs/${id}`);
+      return axios.get(`${API_URL}/img-products/${id}`);
     } catch (error) {
       console.error("Lỗi lấy list Img bằng id", error);
       throw error;
@@ -28,7 +28,7 @@ export default {
   // lấy list Img theo product
   getImgByProduct(productId) {
     try {
-      return axios.get(`${API_URL}/imgs?productId=${productId}`);
+      return axios.get(`${API_URL}/img-products/product/${productId}`);
     } catch (error) {
       console.error("Lỗi lấy list Img bằng productId", error);
       throw error;
@@ -37,7 +37,7 @@ export default {
   // thêm 1 Img 
   createImg(data) {
     try {
-      return axios.post(`${API_URL}/imgs`, data);
+      return axios.post(`${API_URL}/img-products`, data);
     } catch (error) {
       console.error("Thêm Img thất bại", error);
       throw error;
@@ -47,7 +47,7 @@ export default {
   // update 1 Img
   updateImg(id, data) {
     try {
-      return axios.patch(`${API_URL}/imgs/${id}`, data);
+      return axios.patch(`${API_URL}/img-products/${id}`, data);
     } catch (error) {
       console.error("Cập nhập Img thất bại", error);
       throw error;
@@ -57,7 +57,7 @@ export default {
   // xóa 1 Img
   deleteImg(id) {
     try {
-      return axios.delete(`${API_URL}/imgs/${id}`);
+      return axios.delete(`${API_URL}/img-products/${id}`);
     } catch (error) {
       console.error("Xóa Img thất bại", error);
       throw error;
