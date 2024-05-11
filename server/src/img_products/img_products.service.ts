@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { CreateImgProductDto } from './dto/create-img_product.dto';
 import { UpdateImgProductDto } from './dto/update-img_product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,6 +15,7 @@ export class ImgProductsService {
   constructor(
     @InjectRepository(ImgProduct)
     private imgProductRepository: Repository<ImgProduct>,
+    @Inject(forwardRef(() => ProductsService))
     private productsService: ProductsService
   ) { }
 
@@ -56,7 +57,11 @@ export class ImgProductsService {
   }
 
   findOne(id: number) {
-    return 'hahah'
+    try {
+      return this.imgProductRepository.findOneBy({id});
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async update(id: number, updateImgProductDto: UpdateImgProductDto) {
