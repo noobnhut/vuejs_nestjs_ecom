@@ -41,12 +41,15 @@ export default {
       const name_product = data.get("name_product");
       const des_product = data.get("des_product");
       const price = data.get("price");
+      const quantity = data.get("quantity");
       const catID = data.get("catID");
 
       return axios.post(`${API_URL}/products/${catID}`, {
         name_product:name_product,
         des_product:des_product,
-        price:price
+        price:price,
+        quantity:quantity
+
       });;
     } catch (error) {
       console.error("Thêm product thất bại", error);
@@ -60,11 +63,14 @@ export default {
       const name_product = data.get("name_product");
       const des_product = data.get("des_product");
       const price = data.get("price");
+      const quantity = data.get("quantity");
 
       return axios.patch(`${API_URL}/products/${id}`, {
         name_product:name_product,
         des_product:des_product,
-        price:price
+        price:price,
+        quantity:quantity
+
       });
     } catch (error) {
       console.error("Cập nhập product thất bại", error);

@@ -10,6 +10,9 @@ export class OrderDetail {
     @Column({nullable:false,type:'double'})
     single_price:number
 
+    @Column({nullable:false,type:'double'})
+    quantity:number
+    
     @ManyToOne(() => Order, (order) => order.ods)
     order: Order;
 

@@ -7,65 +7,121 @@
         </header>
 
         <div class="mt-8">
-          <!--danh sách sản phẩm mua-->
-          <ul class="space-y-4">
+          
+          <template v-if="carts.length == 0">
+          <div class="cart--empty-message  py-4 text-center">
+            <img src="https://nghiphat.com/images/empty_cart.png" class="mx-auto" alt="">
+            <p>Không có sản phẩm nào trong giỏ hàng của bạn</p>
+          </div>
+        </template>
+
+        <!--danh sách sản phẩm mua-->
+          <ul class="space-y-4" v-for="(product,index) in carts">
             <li class="flex items-center gap-4">
               <img
-                src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=830&q=80"
+                :src="product.img"
                 alt=""
                 class="size-16 rounded object-cover"
               />
 
               <div>
                 <h3 class="text-base font-bold text-gray-900">
-                  Basic Tee 6-Pack
+                  {{ product.name_product }}
                 </h3>
 
                 <dl class="mt-0.5 space-y-px text-sm text-gray-600">
                   <div>
                     <dt class="inline mr-2">Giá:</dt>
-                    <dd class="inline">200k</dd>
+                    <dd class="inline">{{ formatPrice(product.single_price) }}</dd>
                   </div>
                 </dl>
               </div>
 
               <div class="flex flex-1 items-center justify-end gap-2">
-                <form>
-                  <label for="Line1Qty" class="sr-only"> Quantity </label>
+              <div>
+                <label for="Line1Qty" class="sr-only"> Quantity </label>
+                <ol class="flex justify-center gap-1 text-xs font-medium">
+                  <!--decrease-->
+                  <li @click="handlePage(index, 'decrease')">
+                    <a
+                      class="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180"
+                    >
+                      <span class="sr-only">Prev Page</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-3 w-3"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </a>
+                  </li>
 
+                  <!-- input value-->
                   <input
                     type="number"
                     min="1"
-                    value="1"
+                    :value="product.quantity"
+                    disabled
                     id="Line1Qty"
                     class="h-8 w-12 rounded border-gray-200 bg-gray-50 p-0 text-center text-xs text-gray-600 [-moz-appearance:_textfield] focus:outline-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
                   />
-                </form>
 
-                <button class="text-gray-600 transition hover:text-red-600">
-                  <span class="sr-only">Remove item</span>
-
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="h-4 w-4"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                    />
-                  </svg>
-                </button>
+                  <!--increase-->
+                  <li @click="handlePage(index, 'increase')">
+                    <a
+                      class="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180"
+                    >
+                      <span class="sr-only">Next Page</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-3 w-3"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </a>
+                  </li>
+                </ol>
               </div>
+
+              <button
+                class="text-gray-600 transition hover:text-red-600"
+                @click="deleteItem(index)"
+              >
+                <span class="sr-only">Remove item</span>
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="h-4 w-4"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                  />
+                </svg>
+              </button>
+            </div>
             </li>
           </ul>
 
           <!--total price-->
-          <div class="mt-8 flex justify-end border-t border-gray-100 pt-8">
+          <div v-if="carts.length > 0" class="mt-8 flex justify-end border-t border-gray-100 pt-8">
             <div class="w-screen max-w-lg space-y-4">
 
                 <!--form discord-->
@@ -91,17 +147,17 @@
               <dl class="space-y-0.5 text-sm text-gray-700">
                 <div class="flex justify-between">
                   <dt>Tổng giá</dt>
-                  <dd>200k</dd>
+                  <dd>{{ formatPrice( totalPrice) }}</dd>
                 </div>
 
                 <div class="flex justify-between">
                   <dt>Discount</dt>
-                  <dd>-20k</dd>
+                  <dd>{{ formatPrice( discount) }}</dd>
                 </div>
 
                 <div class="flex justify-between !text-base font-medium">
                   <dt>Tổng tiền</dt>
-                  <dd>180k</dd>
+                  <dd>{{ formatPrice( finalPrice) }}</dd>
                 </div>
               </dl>
 
@@ -123,12 +179,64 @@
 </template>
 
 <script>
+import cartController from '../../controllers/cart.controller';
+import extensiveController from '../../controllers/extensive.controller'
 export default {
   data() {
-    return {};
+    return {
+      carts:[],
+      totalPrice:0,
+      discount:0,
+      finalPrice:0
+    };
   },
-  mounted() {},
+  mounted() {
+    this.getCart();
+    
+  },
   components: {},
-  methods: {},
+  methods: {
+    getCart() {
+      this.carts = cartController.loadCartFromlocal();
+      this.getPrice()
+      this.getFinalPrice()
+    },
+    formatPrice(value)
+    {
+      return extensiveController.formatCurrency(value)
+    },
+    deleteItem(index) {
+      cartController.removeItem(index);
+      this.getCart();
+    },
+
+    handlePage(index, value) {
+      if (value == "increase") {
+        cartController.increaseQuantity(index);
+        this.getCart();
+      } else if (value == "decrease") {
+        cartController.decreaseQuantity(index);
+        this.getCart();
+      }
+    },
+
+    getPrice()
+    {
+      let totalPrice = 0;
+      
+      for(let i = 0;i<this.carts.length;i++)
+      {
+        totalPrice += this.carts[i].single_price * this.carts[i].quantity;
+      }
+
+      this.totalPrice = totalPrice;
+    },
+
+    getFinalPrice()
+    {
+      this.finalPrice = this.totalPrice - this.discount
+    }
+
+  },
 };
 </script>

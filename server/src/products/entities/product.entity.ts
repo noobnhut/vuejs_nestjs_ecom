@@ -3,7 +3,7 @@ import { Favourite } from "src/favourites/entities/favourite.entity";
 import { ImgProduct } from "src/img_products/entities/img_product.entity";
 import { OrderDetail } from "src/order_details/entities/order_detail.entity";
 import { Review } from "src/reviews/entities/review.entity";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {  BeforeInsert, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 @Entity({ name: 'products' }) // Tên table trên cơ sở dữ liệu
 export class Product {
     @PrimaryGeneratedColumn()
@@ -18,6 +18,12 @@ export class Product {
     @Column({nullable:false,type:'double'})
     price:number
     
+    @Column({nullable:false,type:'double'})
+    quantity:number
+
+    @Column({nullable:false,type:'double'})
+    real_quantity:number
+
     @ManyToOne(() => Category, (cat) => cat.products)
     cat: Category
 
@@ -44,5 +50,13 @@ export class Product {
 
     @Column({ nullable: true })
     is_deleted: Boolean;
+
+    @BeforeInsert()
+    setDefaultRealQuantity() {
+        // Kiểm tra nếu real_quantity chưa được thiết lập, gán nó bằng quantity
+        if (this.real_quantity === undefined || this.real_quantity === null) {
+            this.real_quantity = this.quantity;
+        }
+    }
 }
 

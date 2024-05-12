@@ -19,7 +19,8 @@
     <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 p-4">
       <!-- render list product -->
       <div v-for="(product, index) in products" :key="index">
-        <a class="group block overflow-hidden shadow-xl">
+      
+        <a class="group block overflow-hidden shadow-xl" v-if="product.imgs.length > 0">
           <div class="relative h-[250px] sm:h-[300px]">
             <!-- Product images -->
             <img
@@ -40,6 +41,23 @@
 
             <div class="mt-1.5 flex items-center justify-between text-gray-900">
               <p class="tracking-wide">{{ formatPrice(product.price) }}</p>
+              <!--nut mua hang -->
+              <div @click="addCart(product)"
+                class="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-2 hover:bg-gray-100"
+              >
+                <div class="relative">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 text-gray-500"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"
+                    />
+                  </svg>
+                </div>
+              </div>
             </div>
           </div>
         </a>
@@ -74,8 +92,8 @@
       v-for="pageNumber in last_page"
       :key="pageNumber"
       @click="changePage(pageNumber)"
-      :class="{'bg-gray-600 text-white': pageNumber === page_number}"
-      class="block size-8 rounded border-gray-600  text-center leading-8  cursor-pointer"
+      :class="{ 'bg-gray-600 text-white': pageNumber === page_number }"
+      class="block size-8 rounded border-gray-600 text-center leading-8 cursor-pointer"
     >
       {{ pageNumber }}
     </li>
@@ -106,7 +124,7 @@
 <script>
 import extensiveController from "../../controllers/extensive.controller";
 import productController from "../../controllers/product.controller";
-
+import cartController from "../../controllers/cart.controller";
 export default {
   props: {
     isCatTitle: {
@@ -135,6 +153,14 @@ export default {
       products: [],
       last_page: "",
       page_number: 1,
+      newItem: {
+        id_product: 0,
+        name_product: '',
+        single_price: 0,
+        quantity: 1,
+        real_quantity:1,
+        img:''
+      }
     };
   },
 
@@ -182,9 +208,21 @@ export default {
     goProductByCat() {
       this.$router.push(`/category/${this.cat.id}`);
     },
+
     goToDetail(id) {
       this.$router.push(`/products/${id}`);
     },
+
+    addCart(product)
+    {
+      this.newItem.img=product.imgs[0].img_url
+      this.newItem.id_product = product.id
+      this.newItem.name_product = product.name_product
+      this.newItem.single_price = product.price
+      this.newItem.real_quantity = product.real_quantity
+      cartController.addItem(this.newItem)
+    },
+
     formatPrice(value) {
       return extensiveController.formatCurrency(value);
     },

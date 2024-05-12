@@ -1,6 +1,6 @@
 <template>
   <div
-    class="overflow-y-auto overflow-x-hidden fixed w-full h-full top-0 left-0 flex items-center justify-center z-[100]"
+    class="m-1 overflow-y-auto overflow-x-hidden fixed w-full h-full top-0 left-0 flex items-center justify-center z-[100]"
   >
     <div
       class="relative w-screen max-w-sm rounded-xl bg-gray-100 px-4 py-8 sm:px-6 lg:px-8"
@@ -8,8 +8,9 @@
       role="dialog"
       tabindex="-1"
     >
-    <!--nút đóng-->
-      <button @click="onclose()"
+      <!--nút đóng-->
+      <button
+        @click="onclose()"
         class="absolute end-4 top-4 text-gray-600 transition hover:scale-110"
       >
         <span class="sr-only">Close cart</span>
@@ -32,32 +33,86 @@
 
       <div class="mt-4 space-y-6">
         <!--list sản phẩm mua-->
+        <template v-if="carts.length == 0">
+          <div class="cart--empty-message  py-4 text-center">
+            <img src="https://nghiphat.com/images/empty_cart.png" class="mx-auto" alt="">
+            <p>Không có sản phẩm nào trong giỏ hàng của bạn</p>
+          </div>
+        </template>
         <ul class="space-y-4">
-          <li class="flex items-center gap-4">
+          <li class="flex items-center gap-4" v-for="(product, index) in carts">
             <img
-              src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=830&q=80"
+              :src="product.img"
               alt=""
               class="size-16 rounded object-cover"
             />
 
             <div>
-              <h3 class="text-sm text-gray-900">Basic Tee 6-Pack</h3>
+              <h3 class="text-sm text-gray-900">{{ product.name_product }}</h3>
             </div>
 
             <div class="flex flex-1 items-center justify-end gap-2">
-              <form>
+              <div>
                 <label for="Line1Qty" class="sr-only"> Quantity </label>
+                <ol class="flex justify-center gap-1 text-xs font-medium">
+                  <!--decrease-->
+                  <li @click="handlePage(index, 'decrease')">
+                    <a
+                      class="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180"
+                    >
+                      <span class="sr-only">Prev Page</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-3 w-3"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </a>
+                  </li>
 
-                <input
-                  type="number"
-                  min="1"
-                  value="1"
-                  id="Line1Qty"
-                  class="h-8 w-12 rounded border-gray-200 bg-gray-50 p-0 text-center text-xs text-gray-600 [-moz-appearance:_textfield] focus:outline-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
-                />
-              </form>
+                  <!-- input value-->
+                  <input
+                    type="number"
+                    min="1"
+                    :value="product.quantity"
+                    disabled
+                    id="Line1Qty"
+                    class="h-8 w-12 rounded border-gray-200 bg-gray-50 p-0 text-center text-xs text-gray-600 [-moz-appearance:_textfield] focus:outline-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+                  />
 
-              <button class="text-gray-600 transition hover:text-red-600">
+                  <!--increase-->
+                  <li @click="handlePage(index, 'increase')">
+                    <a
+                      class="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180"
+                    >
+                      <span class="sr-only">Next Page</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-3 w-3"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </a>
+                  </li>
+                </ol>
+              </div>
+
+              <button
+                class="text-gray-600 transition hover:text-red-600"
+                @click="deleteItem(index)"
+              >
                 <span class="sr-only">Remove item</span>
 
                 <svg
@@ -81,18 +136,20 @@
 
         <!--các lựu chọn nè-->
         <div class="space-y-4 text-center">
-          <router-link to="/carts" @click="onclose"
-            
+          <router-link
+            to="/carts"
+            @click="onclose"
             class="block rounded cursor-pointer border border-gray-600 px-5 py-3 text-sm text-gray-600 transition hover:ring-1 hover:ring-gray-400"
           >
             Xem giỏ hàng (số lượng)
           </router-link>
 
-          <router-link to="/" @click="onclose()"
-            
-            class="inline-block  cursor-pointer text-sm text-gray-500 underline underline-offset-4 transition hover:text-gray-600"
+          <router-link
+            to="/"
+            @click="onclose()"
+            class="inline-block cursor-pointer text-sm text-gray-500 underline underline-offset-4 transition hover:text-gray-600"
           >
-           Tiếp tục mua sắm
+            Tiếp tục mua sắm
           </router-link>
         </div>
       </div>
@@ -101,17 +158,43 @@
 </template>
 
 <script>
+import cartController from "../../controllers/cart.controller";
 export default {
   emits: ["cancel"],
   data() {
-    return {};
+    return {
+      carts: [],
+    };
   },
-  mounted() {},
+  mounted() {
+    this.getCart();
+  },
   components: {},
   methods: {
     onclose() {
       this.$emit("cancel");
     },
+
+    getCart() {
+      this.carts = cartController.loadCartFromlocal();
+    },
+
+    deleteItem(index) {
+      cartController.removeItem(index);
+      this.getCart();
+    },
+
+    handlePage(index, value) {
+      if (value == "increase") {
+        cartController.increaseQuantity(index);
+        this.getCart();
+      } else if (value == "decrease") {
+        cartController.decreaseQuantity(index);
+        this.getCart();
+      }
+    },
+
+    
   },
 };
 </script>

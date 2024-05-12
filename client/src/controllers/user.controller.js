@@ -134,6 +134,7 @@ export default {
 
       if (token) {
         var replace_token = token.replace(/"/g, "");
+        
         const headers = {
           Authorization: `Bearer ${replace_token}`,
           "Content-Type": "application/json",

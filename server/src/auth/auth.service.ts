@@ -39,16 +39,25 @@ export class AuthService {
     this.updateUserToken(refresh_token, user.id)
 
     // set cookie
-    response.cookie('refresh_token', refresh_token, {
-      httpOnly: true,
-      maxAge: ms(this.configService.get<string>("JWT_REFRESH_EXPIRED_IN")),
-    })
+    if (user.role == 'admin') {
+      response.cookie('refresh_token_admin', refresh_token, {
+        httpOnly: true,
+        maxAge: ms(this.configService.get<string>("JWT_REFRESH_EXPIRED_IN")),
+      })
+    }
+    else if (user.role == 'user') {
+      response.cookie('refresh_token', refresh_token, {
+        httpOnly: true,
+        maxAge: ms(this.configService.get<string>("JWT_REFRESH_EXPIRED_IN")),
+      })
+    }
+
 
     return {
       access_token: this.jwtService.sign(payload),
       refresh_token: refresh_token,
       user: {
-        id:user.id,
+        id: user.id,
         email: user.email,
         fullname: user.fullname,
         role: user.role
@@ -81,7 +90,13 @@ export class AuthService {
       let user = await this.usersService.findUserByToken(refresh_token)
       if (user) {
         // update refresh_token
-        response.clearCookie("refresh_token")
+        if (user.role == 'admin') {
+          response.clearCookie("refresh_token_admin")
+        }
+        else if (user.role == 'user') {
+          response.clearCookie("refresh_token")
+        }
+
         return this.login(user, response)
       }
       else {
@@ -93,9 +108,16 @@ export class AuthService {
     }
   }
 
-  logout = async (id:number, responsse: Response) => {
-    await this.usersService.updateUserToken(null,id);
-    responsse.clearCookie("refresh_token")
+  logout = async (id: number, responsse: Response) => {
+    await this.usersService.updateUserToken('logoutsucesss', id);
+    const user =  await this.usersService.findOne(id)
+    if (user.role == 'admin') {
+      responsse.clearCookie("refresh_token_admin")
+    }
+    else if (user.role == 'user') {
+      responsse.clearCookie("refresh_token")
+    }
+   
     return "ok"
   }
 }

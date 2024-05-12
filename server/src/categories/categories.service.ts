@@ -81,7 +81,7 @@ export class CategoriesService {
 
   async remove(id: number) {
     try {
-     const check_cat = await this.catRepository.findOneBy({id:id})
+     let check_cat = await this.catRepository.findOneBy({id:id})
      if(check_cat)
        {
          // check product
@@ -92,7 +92,7 @@ export class CategoriesService {
            }
            else
            {
-             await this.catRepository.delete(check_cat)
+             await this.catRepository.delete({id:check_cat.id})
              return 'Xóa thành công'
            }
        }
