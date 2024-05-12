@@ -3,9 +3,7 @@
   <section class="p-3 sm:p-5 antialiased">
     <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
       <!-- Start coding here -->
-      <div
-        class="relative shadow-md sm:rounded-lg overflow-hidden  px-2 py-2"
-      >
+      <div class="relative shadow-md sm:rounded-lg overflow-hidden px-2 py-2">
         <div
           class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4"
         >
@@ -46,8 +44,10 @@
         <!--nội dung-->
         <!--title add-->
         <div class="flex items-center justify-between mt-2 mb-2">
-          <h2 class="text-[20px] font-medium ">Quản lý danh mục</h2>
-          <button @click="openAdd()" type="button"
+          <h2 class="text-[20px] font-medium">Quản lý danh mục</h2>
+          <button
+            @click="openAdd()"
+            type="button"
             class="inline-flex items-center gap-x-1 rounded-10 bg-white py-2 px-4 text-sm"
           >
             <svg fill="none" viewBox="0 0 24 24" class="h-6 w-6 stroke-current">
@@ -78,7 +78,7 @@
             </thead>
 
             <tbody v-for="(cat, index) in cats" :key="index">
-              <tr class="border-b border-gray-700">
+              <tr class="border-b">
                 <th
                   scope="row"
                   class="px-4 py-3 font-medium text-white-900 whitespace-nowrap dark:text-black"
@@ -90,8 +90,13 @@
                 </td>
 
                 <td class="px-4 py-3">
-                  <button @click="openUpdate(); selectCat(cat)" type="button"
-                    class="flex items-center justify-center gap-x-2 rounded-10 border py-2 px-1 border-blue-400/10 bg-blue-700/20 text-blue-400"
+                  <button
+                    @click="
+                      isUpdate = true;
+                      selectCat(cat);
+                    "
+                    type="button"
+                    class="cursor-pointer flex items-center justify-center gap-x-2 rounded-10 border py-2 px-1 border-blue-400/10 bg-blue-700/20 text-blue-400"
                   >
                     <span class="h-2 w-2 rounded-full bg-blue-400"></span
                     ><span class="text-xs">Cập nhập</span>
@@ -99,7 +104,12 @@
                 </td>
 
                 <td class="px-4 py-3">
-                  <button @click="openDelete(); selectCat(cat)" type="button"
+                  <button
+                    @click="
+                      isDelete = true;
+                      selectCat(cat);
+                    "
+                    type="button"
                     class="flex items-center justify-center gap-x-2 rounded-10 border py-2 px-1 border-red-400/10 bg-red-700/20 text-red-400"
                   >
                     <span class="h-2 w-2 rounded-full bg-red-400"></span
@@ -114,76 +124,242 @@
     </div>
   </section>
 
-  <!-- Create modal -->
-  <div v-if="isAdd"
-    class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 bg-blue-100 rounded-lg shadow-lg">
-    <div class="p-8">
-      <div class="mb-2">
-          <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Tên danh mục
-          </label>
-          <input v-model="name_cat" type="text" 
-          id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-      </div>
+  <!--create-->
+  <div
+    v-if="isAdd"
+    id="createProductModal"
+    class="overflow-y-auto overflow-x-hidden fixed w-full h-full top-0 left-0 flex items-center justify-center z-50"
+  >
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+      <!-- Modal content -->
+      <div
+        class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5"
+      >
+        <!-- Modal header -->
+        <div
+          class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600"
+        >
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+            Thêm danh mục
+          </h3>
 
-      <div class="flex justify-between items-center">
-        <button @click="createCat()" type="button" 
-        class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-            Thêm
-        </button>
-        <button @click="openAdd()" type="button" 
-        class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
-            Hủy
+          <button
+            @click="isAdd = false"
+            type="button"
+            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+            data-modal-target="createProductModal"
+            data-modal-toggle="createProductModal"
+          >
+            <svg
+              aria-hidden="true"
+              class="w-5 h-5"
+              fill="currentColor"
+              viewbox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <span class="sr-only">Close modal</span>
+          </button>
+        </div>
+        <!-- Modal body -->
+        <div>
+          <div class="name_product">
+            <label
+              for="name"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Tên danh mục</label
+            >
+            <input
+              v-model="name_cat"
+              type="text"
+              name="name"
+              id="name"
+              class="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="Nhập tên danh mục"
+              required=""
+            />
+          </div>
+        </div>
+
+        <button
+          @click="createCat()"
+          class="mt-2 inline-flex items-center bg-gray-400 hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+        >
+          <svg
+            class="mr-1 -ml-1 w-6 h-6"
+            fill="currentColor"
+            viewbox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          Thêm danh mục
         </button>
       </div>
     </div>
-</div>
-  <!-- Create end -->
+  </div>
 
-  <!-- Update modal -->
-  <div v-if="isUpdate"
-    class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 bg-blue-100 rounded-lg shadow-lg">
-    <div class="p-8">
-      <div class="mb-2">
-          <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Tên danh mục
-          </label>
-          <input v-model="name_cat" type="text" 
-          id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-      </div>
+  <!--update-->
+  <div
+    v-if="isUpdate"
+    id="createProductModal"
+    class="overflow-y-auto overflow-x-hidden fixed w-full h-full top-0 left-0 flex items-center justify-center z-50"
+  >
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+      <!-- Modal content -->
+      <div
+        class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5"
+      >
+        <!-- Modal header -->
+        <div
+          class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600"
+        >
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+            Cập nhật danh mục
+          </h3>
 
-      <div class="flex justify-between items-center">
-        <button @click="updateCat()" type="button" 
-        class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-            Cập nhật
-        </button>
-        <button @click="openUpdate()" type="button" 
-        class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
-            Hủy
+          <button
+            @click="isUpdate = false"
+            type="button"
+            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+            data-modal-target="createProductModal"
+            data-modal-toggle="createProductModal"
+          >
+            <svg
+              aria-hidden="true"
+              class="w-5 h-5"
+              fill="currentColor"
+              viewbox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <span class="sr-only">Close modal</span>
+          </button>
+        </div>
+        <!-- Modal body -->
+        <div>
+          <div class="name_product">
+            <label
+              for="name"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Tên danh mục</label
+            >
+            <input
+              v-model="name_cat"
+              type="text"
+              name="name"
+              id="name"
+              class="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="Nhập tên danh mục"
+              required=""
+            />
+          </div>
+        </div>
+
+        <button
+          @click="updateCat()"
+          class="mt-2 inline-flex items-center bg-gray-400 hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+        >
+          <svg
+            class="mr-1 -ml-1 w-6 h-6"
+            fill="currentColor"
+            viewbox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          Cập nhật danh mục
         </button>
       </div>
     </div>
-</div>
-  <!-- Update end -->
+  </div>
 
-  <!-- Delete modal -->
-  <div v-if="isDelete" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 bg-blue-100 rounded-lg shadow-lg">
-    <div class="p-8">
-      <div class="mb-2">
-        <p class="text-center text-gray-700 mb-4">Bạn có muốn xóa không?</p>
-
-        <div class="flex justify-between items-center">
-            <button @click="deleteCat()" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                Xóa
-            </button>
-            <button @click="openDelete()" type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
-                Hủy
-            </button>
+  <!-- delete -->
+  <div
+    id="deleteModal"
+    v-if="isDelete"
+    class="overflow-y-auto overflow-x-hidden fixed w-full h-full top-0 left-0 flex items-center justify-center z-50"
+  >
+    <div class="relative p-4 w-full max-w-md max-h-full">
+      <!-- Modal content -->
+      <div
+        class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5"
+      >
+        <button
+          @click="isDelete = false"
+          type="button"
+          class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+          data-modal-toggle="deleteModal"
+        >
+          <svg
+            aria-hidden="true"
+            class="w-5 h-5"
+            fill="currentColor"
+            viewbox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <svg
+          class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto"
+          aria-hidden="true"
+          fill="currentColor"
+          viewbox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        <p class="mb-4 text-gray-500 dark:text-gray-300">
+          Bạn có muốn xóa
+          <span class="font-bold"> {{ name_cat }}</span> ?
+        </p>
+        <div class="flex justify-center items-center space-x-4">
+          <button
+            data-modal-toggle="deleteModal"
+            type="button"
+            @click="isDelete = false"
+            class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+          >
+            Hủy
+          </button>
+          <button
+            type="submit"
+            @click="deleteCat()"
+            class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
+          >
+            Xóa
+          </button>
         </div>
       </div>
     </div>
-</div>
-  <!-- Delete end -->
+  </div>
 
   <!-- End block -->
 
@@ -192,15 +368,19 @@
 </template>
 
 <script>
-import catController from '../../controllers/category.controller';
+import catController from "../../controllers/category.controller";
 import toast from "../../components/toast.component.vue";
 export default {
   data() {
     return {
-      cats: [], cat: "",
+      cats: [],
+      cat: "",
       value_search: "",
-      name_cat:null,select_cat:null,
-      isAdd:false,isUpdate:false,isDelete:false
+      name_cat: null,
+      select_cat: null,
+      isAdd: false,
+      isUpdate: false,
+      isDelete: false,
     };
   },
   mounted() {
@@ -211,16 +391,8 @@ export default {
   },
   methods: {
     openAdd() {
-        this.isAdd = !this.isAdd
-        this.name_cat = ""
-    },
-
-    openDelete() {
-      this.isDelete = !this.isDelete
-    },
-
-    openUpdate() {
-      this.isUpdate = !this.isUpdate
+      this.isAdd = true;
+      this.name_cat = "";
     },
 
     selectCat(select) {
@@ -239,24 +411,21 @@ export default {
 
     async createCat() {
       try {
-        const requestData = {
-          name_cat: this.name_cat
-        };
-        console.log(this.name_cat);
-        const result = await catController.createCat(requestData);
-        console.log(result);
+        const formData = new FormData();
+        formData.append("name_cat", this.name_cat);
 
-        if(result.status == 201){
-          this.$refs.toast.showToast(result.data.message);
+        const result = await catController.createCat(formData);
+        console.log(result)
+        if (result.status == 201) {
+          this.$refs.toast.showToast(result.data);
           // setTimeout(() => {
           //    location.reload()
           // }, 1000);
-          this.openAdd();
+          this.isAdd = false;
           this.getCat();
-        }else{
-          this.$refs.toast.showToast(result.data.message);
+        } else {
+          this.$refs.toast.showToast(result.data);
         }
-        
       } catch (error) {
         console.log(error);
       }
@@ -264,19 +433,19 @@ export default {
 
     async updateCat() {
       try {
-        const requestData = {
-          name_cat: this.name_cat
-        };
-        const result = await catController.updateCat(this.cat.id, requestData);
-        if(result.status == 201){
-          setTimeout(() => {
-             location.reload()
-          }, 1000);
-          this.openUpdate();
+        const formData = new FormData();
+        formData.append("name_cat", this.name_cat);
+        const result = await catController.updateCat(this.cat.id, formData);
+        // console.log(result);
+        if (result.status == 200) {
+          // setTimeout(() => {
+          //   location.reload();
+          // }, 1000);
+          this.isUpdate = false;
           this.getCat();
-          this.$refs.toast.showToast(result.data.message);
-        }else{
-          this.$refs.toast.showToast(result.data.message);
+          this.$refs.toast.showToast(result.data);
+        } else {
+          this.$refs.toast.showToast(result.data);
         }
       } catch (error) {
         console.log(error);
@@ -286,7 +455,8 @@ export default {
     async deleteCat() {
       try {
         const result = await catController.deleteCat(this.cat.id);
-        this.openDelete();
+        this.isDelete = false;
+        this.$refs.toast.showToast(result.data);
         this.getCat();
       } catch (error) {
         console.log(error);
