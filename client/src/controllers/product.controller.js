@@ -26,9 +26,9 @@ export default {
   },
 
   // lấy list product theo cat
-  getProductByCat(catId) {
+  getProductByCat(catId,page,limit) {
     try {
-      return axios.get(`${API_URL}/products?catId=${catId}`);
+      return axios.get(`${API_URL}/products/cat/${catId}?page=${page}&&limit=${limit}`);
     } catch (error) {
       console.error("Lỗi lấy list product bằng catId", error);
       throw error;
@@ -90,6 +90,8 @@ export default {
       console.error("Xóa product thất bại", error);
       throw error;
     }
-  }
+  },
+
+  
   
 };

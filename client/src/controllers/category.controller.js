@@ -16,6 +16,24 @@ export default {
     }
   },
 
+  getCat(id) {
+    try {
+      return axios.get(`${API_URL}/categories/${id}`);
+    } catch (error) {
+      console.error("Lỗi lấy list cat", error);
+      throw error;
+    }
+  },
+
+  getByProduct() {
+    try {
+      return axios.get(`${API_URL}/categories/byproduct`);
+    } catch (error) {
+      console.error("Lỗi lấy list cat", error);
+      throw error;
+    }
+  },
+
   createCat(dataCat) {
     try {
       return axios.post(`${API_URL}/categories`, dataCat);

@@ -573,7 +573,7 @@ export default {
   methods: {
     async getProduct() {
       const result = await productController.getProducts();
-      this.products = result.data.products;
+      this.products = result.data;
     },
 
     async getImgs(id) {

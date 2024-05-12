@@ -50,23 +50,31 @@ export class ProductsService {
     }
   }
 
-  async findAll(page: number = 1, limit: number = 10) {
-    const skip = (page - 1) * limit;
-    const [products, total] = await this.productoRepository.findAndCount({
-      skip,
-      take: limit,
-    });
-    return {
-      products,
-      total,
-      currentPage: page,
-      perPage: limit,
-      lastPage: Math.ceil(total / limit),
-    };
+  // async findAll(page: number = 1, limit: number = 2) {
+  //   const skip = (page - 1) * limit;
+  //   const [products, total] = await this.productoRepository.findAndCount({
+  //     skip,
+  //     take: limit,
+  //   });
+  //   return {
+  //     products,
+  //     total,
+  //     currentPage: page,
+  //     perPage: limit,
+  //     lastPage: Math.ceil(total / limit),
+  //   };
+  // }
+
+  async findAll()
+  {
+    return await this.productoRepository.find()
   }
 
   findOne(id: number) {
-    return this.productoRepository.findOneBy({id:id});
+    return this.productoRepository.findOne({
+      relations:['cat','imgs'],
+      where:{id:id},
+    });
   }
 
   // có cần đổi danh mục ko ? // không
@@ -116,12 +124,22 @@ export class ProductsService {
     }
   } 
 
-  findProductByCat(id:number)
+ async findProductByCat(id:number,page: number = 1, limit: number = 10)
   {
-    return this.productoRepository.find({
-      relations:['cat'],
-      where:{cat:{id:id}}
-    })
+    const skip = (page - 1) * limit;
+    const [products, total] = await this.productoRepository.findAndCount({
+      relations:['cat','imgs'],
+      where:{cat:{id:id}},
+      skip,
+      take: limit,
+    });
+    return {
+      products,
+      total,
+      currentPage: page,
+      perPage: limit,
+      lastPage: Math.ceil(total / limit),
+    };
   }
 
   findProductByName(name:string)

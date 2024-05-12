@@ -1,7 +1,7 @@
 <template>
   <!--section hero-->
   <section
-    class="relative bg-[url(https://scr.vn/wp-content/uploads/2020/07/H%C3%ACnh-n%E1%BB%81n-Star-War-cho-desktop-scaled.jpg)] bg-cover bg-center bg-no-repeat"
+    class="relative bg-[url(https://blogchiasekienthuc.com/wp-content/uploads/2022/12/hinh-nen-may-tinh-fantasy-4k-blogchiasekienthuc.com-12-scaled.jpg)] bg-cover bg-center bg-no-repeat"
   >
     <div
       class="absolute inset-0 bg-white/75 sm:bg-transparent sm:from-white/95 sm:to-white/25 ltr:sm:bg-gradient-to-r rtl:sm:bg-gradient-to-l"
@@ -10,25 +10,22 @@
     <div
       class="relative mx-auto max-w-screen-xl px-4 py-32 sm:px-6 lg:flex lg:h-screen lg:items-center lg:px-8"
     >
-      <div class="max-w-xl text-center ltr:sm:text-left rtl:sm:text-right">
+      <div class="max-w-xl ltr:sm:text-left rtl:sm:text-right">
         <h1 class="text-3xl font-extrabold sm:text-5xl">
-          Let us find your
+          <span class="text-white">404NFP</span> Bàn phím cơ
 
-          <strong class="block font-extrabold text-gray-700">
-            Forever Home.
+          <strong class="block font-extrabold text-white mt-2">
+            Chẳng có gì ngoài bàn phím
           </strong>
         </h1>
-
-        <p class="mt-4 max-w-lg sm:text-xl/relaxed text-white">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nesciunt
-          illo tenetur fuga ducimus numquam ea!
-        </p>
       </div>
     </div>
   </section>
 
   <!--list product-->
-  <Product />
+  <div v-for="cat in cats">
+    <Product :cat="cat" page="1" limit="4" />
+  </div>
 
   <!--về chúng tôi-->
   <section id="about" class="bg-white">
@@ -41,18 +38,20 @@
         >
           <img
             alt=""
-            src="https://inkythuatso.com/uploads/thumbnails/800/2023/03/3-anh-trang-den-meo-den-heinz-inkythuatso-02-16-05-21.jpg"
+            src="https://www.tncstore.vn/image/catalog/nh%20b%C3%A0i%20vi%E1%BA%BFt%20bmin/tnc-store-top-5-ban-phim-co-tot-nhat%20(2).jpg"
             class="absolute inset-0 h-full w-full object-cover"
           />
         </div>
 
         <div class="lg:py-24">
-          <h2 class="text-3xl font-bold sm:text-4xl">Grow your audience</h2>
+          <h2 class="text-3xl font-bold sm:text-4xl">Về chúng tôi</h2>
 
           <p class="mt-4 text-gray-600">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aut qui
-            hic atque tenetur quis eius quos ea neque sunt, accusantium soluta
-            minus veniam tempora deserunt? Molestiae eius quidem quam repellat.
+            Với đội ngũ nhân viên tận tâm và chuyên nghiệp, chúng tôi sẵn lòng
+            hỗ trợ bạn trong việc chọn lựa sản phẩm phù hợp nhất với nhu cầu và
+            mong muốn của bạn. Không chỉ là một cửa hàng, chúng tôi là một cộng
+            đồng của những người yêu thích bàn phím, chia sẻ kiến thức và kinh
+            nghiệm để cùng nhau phát triển.
           </p>
         </div>
       </div>
@@ -62,16 +61,13 @@
 
   <!--contact-->
   <section id="contact" class="bg-white">
-    <div class="p-8 md:p-8 lg:px-16 ">
+    <div class="p-8 md:p-8 lg:px-16">
       <div class="mx-auto max-w-lg text-center">
-        <h2 class="text-2xl font-bold text-gray-900 md:text-3xl">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit
-        </h2>
+        <h2 class="text-2xl font-bold text-gray-900 md:text-3xl">Liên hệ</h2>
 
         <p class="hidden text-gray-500 sm:mt-4 sm:block">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae dolor
-          officia blanditiis repellat in, vero, aperiam porro ipsum laboriosam
-          consequuntur exercitationem incidunt tempora nisi?
+          Mua mọi loại hàng ở đây Hơn 100 sản phẩm giá tốt đang chờ bạn <br> Hãy
+          liên hệ với chúng tôi để có trải nghiệm tuyệt vời.
         </p>
       </div>
 
@@ -82,7 +78,7 @@
 
             <input
               type="email"
-              placeholder="Email address"
+              placeholder="Nhập địa chỉ email"
               class="w-full rounded-md border-gray-200 bg-white p-3 text-gray-700 shadow-sm transition focus:border-white focus:outline-none focus:ring focus:ring-gray-400"
             />
           </div>
@@ -91,7 +87,7 @@
             type="submit"
             class="group mt-4 flex w-full items-center justify-center gap-2 rounded-md bg-gray-600 px-5 py-3 text-white transition focus:outline-none focus:ring focus:ring-gray-400 sm:mt-0 sm:w-auto"
           >
-            <span class="text-sm font-medium"> Sign Up </span>
+            <span class="text-sm font-medium"> Gửi đi </span>
 
             <svg
               class="size-5 rtl:rotate-180"
@@ -112,26 +108,28 @@
       </div>
     </div>
   </section>
-  
- 
 </template>
 
 <script>
 import Product from "../../components/client/product.component.vue";
-
+import catController from "../../controllers/category.controller";
 export default {
   data() {
     return {
-     
+      cats: [],
     };
   },
-  mounted() {},
+  mounted() {
+    this.getCat();
+  },
   components: {
     Product,
-   
   },
   methods: {
-   
+    async getCat() {
+      const result = await catController.getByProduct();
+      this.cats = result.data;
+    },
   },
 };
 </script>

@@ -1,8 +1,8 @@
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Not, Repository } from 'typeorm';
+import {  InjectRepository } from '@nestjs/typeorm';
+import {  Not, Repository } from 'typeorm';
 import { Category } from './entities/category.entity';
 import { ProductsService } from 'src/products/products.service';
 
@@ -12,7 +12,8 @@ export class CategoriesService {
     @Inject(forwardRef(() => ProductsService))
     private productService: ProductsService,
     @InjectRepository(Category)
-    private catRepository: Repository<Category>
+    private catRepository: Repository<Category>,
+  
   ){}
 
   async create(createCategoryDto: CreateCategoryDto) {
@@ -37,10 +38,19 @@ export class CategoriesService {
   }
 
   findAll() {
-    // return `This action returns all categories`;
     return this.catRepository.find();
   }
 
+  // lay ra cat co product
+  async findCategoriesWithProducts() {
+    return await this.catRepository
+      .createQueryBuilder('category')
+      .innerJoin('category.products', 'product')
+      .select(['category.id', 'category.name_cat'])
+      .distinct(true) // Đảm bảo không có bản ghi trùng lặp
+      .getMany();
+ }
+  
   findOne(id: number) {
     // return `This action returns a #${id} category`;
     return this.catRepository.findOneBy({id});
@@ -84,7 +94,7 @@ export class CategoriesService {
        {
          // check product
          const products = await this.productService.findProductByCat(id)
-         if(products.length > 0)
+         if(products.products.length > 0)
            {
              const errorResponse = {
               message: 'Không thể xóa vì cat này chứ product',

@@ -13,16 +13,22 @@ export class ProductsController {
     return this.productsService.create(createProductDto, id);
   }
 
+  // @Get()
+  // findAll(
+  //   @Query('page') page: number,
+  //   @Query('limit') limit: number,
+  // ) {
+  //   return this.productsService.findAll(page,limit);
+  // }
+
   @Get()
-  findAll(
-    @Query('page') page: number,
-    @Query('limit') limit: number,
-  ) {
-    return this.productsService.findAll(page,limit);
+  findAll() {
+    return this.productsService.findAll();
   }
 
+
   @Get('/search')
-  getExample(@Query('name') name: string) { 
+  findName(@Query('name') name: string) { 
       return this.productsService.findProductByName(name)
   }
 
@@ -31,11 +37,14 @@ export class ProductsController {
     return this.productsService.findOne(id);
   }
   
-
-  @Get('/cat')
-  findByCat(@Query('catId') catId: number)
+  @Get('/cat/:id')
+  findByCat(
+    @Param('id') catId: number,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  )
   {
-    return this.productsService.findProductByCat(catId)
+    return this.productsService.findProductByCat(catId,page,limit)
   }
 
   @Patch(':id')

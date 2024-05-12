@@ -17,6 +17,11 @@ export class CategoriesController {
     return this.categoriesService.findAll();
   }
 
+  @Get('byproduct')
+  findAllWithProduct() {
+    return this.categoriesService.findCategoriesWithProducts();
+  }
+  
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.categoriesService.findOne(+id);

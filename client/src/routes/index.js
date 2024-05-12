@@ -31,12 +31,12 @@ import {
           component: () => import('../pages/client.page/home.page.vue'),
         },
         {
-          path: 'category/:name',
+          path: 'category/:id',
           name: 'productbycat',
           component: () => import('../pages/client.page/productbycat.page.vue'),
         },
         {
-          path: 'products/:name',
+          path: 'products/:id',
           name: 'productdetail',
           component: () => import('../pages/client.page/productdetail.page.vue'),
         },

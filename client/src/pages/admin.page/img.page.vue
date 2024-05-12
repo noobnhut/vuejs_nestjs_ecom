@@ -300,7 +300,7 @@ export default {
    async addImg()
     {
       const formData = new FormData();
-            formData.append('avatar', this.avatar);
+      formData.append('avatar', this.avatar);
       const result = await imgController.createImg(formData,this.productId)
       if (result.status == 201) {
         this.getImgs(this.productId);
