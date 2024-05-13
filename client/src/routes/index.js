@@ -52,6 +52,11 @@ import {
           component: () => import('../pages/client.page/payment.page.vue'),
         },
         {
+          path: "/payment_return",
+          name: "payment_return",
+          component: () => import("../pages/client.page/payment.return.vue"),
+        },
+        {
           path: 'informations',
           name: 'information',
           component: () => import('../pages/client.page/user.page.vue'),

@@ -8,6 +8,12 @@ export enum OrderStatus {
     DangGiao = "Đang giao hàng",
     DaHuy = "Đã hủy",
 }
+
+export enum Payment {
+    COD = "COD",
+    VNPAY = "VNPAY",
+}
+
 @Entity({ name: 'orders' }) // Tên table trên cơ sở dữ liệu
 export class Order {
     @PrimaryGeneratedColumn()
@@ -19,12 +25,28 @@ export class Order {
     @Column({nullable:false,type:'double'})
     total_coupon:number
 
+    @Column({nullable: true,type:'double'})
+    vnp_orderID:number
+
+    @Column({nullable: true,type:'double'})
+    total_bank:number
+
+    @Column({  type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    date_bank: Date;
+
     @Column({
         type: "enum",
         enum: OrderStatus,
         default: OrderStatus.DaDat,
     })
     status: OrderStatus;
+
+    @Column({
+        type: "enum",
+        enum: Payment,
+        default: Payment.COD,
+    })
+    payment: Payment;
 
     @ManyToOne(() => User, (user) => user.orders)
     user: User;

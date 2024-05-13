@@ -7,9 +7,9 @@ import { UpdateOrderDetailDto } from './dto/update-order_detail.dto';
 export class OrderDetailsController {
   constructor(private readonly orderDetailsService: OrderDetailsService) {}
 
-  @Post()
-  create(@Body() createOrderDetailDto: CreateOrderDetailDto) {
-    return this.orderDetailsService.create(createOrderDetailDto);
+  @Post(':id')
+  create(@Body() createOrderDetailDto: CreateOrderDetailDto,@Param('id') id:number) {
+    return this.orderDetailsService.create(createOrderDetailDto,id);
   }
 
   @Get()

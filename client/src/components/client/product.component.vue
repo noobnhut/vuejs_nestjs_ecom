@@ -119,9 +119,12 @@
       </a>
     </li>
   </ol>
+  
+  <MiniCart @cancel="openCart()" v-if="isOpenCart" />
 </template>
 
 <script>
+import MiniCart from './minicart.component.vue'
 import extensiveController from "../../controllers/extensive.controller";
 import productController from "../../controllers/product.controller";
 import cartController from "../../controllers/cart.controller";
@@ -131,6 +134,7 @@ export default {
       type: Boolean,
       default() {
         return true;
+        
       },
     },
 
@@ -153,6 +157,7 @@ export default {
       products: [],
       last_page: "",
       page_number: 1,
+      isOpenCart:false,
       newItem: {
         id_product: 0,
         name_product: '',
@@ -167,8 +172,12 @@ export default {
   mounted() {
     this.getProducts();
   },
-  components: {},
+  components: {MiniCart},
   methods: {
+    openCart() {
+      this.isOpenCart = !this.isOpenCart
+    },
+
     async getProducts() {
       const result = await productController.getProductByCat(
         this.cat.id,
@@ -221,6 +230,7 @@ export default {
       this.newItem.single_price = product.price
       this.newItem.real_quantity = product.real_quantity
       cartController.addItem(this.newItem)
+      this.openCart()
     },
 
     formatPrice(value) {

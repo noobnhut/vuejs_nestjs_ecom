@@ -28,6 +28,7 @@ export class AuthService {
   async login(user: any, response: Response) {
     const payload = {
       email: user.email,
+      fullname: user.fullname,
       sub: user.id,
       role: user.role,
     };
@@ -60,6 +61,8 @@ export class AuthService {
         id: user.id,
         email: user.email,
         fullname: user.fullname,
+        address: user.address,
+        numberphone: user.numberphone,
         role: user.role
       }
     };
@@ -110,14 +113,14 @@ export class AuthService {
 
   logout = async (id: number, responsse: Response) => {
     await this.usersService.updateUserToken('logoutsucesss', id);
-    const user =  await this.usersService.findOne(id)
+    const user = await this.usersService.findOne(id)
     if (user.role == 'admin') {
       responsse.clearCookie("refresh_token_admin")
     }
     else if (user.role == 'user') {
       responsse.clearCookie("refresh_token")
     }
-   
+
     return "ok"
   }
 }
