@@ -55,7 +55,8 @@
                 stroke-linejoin="round"
                 stroke-width="1.5"
                 d="M12 5.75v12.5M18.25 12H5.75"
-              ></path></svg><span>Thêm mới</span>
+              ></path></svg
+            ><span>Thêm mới</span>
           </button>
         </div>
 
@@ -567,9 +568,11 @@
       </div>
     </div>
   </div>
+  <toast ref="toast"></toast>
 </template>
 
 <script>
+import toast from "../../components/toast.component.vue";
 import productController from "../../controllers/product.controller";
 import categoryController from "../../controllers/category.controller";
 import extensiveController from "../../controllers/extensive.controller";
@@ -593,7 +596,7 @@ export default {
       name_product: "",
       des_product: "",
       price: "",
-      quantity:""
+      quantity: "",
     };
   },
   mounted() {
@@ -603,13 +606,13 @@ export default {
   components: {
     Swiper,
     SwiperSlide,
+    toast,
   },
   methods: {
-
     // dùng để loại bỏ 2 dấu [] và "" trong thông báo error
-    throwError(errorMessage){ 
-      errorMessage = errorMessage.join(', ');
-      return this.$refs.toast.showToast(errorMessage);   
+    throwError(errorMessage) {
+      errorMessage = errorMessage.join(", ");
+      return this.$refs.toast.showToast(errorMessage);
     },
 
     async getProduct() {
@@ -625,8 +628,8 @@ export default {
     async getCat() {
       const result = await categoryController.getCats();
       this.cats = result.data;
+      this.catId = this.cats[0].id;
     },
-    
 
     async deleteProduct(id) {
       const result = await productController.deleteProduct(id);
@@ -655,7 +658,7 @@ export default {
         if (error.response.status === 400) {
           await this.throwError(error.response.data.message);
         } else {
-            console.log(error);
+          console.log(error);
         }
       }
     },
@@ -680,7 +683,7 @@ export default {
         if (error.response.status === 400) {
           await this.throwError(error.response.data.message);
         } else {
-            console.log(error);
+          console.log(error);
         }
       }
     },
@@ -694,13 +697,10 @@ export default {
     },
 
     async search() {
-      if(this.value_search == '')
-      {
-        this.getProduct()
-      }
-      else
-      {
-        const result  = await productController.searchProduct(this.value_search)
+      if (this.value_search == "") {
+        this.getProduct();
+      } else {
+        const result = await productController.searchProduct(this.value_search);
         this.products = result.data;
       }
     },
