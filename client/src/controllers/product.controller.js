@@ -47,8 +47,8 @@ export default {
       return axios.post(`${API_URL}/products/${catID}`, {
         name_product:name_product,
         des_product:des_product,
-        price:price,
-        quantity:quantity
+        price:parseInt(price),
+        quantity:parseInt(quantity)
 
       });;
     } catch (error) {

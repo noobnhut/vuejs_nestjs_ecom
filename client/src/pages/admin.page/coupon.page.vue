@@ -488,6 +488,12 @@ export default {
       this.coupon_quantity = select.coupon_quantity;
     },
 
+    // dùng để loại bỏ 2 dấu [] và "" trong thông báo error
+    throwError(errorMessage){ 
+      errorMessage = errorMessage.join(', ');
+      return this.$refs.toast.showToast(errorMessage);   
+    },
+
     async getCoupon() {
       try {
         const result = await couponController.getCoupons();
@@ -501,8 +507,8 @@ export default {
       try {
         const requestData = {
           coupon_name: this.coupon_name,
-          coupon_percent: this.coupon_percent,
-          coupon_quantity: this.coupon_quantity,
+          coupon_percent: parseInt(this.coupon_percent),
+          coupon_quantity: parseInt(this.coupon_quantity),
         };
         console.log(this.coupon_name);
         const result = await couponController.createCoupon(requestData);
@@ -519,7 +525,11 @@ export default {
           this.$refs.toast.showToast(result.data);
         }
       } catch (error) {
-        console.log(error);
+        if (error.response.status === 400) {
+          await this.throwError(error.response.data.message);
+        } else {
+          console.log(error);
+        }
       }
     },
 
@@ -527,8 +537,8 @@ export default {
       try {
         const requestData = {
           coupon_name: this.coupon_name,
-          coupon_percent: this.coupon_percent,
-          coupon_quantity: this.coupon_quantity,
+          coupon_percent: parseInt(this.coupon_percent),
+          coupon_quantity: parseInt(this.coupon_quantity),
         };
         const result = await couponController.updateCoupon(
           this.coupon.id,
@@ -545,7 +555,11 @@ export default {
           this.$refs.toast.showToast(result.data);
         }
       } catch (error) {
-        console.log(error);
+        if (error.response.status === 400) {
+          await this.throwError(error.response.data.message);
+        } else {
+          console.log(error);
+        }
       }
     },
 

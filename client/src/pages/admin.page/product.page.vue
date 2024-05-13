@@ -32,7 +32,7 @@
                   id="simple-search"
                   v-on:keyup.enter="search()"
                   v-model="value_search"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  class="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="Tìm theo theo tên..."
                   required=""
                 />
@@ -55,8 +55,7 @@
                 stroke-linejoin="round"
                 stroke-width="1.5"
                 d="M12 5.75v12.5M18.25 12H5.75"
-              ></path></svg
-            ><span>Thêm mới</span>
+              ></path></svg><span>Thêm mới</span>
           </button>
         </div>
 
@@ -329,15 +328,15 @@
             <label
               for="name"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >Tiêu đề</label
+              >Tên sản phẩm</label
             >
             <input
               v-model="get_product.name_product"
               type="text"
               name="name"
               id="name"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="Nhập giá trị"
+              class="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="Nhập tên sản phẩm"
               required=""
             />
           </div>
@@ -346,31 +345,31 @@
             <label
               for="name"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >Tiêu đề</label
+              >Thông tin sản phẩm</label
             >
-            <input
+            <textarea
               v-model="get_product.des_product"
               type="text"
               name="name"
               id="name"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="Nhập giá trị"
+              class="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="Nhập thông tin sản phẩm"
               required=""
-            />
+            ></textarea>
           </div>
 
           <div class="price">
             <label
               for="name"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >Tiêu đề</label
+              >Giá tiền</label
             >
             <input
               v-model="get_product.price"
               type="number"
               name="name"
               id="name"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              class="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               placeholder="Nhập giá trị"
               required=""
             />
@@ -380,14 +379,14 @@
             <label
               for="name"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >Tiêu đề</label
+              >Số lượng</label
             >
             <input
               v-model="get_product.quantity"
               type="number"
               name="name"
               id="name"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              class="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               placeholder="Nhập giá trị"
               required=""
             />
@@ -432,7 +431,7 @@
           class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600"
         >
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-            Cập nhật sản phẩm
+            Thêm sản phẩm
           </h3>
 
           <button
@@ -469,7 +468,7 @@
             <select
               v-model="catId"
               required
-              class="block appearance-none w-full bg-white border px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none text-sm"
+              class="mb-3 block appearance-none w-full bg-white border px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none text-sm"
             >
               <option disabled>Loại danh mục</option>
 
@@ -482,15 +481,15 @@
             <label
               for="name"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >Tiêu đề</label
+              >Tên sản phẩm</label
             >
             <input
               v-model="name_product"
               type="text"
               name="name"
               id="name"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="Nhập giá trị"
+              class="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="Nhập tên sản phẩm"
               required=""
             />
           </div>
@@ -499,31 +498,31 @@
             <label
               for="name"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >Tiêu đề</label
+              >Thông tin sản phẩm</label
             >
-            <input
+            <textarea
               v-model="des_product"
               type="text"
               name="name"
               id="name"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="Nhập giá trị"
+              class="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="Nhập thông tin sản phẩm"
               required=""
-            />
+            ></textarea>
           </div>
 
           <div class="price">
             <label
               for="name"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >Tiêu đề</label
+              >Giá tiền</label
             >
             <input
               v-model="price"
               type="number"
               name="name"
               id="name"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              class="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               placeholder="Nhập giá trị"
               required=""
             />
@@ -533,14 +532,14 @@
             <label
               for="name"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >Tiêu đề</label
+              >Số lượng</label
             >
             <input
               v-model="quantity"
               type="number"
               name="name"
               id="name"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              class="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               placeholder="Nhập giá trị"
               required=""
             />
@@ -563,7 +562,7 @@
               clip-rule="evenodd"
             />
           </svg>
-          Cập nhật sản phẩm
+          Thêm sản phẩm
         </button>
       </div>
     </div>
@@ -606,6 +605,13 @@ export default {
     SwiperSlide,
   },
   methods: {
+
+    // dùng để loại bỏ 2 dấu [] và "" trong thông báo error
+    throwError(errorMessage){ 
+      errorMessage = errorMessage.join(', ');
+      return this.$refs.toast.showToast(errorMessage);   
+    },
+
     async getProduct() {
       const result = await productController.getProducts();
       this.products = result.data;
@@ -620,6 +626,7 @@ export default {
       const result = await categoryController.getCats();
       this.cats = result.data;
     },
+    
 
     async deleteProduct(id) {
       const result = await productController.deleteProduct(id);
@@ -632,33 +639,49 @@ export default {
     },
 
     async updateProduct(id) {
-      const formData = new FormData();
-      formData.append("name_product", this.get_product.name_product);
-      formData.append("des_product", this.get_product.des_product);
-      formData.append("price", this.get_product.price);
-      formData.append("quantity", this.get_product.quantity);
-      const result = await productController.updateProduct(id, formData);
-      if (result.status == 200) {
-        this.getProduct();
-      } else {
-        console.log(result);
+      try {
+        const formData = new FormData();
+        formData.append("name_product", this.get_product.name_product);
+        formData.append("des_product", this.get_product.des_product);
+        formData.append("price", this.get_product.price);
+        formData.append("quantity", this.get_product.quantity);
+        const result = await productController.updateProduct(id, formData);
+        if (result.status == 200) {
+          this.getProduct();
+        } else {
+          console.log(result);
+        }
+      } catch (error) {
+        if (error.response.status === 400) {
+          await this.throwError(error.response.data.message);
+        } else {
+            console.log(error);
+        }
       }
     },
 
     async addProduct() {
-      const formData = new FormData();
-      formData.append("name_product", this.name_product);
-      formData.append("des_product", this.des_product);
-      formData.append("price", this.price);
-      formData.append("catID", this.catId);
-      formData.append("quantity", this.quantity);
+      try {
+        const formData = new FormData();
+        formData.append("name_product", this.name_product);
+        formData.append("des_product", this.des_product);
+        formData.append("price", this.price);
+        formData.append("catID", this.catId);
+        formData.append("quantity", this.quantity);
 
-      const result = await productController.createProduct(formData);
-      if (result.status == 201) {
-        this.getProduct();
-        this.isAdd = false;
-      } else {
-        console.log(result);
+        const result = await productController.createProduct(formData);
+        if (result.status == 201) {
+          this.getProduct();
+          this.isAdd = false;
+        } else {
+          console.log(result);
+        }
+      } catch (error) {
+        if (error.response.status === 400) {
+          await this.throwError(error.response.data.message);
+        } else {
+            console.log(error);
+        }
       }
     },
 

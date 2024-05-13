@@ -17,7 +17,7 @@ export class CouponsService {
       const check_name = await this.couponRepository.findOneBy({
         coupon_name: createCouponDto.coupon_name,
       });
-      if (createCouponDto.coupon_name.length === 0) {
+      if (createCouponDto.coupon_name.length < 0) {
         return 'Không được để trống';
       } else {
         if (check_name) {

@@ -400,6 +400,12 @@ export default {
       this.name_cat = select.name_cat;
     },
 
+    // dùng để loại bỏ 2 dấu [] và "" trong thông báo error
+    throwError(errorMessage){ 
+      errorMessage = errorMessage.join(', ');
+      return this.$refs.toast.showToast(errorMessage);   
+    },
+
     async getCat() {
       try {
         const result = await catController.getCats();
@@ -416,7 +422,7 @@ export default {
 
         const result = await catController.createCat(formData);
         console.log(result)
-        if (result.status == 201) {
+          if (result.status == 201) {
           this.$refs.toast.showToast(result.data);
           // setTimeout(() => {
           //    location.reload()
@@ -427,7 +433,11 @@ export default {
           this.$refs.toast.showToast(result.data);
         }
       } catch (error) {
-        console.log(error);
+        if (error.response.status === 400) {
+          await this.throwError(error.response.data.message);
+        } else {
+            console.log(error);
+        }
       }
     },
 
@@ -448,7 +458,11 @@ export default {
           this.$refs.toast.showToast(result.data);
         }
       } catch (error) {
-        console.log(error);
+        if (error.response.status === 400) {
+          await this.throwError(error.response.data.message);
+        } else {
+            console.log(error);
+        }
       }
     },
 

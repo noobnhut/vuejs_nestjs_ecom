@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsInt, IsNotEmpty, Min } from 'class-validator';
 import { Category } from 'src/categories/entities/category.entity';
 
 export class CreateProductDto {
@@ -9,6 +9,8 @@ export class CreateProductDto {
 
     des_product: string;
 
+    @Min(1, { message: 'Giá tiền tối thiểu là 1000', })
+    @IsInt({ message: 'Phải là số nguyên', })
     @IsNotEmpty({
         message: 'Vui lòng nhập giá tiền',
     })
@@ -16,7 +18,8 @@ export class CreateProductDto {
 
     cat: Category
 
-
+    @Min(1, { message: 'Số lượng tối thiểu là 1', })
+    @IsInt({ message: 'Phải là số nguyên', })
     @IsNotEmpty({
         message: 'Vui lòng nhập số lượng',
     })
