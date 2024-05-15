@@ -76,6 +76,7 @@ export default {
     this.order = JSON.parse(localStorage.getItem("order"));
     this.check_create = JSON.parse(localStorage.getItem("check_create"));
     const check_payment = await this.getPayment();
+    
     if (check_payment === `00`) {
       orderController.updatePayment(
         this.order.id,
@@ -87,7 +88,8 @@ export default {
 
       console.log("xong");
     } else {
-      this.$router.push("/");
+      console.log(check_payment)
+      //this.$router.push("/");
     }
   },
   components: {},
@@ -103,6 +105,7 @@ export default {
     async getPayment() {
       const result = await orderController.getPayment(this.$route.query);
       return result.data.code;
+
     },
   },
 };

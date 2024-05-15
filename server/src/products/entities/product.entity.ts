@@ -2,7 +2,6 @@ import { Category } from "src/categories/entities/category.entity";
 import { Favourite } from "src/favourites/entities/favourite.entity";
 import { ImgProduct } from "src/img_products/entities/img_product.entity";
 import { OrderDetail } from "src/order_details/entities/order_detail.entity";
-import { Review } from "src/reviews/entities/review.entity";
 import {  BeforeInsert, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 @Entity({ name: 'products' }) // Tên table trên cơ sở dữ liệu
 export class Product {
@@ -32,9 +31,6 @@ export class Product {
 
     @OneToMany(() => Favourite, (favourite) => favourite.product)
     favourites: Favourite[]
-
-    @OneToMany(() => Review, (review) => review.product)
-    reviews: Review[]
 
     @OneToMany(() => OrderDetail,(orderDetail) => orderDetail.product)
     order_details: OrderDetail[];    

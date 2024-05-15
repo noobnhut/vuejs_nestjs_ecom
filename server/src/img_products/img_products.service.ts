@@ -52,20 +52,12 @@ export class ImgProductsService {
 
   }
 
-  findAll() {
-    return `This action returns all imgProducts`;
-  }
-
   findOne(id: number) {
     try {
       return this.imgProductRepository.findOneBy({id});
     } catch (error) {
       console.log(error);
     }
-  }
-
-  async update(id: number, updateImgProductDto: UpdateImgProductDto) {
-    return `This action updates a #${id} imgProduct`;
   }
 
   async remove(id: number) {

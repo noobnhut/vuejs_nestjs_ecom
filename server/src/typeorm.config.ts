@@ -9,7 +9,7 @@ import { Favourite } from './favourites/entities/favourite.entity';
 import { Coupon } from './coupons/entities/coupon.entity';
 import { Order } from './orders/entities/order.entity';
 import { OrderDetail } from './order_details/entities/order_detail.entity';
-import { Review } from './reviews/entities/review.entity';
+
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -21,7 +21,7 @@ import { Review } from './reviews/entities/review.entity';
           username: configService.get<string>('DB_USERNAME', 'root'),
           password: configService.get<string>('DB_PASSWORD', ''),
           database: configService.get<string>('DB_DATABASE', 'ecom'),
-          entities: [User,Category,Product,ImgProduct,Favourite,Coupon,Order,OrderDetail,Review ], // Thêm các entities của bạn vào đây
+          entities: [User,Category,Product,ImgProduct,Favourite,Coupon,Order,OrderDetail], // Thêm các entities của bạn vào đây
 
           //  synchronize: true, // Chỉ dùng trong môi trường dev
 

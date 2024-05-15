@@ -19,8 +19,9 @@
     <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 p-4">
       <!-- render list product -->
       <div v-for="(product, index) in products" :key="index">
-      
-        <a class="group block overflow-hidden shadow-xl" v-if="product.imgs.length > 0">
+        <div
+          class="group block overflow-hidden shadow-xl"
+          v-if="product.imgs.length > 0">
           <div class="relative h-[250px] sm:h-[300px]">
             <!-- Product images -->
             <img
@@ -42,7 +43,8 @@
             <div class="mt-1.5 flex items-center justify-between text-gray-900">
               <p class="tracking-wide">{{ formatPrice(product.price) }}</p>
               <!--nut mua hang -->
-              <div @click="addCart(product)"
+              <div
+                @click="addCart(product)"
                 class="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-2 hover:bg-gray-100"
               >
                 <div class="relative">
@@ -58,9 +60,45 @@
                   </svg>
                 </div>
               </div>
+
+              <div class="ml-auto">
+                <span
+                  v-if="
+                    favourites.some(
+                      (item) =>
+                        item.product.id == product.id && item.user.id == user.id
+                    )
+                  "
+                >
+                  <!-- Sử dụng v-for để lặp lại các sản phẩm trong danh sách thích -->
+                  <span
+                    v-for="favourite in favourites.filter(
+                      (item) =>
+                        item.product.id == product.id && item.user.id == user.id
+                    )"
+                  > 
+                 
+                    <!-- Kiểm tra trạng thái của sản phẩm và sử dụng màu đỏ hoặc #ccc tương ứng -->
+                    
+                    <i v-if="favourite.status == true"
+                      class="fa-solid fa-bookmark text-xl text-black"
+                      
+                      @click="unfavourite(favourite, product.id)"
+                    ></i>
+                  </span>
+                </span>
+                <!-- Nếu không có sản phẩm nào trong danh sách thích, hiển thị chữ màu #ccc -->
+                <span v-else>
+                  <i
+                    class="fa-solid fa-bookmark text-xl"
+                    style="color: #ccc"
+                    @click="addfavourite(product.id)"
+                  ></i>
+                </span>
+              </div>
             </div>
           </div>
-        </a>
+        </div>
       </div>
     </div>
   </div>
@@ -119,22 +157,22 @@
       </a>
     </li>
   </ol>
-  
+
   <MiniCart @cancel="openCart()" v-if="isOpenCart" />
 </template>
 
 <script>
-import MiniCart from './minicart.component.vue'
+import MiniCart from "./minicart.component.vue";
 import extensiveController from "../../controllers/extensive.controller";
 import productController from "../../controllers/product.controller";
 import cartController from "../../controllers/cart.controller";
+import favouriteController from "../../controllers/favourite.controller";
 export default {
   props: {
     isCatTitle: {
       type: Boolean,
       default() {
         return true;
-        
       },
     },
 
@@ -155,27 +193,56 @@ export default {
   data() {
     return {
       products: [],
+      favourites: [],
+      user: "",
       last_page: "",
       page_number: 1,
-      isOpenCart:false,
+      isOpenCart: false,
       newItem: {
         id_product: 0,
-        name_product: '',
+        name_product: "",
         single_price: 0,
         quantity: 1,
-        real_quantity:1,
-        img:''
-      }
+        real_quantity: 1,
+        img: "",
+      },
     };
   },
 
   mounted() {
     this.getProducts();
+    this.user = JSON.parse(localStorage.getItem("user"));
+    this.getFavouti();
   },
-  components: {MiniCart},
+  components: { MiniCart },
   methods: {
     openCart() {
-      this.isOpenCart = !this.isOpenCart
+      this.isOpenCart = !this.isOpenCart;
+    },
+
+    async getFavouti() {
+      const result = await favouriteController.getFavourites();
+      this.favourites = result.data;
+    },
+
+    async unfavourite(favoutire, productid) {
+      const id_user = favoutire.user.id;
+
+      const result = await favouriteController.addfavoutires(
+        id_user,
+        productid
+      );
+      this.getFavouti()
+    },
+
+    async addfavourite(productid) {
+      const id_user = this.user.id;
+      const result = await favouriteController.addfavoutires(
+        id_user,
+        productid
+      );
+        this.getFavouti();
+      
     },
 
     async getProducts() {
@@ -222,15 +289,14 @@ export default {
       this.$router.push(`/products/${id}`);
     },
 
-    addCart(product)
-    {
-      this.newItem.img=product.imgs[0].img_url
-      this.newItem.id_product = product.id
-      this.newItem.name_product = product.name_product
-      this.newItem.single_price = product.price
-      this.newItem.real_quantity = product.real_quantity
-      cartController.addItem(this.newItem)
-      this.openCart()
+    addCart(product) {
+      this.newItem.img = product.imgs[0].img_url;
+      this.newItem.id_product = product.id;
+      this.newItem.name_product = product.name_product;
+      this.newItem.single_price = product.price;
+      this.newItem.real_quantity = product.real_quantity;
+      cartController.addItem(this.newItem);
+      this.openCart();
     },
 
     formatPrice(value) {

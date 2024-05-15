@@ -89,8 +89,14 @@ export default {
   mounted() { },
   components: { toast },
   methods: {
+    throwError(errorMessage){ 
+      errorMessage = errorMessage.join('\n');
+      return this.$refs.toast.showToast(errorMessage);   
+    },
+
     async register() {
-      const formData = new FormData();
+      try {
+        const formData = new FormData();
       formData.append("fullname", this.fullname);
       formData.append("address", this.address);
       formData.append("email", this.email);
@@ -105,6 +111,14 @@ export default {
       }
       else {
         this.$refs.toast.showToast(result.data.message);
+      }
+      } catch (error) {
+        if (error.response.status === 400) {
+          await this.throwError(error.response.data.message);
+          console.log(error.response.data.message)
+        } else {
+            console.log(error);
+        }
       }
     }
   },

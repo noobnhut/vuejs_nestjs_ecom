@@ -12,6 +12,7 @@ export class OrderDetailsService {
     private orderDetailRepository: Repository<OrderDetail>,
     private productService:ProductsService
   ) { }
+
   async create(createOrderDetailDto: CreateOrderDetailDto,id:number) {
     const product_get = await this.productService.findOne(id)
     createOrderDetailDto.product = product_get
@@ -29,18 +30,6 @@ export class OrderDetailsService {
         order:orders
       }
     );
-  }
-
-  findAll() {
-    return `This action returns all orderDetails`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} orderDetail`;
-  }
-
-  update(id: number, updateOrderDetailDto: UpdateOrderDetailDto) {
-    return `This action updates a #${id} orderDetail`;
   }
 
   remove(id: number) {

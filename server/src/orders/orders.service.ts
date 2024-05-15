@@ -129,7 +129,6 @@ export class OrdersService {
       let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");
       if (secureHash === signed) {
         //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
-        
         return { code: vnp_Params['vnp_ResponseCode'] }
       } else {
         return { code: '97' }

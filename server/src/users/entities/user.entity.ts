@@ -1,6 +1,6 @@
 import { Favourite } from "src/favourites/entities/favourite.entity";
 import { Order } from "src/orders/entities/order.entity";
-import { Review } from "src/reviews/entities/review.entity";
+
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 /*
 length: ?: Định nghĩa độ dài tối đa của chuỗi (tối đa ?0 ký tự)
@@ -47,8 +47,7 @@ export class User {
     @OneToMany(() => Favourite, (favourite) => favourite.user)
     favourites: Favourite[]
 
-    @OneToMany(() => Review, (review) => review.user)
-    reviews: Review[]
+    
 
     @OneToMany(() => Order, (order) => order.user)
     orders: Order[]

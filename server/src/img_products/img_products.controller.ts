@@ -19,20 +19,11 @@ export class ImgProductsController {
     return this.imgProductsService.create(createImgProductDto,file,id);
   }
 
-  @Get()
-  findAll() {
-    return this.imgProductsService.findAll();
-  }
-
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.imgProductsService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: number, @Body() updateImgProductDto: UpdateImgProductDto) {
-    return this.imgProductsService.update(+id, updateImgProductDto);
-  }
 
   @Delete(':id')
   remove(@Param('id') id: number) {
@@ -44,6 +35,7 @@ export class ImgProductsController {
   {
     return this.imgProductsService.findByProduct(id)
   }
+
   // // 1 file
   // @Post('upload')
   // @UseInterceptors(FileInterceptor('file')) // biến truyền vào
