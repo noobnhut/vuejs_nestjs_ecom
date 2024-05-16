@@ -36,6 +36,12 @@ export class AuthController {
         return this.authService.logout(id, response)
     }
 
+    @Get('refresh_admin')
+    refreshToken_admin(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
+        const refresh_token = request.cookies["refresh_token_admin"];
+        return this.authService.processNewToken(refresh_token, response)
+    }
+
     // @HasRoles(Role.Admin)
     // @UseGuards(JwtAuthGuard, RolesGuard)
     // @Get('admin')

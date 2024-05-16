@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Query, Put } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
@@ -39,6 +39,7 @@ export class OrdersController {
   update(@Param('id') id: number, @Body() updateOrderDto: UpdateOrderDto, @Query('check_create') check_create: Boolean) {
     return this.ordersService.update(id, updateOrderDto, check_create);
   }
+
 
   @Delete(':id')
   remove(@Param('id') id: number) {

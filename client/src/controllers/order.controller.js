@@ -94,5 +94,10 @@ export default {
           "total_bank": vnp_Amount/100,
           "date_bank": vnp_PayDate,
       })
+    },
+
+    async changeDelete(id)
+    {
+      return await axios.delete(`${API_URL}/orders/${id}`)
     }
 }

@@ -32,6 +32,7 @@
 
           <div id="order-item" class="rounded-lg mb-10">
             <ol class="list-disc">
+              <li>Kết quả: {{message}}</li>
               <li>Họ và tên: {{ user.fullname }}</li>
               <li>Email: {{ user.email }}</li>
               <li>Mã giao dịch: {{ this.$route.query.vnp_OrderInfo }}</li>
@@ -69,6 +70,7 @@ export default {
       user: "",
       order: "",
       check_create: "",
+      message:'1'
     };
   },
   async mounted() {
@@ -78,6 +80,7 @@ export default {
     const check_payment = await this.getPayment();
     
     if (check_payment === `00`) {
+      this.message = 'Thanh toán thành công'
       orderController.updatePayment(
         this.order.id,
         this.$route.query.vnp_OrderInfo,
@@ -85,9 +88,10 @@ export default {
         this.$route.query.vnp_PayDate,
         this.check_create
       );
-
       console.log("xong");
     } else {
+       this.message = 'Thanh toán thất bại'
+     await orderController.changeDelete(this.order.id)
       console.log(check_payment)
       //this.$router.push("/");
     }

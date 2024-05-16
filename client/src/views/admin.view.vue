@@ -1,6 +1,6 @@
 <template>
 
-  <div class="flex min-h-screen w-full bg-white-800 font-san" @click="setRefreshToken()">
+  <div class="flex min-h-screen w-full bg-white-800 font-san" @click="getProfile()">
     <!--backview mờ ảo-->
     <div
       :class="isOpen ? 'block' : 'hidden'"
@@ -11,7 +11,7 @@
     <!--sidebar-->
     <aside
       :class="isOpen ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'"
-      class="flex w-64 flex-col px-4 pt-10 pb-6 bg-white-800 inset-y-0 left-0 z-30 fixed transition duration-300 transform lg:translate-x-0 lg:static lg:inset-0"
+      class=" bg-white flex w-64 flex-col px-4 pt-10 pb-6 bg-white-800 inset-y-0 left-0 z-30 fixed transition duration-300 transform lg:translate-x-0 lg:static lg:inset-0"
     >
       <!--title adminpage-->
       <a
@@ -65,16 +65,12 @@
           <h1 class="text-[30px] font-bold ">404NFP</h1>
         </div>
         <!--avatar-->
-        <button
-          class="md:pr-0 pr-10 flex h-11 items-center justify-center rounded-full bg-white-900 px-2 text-black hover:text-gray-500"
-        >
-          <img
-            src="https://mcdn.coolmate.me/image/May2022/wibu-la-gi-weeaboo-la-gi-su-khac-nhau-giua-wibu-va-otaku_494.jpg"
-            alt=""
-            class="h-8 w-8 rounded-full object-cover"
-          />
-          <span class="pl-2 pr-2 text-sm">Admin</span>
-        </button>
+        
+
+        <div  @click="logout()"
+            class="ml-2 flex cursor-pointer items-center gap-x-1 rounded-md border py-2 px-2 md:px-4 hover:bg-gray-100">
+            <span class="text-sm font-medium">Đăng xuất</span>
+          </div>
       </nav>
 
       <!--router-view-->
@@ -118,7 +114,8 @@ export default {
     },
 
     async getProfile() {
-      let token = localStorage.getItem("token_admin");
+      try {
+        let token = localStorage.getItem("token_admin");
       if (token) {
       const result = await userController.getProfile('admin')
       this.user = JSON.parse(localStorage.getItem("admin"));
@@ -127,6 +124,14 @@ export default {
       {
         this.$router.push({name:'login'})
       }
+      } catch (error) {
+        if (error.response.status === 401) {
+           this.setRefreshToken()
+           console.clear()
+        } else {
+            console.log(error);
+        }
+      }
     },
 
     async logout()
@@ -134,7 +139,7 @@ export default {
       const result = await userController.logout(this.user.id,'admin')
       this.user = null
       localStorage.removeItem("admin");
-      localStorage.removeItem("token");
+      localStorage.removeItem("token_admin");
       this.$router.push({name:'login'})
     }
   },

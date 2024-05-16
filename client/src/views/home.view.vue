@@ -1,6 +1,6 @@
 <template>
   <!-- navbar -->
-  <div class="fixed top-0 w-full z-20 bg-white" @click="setRefreshToken">
+  <div class="fixed top-0 w-full z-20 bg-white" @click="getProfile()">
     <div class="border shadow-md py-3 px-6">
       <!--header 1-->
       <div class="flex justify-between">
@@ -36,9 +36,9 @@
         </div>
 
         <!--icon + login-->
-        <div class="ml-2 flex">
+        <div class="ml-2 flex" >
           <div class="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-2 hover:bg-gray-100">
-            <router-link to="/informations" class="relative">
+            <router-link to="/informations" class="relative" v-if="user != null">
               <i class="fa-solid fa-user h-5 w-5 text-gray-500"></i>
             </router-link>
           </div>
@@ -110,14 +110,14 @@
     </div>
   </div>
 
-  <div style="background-image: url('https://mixivivu.com/section-background.png');"  @click="setRefreshToken">
+  <div style="background-image: url('https://mixivivu.com/section-background.png');"  @click="getProfile()">
     <div class="container mx-auto mt-[7.1rem] main">
       <router-view></router-view>
     </div>
   </div>
 
   <!--footer-->
-  <footer class="bg-white "  @click="setRefreshToken">
+  <footer class="bg-white "  @click="getProfile()">
     <div class="mx-auto mb-4 max-w-screen-xl px-4 sm:px-6 lg:px-8">
       <div class="mt-4 grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-32">
         <div class="mx-auto max-w-sm lg:max-w-none">
@@ -230,10 +230,19 @@ export default {
     },
 
     async getProfile() {
-      let token = localStorage.getItem("token");
+      try {
+        let token = localStorage.getItem("token");
       if (token) {
       const result = await userController.getProfile('user')
       this.user = JSON.parse(localStorage.getItem("user"));
+      }
+      } catch (error) {
+        if (error.response.status === 401) {
+           this.setRefreshToken()
+           console.clear()
+        } else {
+            console.log(error);
+        }
       }
     },
 
@@ -244,7 +253,9 @@ export default {
       localStorage.removeItem("user");
       localStorage.removeItem("token");
       this.$router.push({name:'login'})
-    }
+    },
+
+
   },
 };
 </script>

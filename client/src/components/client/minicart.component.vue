@@ -34,8 +34,12 @@
       <div class="mt-4 space-y-6">
         <!--list sản phẩm mua-->
         <template v-if="carts.length == 0">
-          <div class="cart--empty-message  py-4 text-center">
-            <img src="https://nghiphat.com/images/empty_cart.png" class="mx-auto" alt="">
+          <div class="cart--empty-message py-4 text-center">
+            <img
+              src="https://nghiphat.com/images/empty_cart.png"
+              class="mx-auto"
+              alt=""
+            />
             <p>Không có sản phẩm nào trong giỏ hàng của bạn</p>
           </div>
         </template>
@@ -141,7 +145,7 @@
             @click="onclose"
             class="block rounded cursor-pointer border border-gray-600 px-5 py-3 text-sm text-gray-600 transition hover:ring-1 hover:ring-gray-400"
           >
-            Xem giỏ hàng (số lượng)
+            Xem giỏ hàng ({{sum_item }})
           </router-link>
 
           <router-link
@@ -164,6 +168,7 @@ export default {
   data() {
     return {
       carts: [],
+      sum_item:0
     };
   },
   mounted() {
@@ -177,11 +182,13 @@ export default {
 
     getCart() {
       this.carts = cartController.loadCartFromlocal();
+      this.getValue()
     },
 
     deleteItem(index) {
       cartController.removeItem(index);
       this.getCart();
+      this.getValue()
     },
 
     handlePage(index, value) {
@@ -192,9 +199,24 @@ export default {
         cartController.decreaseQuantity(index);
         this.getCart();
       }
+      this.getValue()
+
     },
 
-    
+    getValue() {
+      let sum = 0;
+      let carts = JSON.parse(localStorage.getItem("cart"));
+
+      if (carts) {
+        for (let i = 0; i < carts.length; i++) {
+          sum += carts[i].quantity;
+        }
+      } else {
+        sum = 0
+      }
+
+     this.sum_item = sum
+    },
   },
 };
 </script>

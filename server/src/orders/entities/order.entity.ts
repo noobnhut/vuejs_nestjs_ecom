@@ -7,6 +7,7 @@ export enum OrderStatus {
     DaThanhToan = "Đã thanh toán",
     DangGiao = "Đang giao hàng",
     DaHuy = "Đã hủy",
+    ThatBai = "Thanh toán thất bại"
 }
 
 export enum Payment {

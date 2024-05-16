@@ -68,8 +68,8 @@ export default {
       return axios.patch(`${API_URL}/products/${id}`, {
         name_product:name_product,
         des_product:des_product,
-        price:price,
-        quantity:quantity
+        price:parseInt(price),
+        quantity:parseInt(quantity)
 
       });
     } catch (error) {

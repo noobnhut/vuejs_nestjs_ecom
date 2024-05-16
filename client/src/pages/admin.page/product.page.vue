@@ -73,8 +73,13 @@
                 <th scope="col" class="px-4 py-3">Tên sản phẩm</th>
                 <th scope="col" class="px-4 py-3">Thông tin sản phẩm</th>
                 <th scope="col" class="px-4 py-3">Ảnh sản phẩm</th>
+                <th scope="col" class="px-4 py-3">Số lượng nhập</th>
+                <th scope="col" class="px-4 py-3">Số lượng tồn</th>
+
                 <th scope="col" class="px-4 py-3">Giá tiền</th>
                 <th scope="col" class="px-4 py-3">Ngày tạo</th>
+                <th scope="col" class="px-4 py-3">Trạng thái</th>
+
                 <th scope="col" class="px-4 py-3"></th>
                 <th scope="col" class="px-4 py-3"></th>
               </tr>
@@ -109,6 +114,14 @@
                 </td>
 
                 <td class="px-4 py-3">
+                  {{ product.quantity }}
+                </td>
+
+                <td class="px-4 py-3">
+                  {{ product.real_quantity }}
+                </td>
+
+                <td class="px-4 py-3">
                   {{ formatPrice(product.price) }}
                 </td>
 
@@ -117,6 +130,10 @@
                 </td>
 
                 <td class="px-4 py-3">
+                  {{ product.is_deleted == 0 ? 'Đang bán' : 'Đã dừng'  }}
+                </td>
+
+                <td class="px-4 py-3" v-if="product.is_deleted == 0">
                   <div
                     @click="
                       isUpdate = true;
@@ -138,7 +155,7 @@
                     class="cursor-pointer flex items-center justify-center gap-x-2 rounded-10 border py-2 px-1 border-red-400/10 bg-red-700/20 text-red-400"
                   >
                     <span class="h-2 w-2 rounded-full bg-red-400"></span
-                    ><span class="text-xs">Xóa</span>
+                    ><span class="text-xs">{{product.is_deleted == 0 ? 'Xóa' : 'Bán lại' }}</span>
                   </div>
                 </td>
               </tr>
@@ -251,7 +268,7 @@
           />
         </svg>
         <p class="mb-4 text-gray-500 dark:text-gray-300">
-          Bạn có muốn xóa
+          Bạn có muốn {{get_product.is_deleted ==0 ? 'Xóa' : 'Bán lại' }}
           <span class="font-bold"> {{ get_product.name_product }}</span> ?
         </p>
         <div class="flex justify-center items-center space-x-4">
@@ -271,7 +288,7 @@
             @click="deleteProduct(get_product.id)"
             class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
           >
-            Xóa
+          {{get_product.is_deleted ==0 ? 'Xóa' : 'Bán lại' }}
           </button>
         </div>
       </div>
@@ -636,6 +653,7 @@ export default {
       if (result.status == 200) {
         this.getProduct();
         this.isDelete = false;
+        this.$refs.toast.showToast(result.data);
       } else {
         console.log(result);
       }
@@ -651,8 +669,10 @@ export default {
         const result = await productController.updateProduct(id, formData);
         if (result.status == 200) {
           this.getProduct();
+          this.$refs.toast.showToast(result.data);
+          this.isUpdate = false
         } else {
-          console.log(result);
+          this.$refs.toast.showToast(result.data);
         }
       } catch (error) {
         if (error.response.status === 400) {
@@ -676,8 +696,9 @@ export default {
         if (result.status == 201) {
           this.getProduct();
           this.isAdd = false;
+          this.$refs.toast.showToast(result.data);
         } else {
-          console.log(result);
+          this.$refs.toast.showToast(result.data);
         }
       } catch (error) {
         if (error.response.status === 400) {

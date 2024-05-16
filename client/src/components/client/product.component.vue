@@ -61,7 +61,7 @@
                 </div>
               </div>
 
-              <div class="ml-auto">
+              <div class="ml-auto" v-if="user != null">
                 <span
                   v-if="
                     favourites.some(
@@ -253,6 +253,7 @@ export default {
       );
       this.products = result.data.products;
       this.last_page = result.data.lastPage;
+
     },
 
     async changePage(pageNumber) {

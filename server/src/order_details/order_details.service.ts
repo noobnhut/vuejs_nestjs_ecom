@@ -21,6 +21,7 @@ export class OrderDetailsService {
 
   async creates(single_price:number,quantity:number,id:number,orders:any) {
     const product_get = await this.productService.findOne(id)
+    await this.productService.updateQuantity(id,quantity)
     let product = product_get
     return await this.orderDetailRepository.save(
       {

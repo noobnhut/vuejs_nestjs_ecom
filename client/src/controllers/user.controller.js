@@ -82,17 +82,19 @@ export default {
   async refreshToken(value) {
     try {
       // Gọi API để refresh token
-      const refreshResponse = await axios.get(`${API_URL}/auth/refresh`);
+      let refreshResponse = ''
 
       // Lưu token mới vào local storage
       let newToken = ''
       if (value == "admin") {
+        refreshResponse = await axios.get(`${API_URL}/auth/refresh_admin`);
         localStorage.setItem(
           "token_admin",
           JSON.stringify(refreshResponse.data.access_token)
         );
          newToken = localStorage.getItem("token_admin");
       } else if ((value = "user")) {
+        refreshResponse = await axios.get(`${API_URL}/auth/refresh`);
         localStorage.setItem(
           "token",
           JSON.stringify(refreshResponse.data.access_token)

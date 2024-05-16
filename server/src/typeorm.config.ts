@@ -23,7 +23,7 @@ import { OrderDetail } from './order_details/entities/order_detail.entity';
           database: configService.get<string>('DB_DATABASE', 'ecom'),
           entities: [User,Category,Product,ImgProduct,Favourite,Coupon,Order,OrderDetail], // Thêm các entities của bạn vào đây
 
-          //  synchronize: true, // Chỉ dùng trong môi trường dev
+          synchronize: true, // Chỉ dùng trong môi trường dev
 
         }),
         inject: [ConfigService],

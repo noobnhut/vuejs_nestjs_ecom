@@ -183,8 +183,18 @@ export class OrdersService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} order`;
+  async remove(id: number) {
+   try {
+    const check_id = await this.orderRepository.findOneBy({id})
+      if(check_id)
+        {
+          check_id.status = OrderStatus.ThatBai
+          this.orderRepository.update(id,check_id)
+          return 'Xong'
+        }
+   } catch (error) {
+    console.log(error)
+   }
   }
 }
 
@@ -194,4 +204,5 @@ export enum OrderStatus {
   DaThanhToan = "Đã thanh toán",
   DangGiao = "Đang giao hàng",
   DaHuy = "Đã hủy",
+  ThatBai = "Thanh toán thất bại"
 }

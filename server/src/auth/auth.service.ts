@@ -92,7 +92,7 @@ export class AuthService {
       )
       let user = await this.usersService.findUserByToken(refresh_token)
       if (user) {
-        // update refresh_token
+        // update refresh_toke
         if (user.role == 'admin') {
           response.clearCookie("refresh_token_admin")
         }

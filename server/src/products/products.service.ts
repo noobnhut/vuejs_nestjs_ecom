@@ -84,6 +84,9 @@ export class ProductsService {
           id: Not(id)
         })
         if (!check_name) {
+          const quantity_new = updateProductDto.quantity
+          updateProductDto.quantity = quantity_new + check_id.quantity
+          updateProductDto.real_quantity  = quantity_new + check_id.real_quantity
           await this.productoRepository.update(id, updateProductDto);
           return `Đã cập nhật`
         } else {
@@ -102,17 +105,27 @@ export class ProductsService {
     try {
       const check_id = await this.productoRepository.findOne({ where: { id } })
       if (check_id) {
-        const cats = await this.imgProductsService.findByProduct(id);
-        if (cats.length > 0) {
-          for (const cat of cats) {
-            await this.imgProductsService.remove(cat.id);
+        // const cats = await this.imgProductsService.findByProduct(id);
+        // if (cats.length > 0) {
+        //   for (const cat of cats) {
+        //     await this.imgProductsService.remove(cat.id);
+        //   }
+        //   await this.productoRepository.delete({ id });
+        //   return 'Xóa sản phẩm thành công';
+        // } else {
+        //   await this.productoRepository.delete({ id });
+        //   return 'Xóa sản phẩm thành công';
+        // }
+        if(check_id.is_deleted == true)
+          {
+            check_id.is_deleted = false
           }
-          await this.productoRepository.delete({ id });
-          return 'Xóa sản phẩm thành công';
-        } else {
-          await this.productoRepository.delete({ id });
-          return 'Xóa sản phẩm thành công';
-        }
+          else
+          {
+            check_id.is_deleted = true
+          }
+        await this.productoRepository.update(id,check_id)
+        return 'Thao tác thành công'
       } else {
         return 'Không tìm thấy sản phẩm';
       }
@@ -145,5 +158,19 @@ export class ProductsService {
 
       where: { name_product: Like(`%${name}%`) }
     })
+  }
+
+  async updateQuantity(id:number,quantity:number)
+  {
+    try {
+      const check_id = await this.productoRepository.findOneBy({id})
+      if(check_id)
+        {
+          check_id.real_quantity -= quantity
+          await this.productoRepository.update(id,check_id)
+        }
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
