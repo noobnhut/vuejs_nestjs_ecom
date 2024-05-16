@@ -361,7 +361,7 @@ export default {
         );
         localStorage.removeItem("total");
         localStorage.removeItem("cart");
-        window.location.href = "http://localhost:5173/";
+        window.location.href = `${import.meta.env.VITE_API_BASE_FE}`;
         console.log(result.data.redirectUrl);
       } else {
         this.is_bank = true;
