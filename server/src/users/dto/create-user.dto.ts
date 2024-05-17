@@ -11,7 +11,6 @@ export class CreateUserDto {
     @Matches(/(?=.*[a-z])/, { message: 'Mật khẩu phải chứa ít nhất một chữ thường' })
     @Matches(/(?=.*[A-Z])/, { message: 'Mật khẩu phải chứa ít nhất một chữ hoa' })
     @Matches(/(?=.*\d)/, { message: 'Mật khẩu phải chứa ít nhất một chữ số' })
-    @Matches(/(?=.*[!@#$%^&*])/, { message: 'Mật khẩu phải chứa ít nhất một ký tự đặc biệt' })
     password: string;
 
     @IsNotEmpty({ message: 'Họ và tên không được để trống' })

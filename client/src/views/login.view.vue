@@ -75,9 +75,8 @@ export default {
       if (result.data.user.role == 'user') {
         localStorage.setItem("token", JSON.stringify(result.data.access_token));
         localStorage.setItem("user", JSON.stringify(result.data.user))
-        window.location.href = `${import.meta.env.VITE_API_BASE_FE}'
-
-  `   }
+        window.location.href = `${import.meta.env.VITE_API_BASE_FE}`
+       }
       else if (result.data.user.role == 'admin') {
         localStorage.setItem("token_admin", JSON.stringify(result.data.access_token));
         localStorage.setItem("admin", JSON.stringify(result.data.user))
