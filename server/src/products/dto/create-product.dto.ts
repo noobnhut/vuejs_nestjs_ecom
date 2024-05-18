@@ -25,5 +25,5 @@ export class CreateProductDto {
     })
     quantity: number;
 
-    real_quantity: number;
+    out_quantity: number;
 }

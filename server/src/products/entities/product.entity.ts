@@ -21,7 +21,7 @@ export class Product {
     quantity:number
 
     @Column({nullable:false,type:'double'})
-    real_quantity:number
+    out_quantity:number
 
     @ManyToOne(() => Category, (cat) => cat.products)
     cat: Category
@@ -47,12 +47,6 @@ export class Product {
     @Column({ nullable: true })
     is_deleted: Boolean;
 
-    @BeforeInsert()
-    setDefaultRealQuantity() {
-        // Kiểm tra nếu real_quantity chưa được thiết lập, gán nó bằng quantity
-        if (this.real_quantity === undefined || this.real_quantity === null) {
-            this.real_quantity = this.quantity;
-        }
-    }
+    
 }
 

@@ -86,7 +86,6 @@ export class ProductsService {
         if (!check_name) {
           const quantity_new = updateProductDto.quantity
           updateProductDto.quantity = quantity_new + check_id.quantity
-          updateProductDto.real_quantity  = quantity_new + check_id.real_quantity
           await this.productoRepository.update(id, updateProductDto);
           return `Đã cập nhật`
         } else {
@@ -105,10 +104,10 @@ export class ProductsService {
     try {
       const check_id = await this.productoRepository.findOne({ where: { id } })
       if (check_id) {
-        // const cats = await this.imgProductsService.findByProduct(id);
-        // if (cats.length > 0) {
-        //   for (const cat of cats) {
-        //     await this.imgProductsService.remove(cat.id);
+        // const imgs = await this.imgProductsService.findByProduct(id);
+        // if (imgs.length > 0) {
+        //   for (const img of imgs) {
+        //     await this.imgProductsService.remove(img.id);
         //   }
         //   await this.productoRepository.delete({ id });
         //   return 'Xóa sản phẩm thành công';
@@ -153,11 +152,21 @@ export class ProductsService {
     };
   }
 
-  findProductByName(name: string) {
-    return this.productoRepository.find({
-
-      where: { name_product: Like(`%${name}%`) }
-    })
+  async findProductByName(name: string,page: number = 1, limit: number = 10) {
+    const skip = (page - 1) * limit;
+    const [products, total] = await this.productoRepository.findAndCount({
+      relations: ['cat', 'imgs'],
+      where: { name_product: Like(`%${name}%`) },
+      skip,
+      take: limit,
+    });
+    return {
+      products,
+      total,
+      currentPage: page,
+      perPage: limit,
+      lastPage: Math.ceil(total / limit),
+    };
   }
 
   async updateQuantity(id:number,quantity:number)
@@ -166,7 +175,7 @@ export class ProductsService {
       const check_id = await this.productoRepository.findOneBy({id})
       if(check_id)
         {
-          check_id.real_quantity -= quantity
+          check_id.out_quantity += quantity
           await this.productoRepository.update(id,check_id)
         }
     } catch (error) {

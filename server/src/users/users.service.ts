@@ -39,8 +39,13 @@ export class UsersService {
     return this.userRepository.findOneBy({id});
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number) {
+    const user = await this.userRepository.findOneBy({id})
+    if(user)
+      {
+        user.role = Role.Admin
+        await this.userRepository.update(id,user)
+      }
   }
 
   remove(id: number) {
@@ -63,4 +68,8 @@ export class UsersService {
       return await this.userRepository.findOneBy({ refresh_token:token });
 
     }
+}
+export enum Role {
+  User = "user",
+  Admin = "admin",
 }

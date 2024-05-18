@@ -6,10 +6,10 @@ import { query } from 'express';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(private readonly productsService: ProductsService) { }
 
   @Post(':id')
-  create(@Body()  createProductDto: CreateProductDto, @Param('id') id: number) {
+  create(@Body() createProductDto: CreateProductDto, @Param('id') id: number) {
     return this.productsService.create(createProductDto, id);
   }
 
@@ -28,23 +28,25 @@ export class ProductsController {
 
 
   @Get('/search')
-  findName(@Query('name') name: string) { 
-      return this.productsService.findProductByName(name)
+  findName(
+    @Query('name') name: string,
+    @Query('page') page: number,
+    @Query('limit') limit: number,) {
+    return this.productsService.findProductByName(name, page, limit)
   }
 
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.productsService.findOne(id);
   }
-  
+
   @Get('/cat/:id')
   findByCat(
     @Param('id') catId: number,
     @Query('page') page: number,
     @Query('limit') limit: number,
-  )
-  {
-    return this.productsService.findProductByCat(catId,page,limit)
+  ) {
+    return this.productsService.findProductByCat(catId, page, limit)
   }
 
   @Patch(':id')
