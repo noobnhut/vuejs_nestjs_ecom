@@ -4,4 +4,5 @@ export declare class Coupon {
     coupon_percent: number;
     coupon_quantity: number;
     created_at: Date;
+    date_at: Date;
 }

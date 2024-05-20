@@ -20,13 +20,15 @@ const order_entity_1 = require("./entities/order.entity");
 const users_service_1 = require("../users/users.service");
 const config_1 = require("@nestjs/config");
 const order_details_service_1 = require("../order_details/order_details.service");
+const mail_service_1 = require("../mail/mail.service");
 const moment = require('moment');
 let OrdersService = class OrdersService {
-    constructor(orderRepository, userService, configService, orderDetailService) {
+    constructor(orderRepository, userService, configService, orderDetailService, mailService) {
         this.orderRepository = orderRepository;
         this.userService = userService;
         this.configService = configService;
         this.orderDetailService = orderDetailService;
+        this.mailService = mailService;
     }
     async create(createOrderDto, id, carts) {
         const check_user = await this.userService.findOne(id);
@@ -36,7 +38,41 @@ let OrdersService = class OrdersService {
             for (const cart of carts) {
                 this.orderDetailService.creates(cart.single_price, cart.quantity, cart.id_product, order);
             }
-            return 'Mua hàng thành công';
+            let html = `
+      <html>
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script src="https://cdn.tailwindcss.com"></script>
+      </head>
+      <body>
+        <section class=" px-4 flex flex-col bg-gray-300 rounded-r-3xl">
+          
+          <section>
+            <h1 class="font-bold text-2xl">Chân thành cảm ơn</h1>
+            <article class="mt-8 text-gray-500 leading-7 tracking-wider">
+              <p>Chào bạn,${check_user.fullname}</p>
+              <p>
+                404NFP chân thành cảm ơn bạn đã lựa chọn tin tưởng 404NFP và đặt mua sản phẩm của chúng tôi. <br>
+                Hy vọng rằng chất lượng mà sản phẩm mang lại sẽ làm bạn cảm thấy hài lòng.<br>
+                 404NFP mong rằng sẽ được tiếp tục đồng hành cùng bạn trong những lần mua sắm sắp tới.
+              </p>
+              <footer class="mt-12">
+                <p>Chân thành cảm ơn</p>
+                <p>404NFP</p>
+              </footer>
+              <img src="https://res.cloudinary.com/dgnsgobj6/image/upload/v1715396106/bjha0n74cwvjf1exegon.png" alt="hình ảnh" style="max-width: 100%; height: auto; margin-bottom: 20px;">
+            </article>
+         
+          </section>
+          
+        </section>
+      </body>
+    </html>
+      
+      `;
+            this.mailService.sendMail(check_user.email, '404NFP Keyboard', html);
+            return { order };
         }
         else {
             return 'Tạo thất bại';
@@ -92,6 +128,7 @@ let OrdersService = class OrdersService {
             let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");
             vnp_Params['vnp_SecureHash'] = signed;
             vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
+            console.log(order);
             return { redirectUrl: vnpUrl, order, check_create };
         }
         else {
@@ -147,26 +184,104 @@ let OrdersService = class OrdersService {
         return this.orderRepository.findOneBy({ id });
     }
     async update(id, updateOrderDto, check_create) {
-        const check = await this.findOne(id);
+        const check = await this.orderRepository.findOne({
+            relations: ['user'],
+            where: { id: id }
+        });
         if (check) {
-            check.status = OrderStatus.DaThanhToan;
-            check.vnp_orderID = updateOrderDto.vnp_orderID;
-            check.total_bank = updateOrderDto.total_bank;
-            check.date_bank = updateOrderDto.date_bank;
-            await this.orderRepository.update(id, check);
-            return 'xong';
+            if (check_create === "true") {
+                check.status = OrderStatus.DaThanhToan;
+                check.vnp_orderID = updateOrderDto.vnp_orderID;
+                check.total_bank = updateOrderDto.total_bank;
+                check.date_bank = updateOrderDto.date_bank;
+                await this.orderRepository.update(id, check);
+                let html = `
+        <html>
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <script src="https://cdn.tailwindcss.com"></script>
+        </head>
+        <body>
+          <section class=" px-4 flex flex-col bg-gray-300 rounded-r-3xl">
+            
+            <section>
+              <h1 class="font-bold text-2xl">Chân thành cảm ơn</h1>
+              <article class="mt-8 text-gray-500 leading-7 tracking-wider">
+                <p>Chào bạn,${check.user.fullname}</p>
+                <p>
+                  404NFP chân thành cảm ơn bạn đã lựa chọn tin tưởng 404NFP và đặt mua sản phẩm của chúng tôi. <br>
+                  Hy vọng rằng chất lượng mà sản phẩm mang lại sẽ làm bạn cảm thấy hài lòng.<br>
+                   404NFP mong rằng sẽ được tiếp tục đồng hành cùng bạn trong những lần mua sắm sắp tới.
+                </p>
+                <footer class="mt-12">
+                  <p>Chân thành cảm ơn</p>
+                  <p>404NFP</p>
+                </footer>
+                <img src="https://res.cloudinary.com/dgnsgobj6/image/upload/v1715396106/bjha0n74cwvjf1exegon.png" alt="hình ảnh" style="max-width: 100%; height: auto; margin-bottom: 20px;">
+              </article>
+           
+            </section>
+            
+          </section>
+        </body>
+      </html>
+        
+        `;
+                this.mailService.sendMail(check.user.email, '404NFP Keyboard', html);
+                return 'Thanh toán thành công';
+            }
+            else {
+                return 'Đơn hàng đã thanh toán';
+            }
         }
         else {
-            return 'Không tồn tại hóa đơn';
+            return 'Không tồn tại hóa đơn hoặc đã thanh toán thành công';
         }
     }
-    async remove(id) {
+    async remove(id, check) {
         try {
             const check_id = await this.orderRepository.findOneBy({ id });
-            if (check_id) {
+            if (check == "HUY" && check_id) {
                 check_id.status = OrderStatus.ThatBai;
                 this.orderRepository.update(id, check_id);
                 return 'Xong';
+            }
+            else if (check == "HUY_2" && check_id) {
+                if (check_id.status == OrderStatus.DaDat) {
+                    check_id.status = OrderStatus.DaHuy;
+                    this.orderRepository.update(id, check_id);
+                    return 'Hủy thành công';
+                }
+                else if (check_id.status == OrderStatus.DangGiao ||
+                    check_id.status == OrderStatus.DaGiaoHang ||
+                    check_id.status == OrderStatus.DaThanhToan) {
+                    return 'Đơn hàng không thể hủy,vui lòng liên hệ CSKH';
+                }
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+    async updateOrderStatus(id) {
+        try {
+            const order = await this.orderRepository.findOneBy({ id });
+            if (!order) {
+                return 'Không tồn tại hóa đơn';
+            }
+            switch (order.status) {
+                case OrderStatus.DaDat:
+                case OrderStatus.DaThanhToan:
+                    order.status = OrderStatus.DangGiao;
+                    await this.orderRepository.update(id, order);
+                    return 'Cập nhập đang giao hàng';
+                case OrderStatus.DangGiao:
+                    order.status = OrderStatus.DaGiaoHang;
+                    await this.orderRepository.update(id, order);
+                    return 'Cập nhập đã giao hàng';
+                default:
+                    return 'Không tồn tại';
             }
         }
         catch (error) {
@@ -181,7 +296,8 @@ exports.OrdersService = OrdersService = __decorate([
     __metadata("design:paramtypes", [typeorm_2.Repository,
         users_service_1.UsersService,
         config_1.ConfigService,
-        order_details_service_1.OrderDetailsService])
+        order_details_service_1.OrderDetailsService,
+        mail_service_1.MailService])
 ], OrdersService);
 var OrderStatus;
 (function (OrderStatus) {

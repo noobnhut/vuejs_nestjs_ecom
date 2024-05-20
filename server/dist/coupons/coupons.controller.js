@@ -28,13 +28,19 @@ let CouponsController = class CouponsController {
         return this.couponsService.findAll();
     }
     findOne(id) {
-        return this.couponsService.findOne(+id);
+        return this.couponsService.findOne(id);
     }
     update(id, updateCouponDto) {
-        return this.couponsService.update(+id, updateCouponDto);
+        return this.couponsService.update(id, updateCouponDto);
+    }
+    check(name) {
+        return this.couponsService.check_date(name);
+    }
+    change(id, check_create) {
+        return this.couponsService.change_quantity(id, check_create);
     }
     remove(id) {
-        return this.couponsService.remove(+id);
+        return this.couponsService.remove(id);
     }
 };
 exports.CouponsController = CouponsController;
@@ -55,7 +61,7 @@ __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], CouponsController.prototype, "findOne", null);
 __decorate([
@@ -63,14 +69,29 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_coupon_dto_1.UpdateCouponDto]),
+    __metadata("design:paramtypes", [Number, update_coupon_dto_1.UpdateCouponDto]),
     __metadata("design:returntype", void 0)
 ], CouponsController.prototype, "update", null);
+__decorate([
+    (0, common_1.Put)('/check'),
+    __param(0, (0, common_1.Body)('coupon_name')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], CouponsController.prototype, "check", null);
+__decorate([
+    (0, common_1.Put)('/change/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Query)('check_create')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, String]),
+    __metadata("design:returntype", void 0)
+], CouponsController.prototype, "change", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], CouponsController.prototype, "remove", null);
 exports.CouponsController = CouponsController = __decorate([

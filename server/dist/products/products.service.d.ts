@@ -14,14 +14,14 @@ export declare class ProductsService {
     findOne(id: number): Promise<Product>;
     update(id: number, updateProductDto: UpdateProductDto): Promise<"Đã tồn tại tên sản phẩm này" | "Đã cập nhật" | "Không tìm thấy sản phẩm">;
     remove(id: number): Promise<"Không tìm thấy sản phẩm" | "Thao tác thành công">;
-    findProductByCat(id: number, page?: number, limit?: number): Promise<{
+    findProductByCat(id: number, page?: number, limit?: number, check?: string): Promise<{
         products: Product[];
         total: number;
         currentPage: number;
         perPage: number;
         lastPage: number;
     }>;
-    findProductByName(name: string, page?: number, limit?: number): Promise<{
+    findProductByName(name: string, page?: number, limit?: number, check?: string): Promise<{
         products: Product[];
         total: number;
         currentPage: number;

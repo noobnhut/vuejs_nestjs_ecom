@@ -27,14 +27,14 @@ let ProductsController = class ProductsController {
     findAll() {
         return this.productsService.findAll();
     }
-    findName(name, page, limit) {
-        return this.productsService.findProductByName(name, page, limit);
+    findName(name, page, limit, check) {
+        return this.productsService.findProductByName(name, page, limit, check);
     }
     findOne(id) {
         return this.productsService.findOne(id);
     }
-    findByCat(catId, page, limit) {
-        return this.productsService.findProductByCat(catId, page, limit);
+    findByCat(catId, page, limit, check) {
+        return this.productsService.findProductByCat(catId, page, limit, check);
     }
     update(id, updateProductDto) {
         return this.productsService.update(id, updateProductDto);
@@ -63,8 +63,9 @@ __decorate([
     __param(0, (0, common_1.Query)('name')),
     __param(1, (0, common_1.Query)('page')),
     __param(2, (0, common_1.Query)('limit')),
+    __param(3, (0, common_1.Query)('check')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Number, Number]),
+    __metadata("design:paramtypes", [String, Number, Number, String]),
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "findName", null);
 __decorate([
@@ -79,8 +80,9 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Query)('page')),
     __param(2, (0, common_1.Query)('limit')),
+    __param(3, (0, common_1.Query)('check')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Number, Number]),
+    __metadata("design:paramtypes", [Number, Number, Number, String]),
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "findByCat", null);
 __decorate([

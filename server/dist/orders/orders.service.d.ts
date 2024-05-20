@@ -5,13 +5,17 @@ import { Order } from './entities/order.entity';
 import { UsersService } from 'src/users/users.service';
 import { ConfigService } from '@nestjs/config';
 import { OrderDetailsService } from 'src/order_details/order_details.service';
+import { MailService } from 'src/mail/mail.service';
 export declare class OrdersService {
     private orderRepository;
     private userService;
     private configService;
     private orderDetailService;
-    constructor(orderRepository: Repository<Order>, userService: UsersService, configService: ConfigService, orderDetailService: OrderDetailsService);
-    create(createOrderDto: CreateOrderDto, id: number, carts: any): Promise<"Mua hàng thành công" | "Tạo thất bại">;
+    private mailService;
+    constructor(orderRepository: Repository<Order>, userService: UsersService, configService: ConfigService, orderDetailService: OrderDetailsService, mailService: MailService);
+    create(createOrderDto: CreateOrderDto, id: number, carts: any): Promise<"Tạo thất bại" | {
+        order: never;
+    }>;
     createVNP(createOrderDto: CreateOrderDto, id: number, req: any, bank: string, carts: any): Promise<"Thất bại" | {
         redirectUrl: string;
         order: never;
@@ -23,8 +27,9 @@ export declare class OrdersService {
     sortObject(obj: any): {};
     findAll(): Promise<Order[]>;
     findOne(id: number): Promise<Order>;
-    update(id: number, updateOrderDto: UpdateOrderDto, check_create: Boolean): Promise<"xong" | "Không tồn tại hóa đơn">;
-    remove(id: number): Promise<string>;
+    update(id: number, updateOrderDto: UpdateOrderDto, check_create: string): Promise<"Thanh toán thành công" | "Đơn hàng đã thanh toán" | "Không tồn tại hóa đơn hoặc đã thanh toán thành công">;
+    remove(id: number, check: string): Promise<"Xong" | "Hủy thành công" | "Đơn hàng không thể hủy,vui lòng liên hệ CSKH">;
+    updateOrderStatus(id: number): Promise<"Không tồn tại hóa đơn" | "Cập nhập đang giao hàng" | "Cập nhập đã giao hàng" | "Không tồn tại">;
 }
 export declare enum OrderStatus {
     DaGiaoHang = "\u0110\u00E3 giao h\u00E0ng",

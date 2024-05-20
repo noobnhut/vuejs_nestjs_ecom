@@ -15,6 +15,7 @@ export declare class UsersService {
     findByEmail(email_get: string): Promise<User>;
     updateUserToken(token: string, id: number): Promise<void>;
     findUserByToken: (token: string) => Promise<User>;
+    isValidPassword(password: string, hash: string): any;
 }
 export declare enum Role {
     User = "user",

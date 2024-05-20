@@ -107,13 +107,23 @@ let ProductsService = class ProductsService {
             console.log(error);
         }
     }
-    async findProductByCat(id, page = 1, limit = 10) {
+    async findProductByCat(id, page = 1, limit = 10, check = "new") {
         const skip = (page - 1) * limit;
+        let order;
+        if (check === 'asc' || check === 'desc') {
+            order = { price: check };
+        }
+        else if (check === 'new') {
+            order = { id: 'DESC' };
+        }
         const [products, total] = await this.productoRepository.findAndCount({
             relations: ['cat', 'imgs'],
             where: {
-                cat: { id: id },
+                cat: {
+                    id: id,
+                },
             },
+            order,
             skip,
             take: limit,
         });
@@ -125,13 +135,21 @@ let ProductsService = class ProductsService {
             lastPage: Math.ceil(total / limit),
         };
     }
-    async findProductByName(name, page = 1, limit = 10) {
+    async findProductByName(name, page = 1, limit = 10, check = "new") {
         const skip = (page - 1) * limit;
+        let order;
+        if (check === 'asc' || check === 'desc') {
+            order = { price: check };
+        }
+        else if (check === 'new') {
+            order = { id: 'DESC' };
+        }
         const [products, total] = await this.productoRepository.findAndCount({
             relations: ['cat', 'imgs'],
             where: { name_product: (0, typeorm_2.Like)(`%${name}%`) },
             skip,
             take: limit,
+            order
         });
         return {
             products,

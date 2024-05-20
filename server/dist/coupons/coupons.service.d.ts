@@ -10,4 +10,8 @@ export declare class CouponsService {
     findOne(id: number): Promise<Coupon>;
     update(id: number, updateCouponDto: UpdateCouponDto): Promise<"Đã cập nhật" | "Đã tồn tại mã coupon này" | "Không tìm thấy coupon">;
     remove(id: number): Promise<"Không tìm thấy coupon" | "Xóa coupon thành công">;
+    check_date(coupon_name: string): Promise<"counpon ko được rỗng" | "counpon đã hết hạn" | "counpon không tồn tại" | "Đã xảy ra lỗi" | {
+        coupon: Coupon;
+    }>;
+    change_quantity(id: number, check_create: string): Promise<"xong" | "ko tồn tại" | "Đã thay đổi số lượng">;
 }

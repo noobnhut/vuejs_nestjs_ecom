@@ -6,7 +6,7 @@ export declare class ProductsController {
     constructor(productsService: ProductsService);
     create(createProductDto: CreateProductDto, id: number): Promise<"Đã tồn tại tên sản phẩm này" | "Thêm thành công" | "không tồn tại cat">;
     findAll(): Promise<import("./entities/product.entity").Product[]>;
-    findName(name: string, page: number, limit: number): Promise<{
+    findName(name: string, page: number, limit: number, check: string): Promise<{
         products: import("./entities/product.entity").Product[];
         total: number;
         currentPage: number;
@@ -14,7 +14,7 @@ export declare class ProductsController {
         lastPage: number;
     }>;
     findOne(id: number): Promise<import("./entities/product.entity").Product>;
-    findByCat(catId: number, page: number, limit: number): Promise<{
+    findByCat(catId: number, page: number, limit: number, check: string): Promise<{
         products: import("./entities/product.entity").Product[];
         total: number;
         currentPage: number;

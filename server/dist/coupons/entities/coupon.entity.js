@@ -34,6 +34,10 @@ __decorate([
     (0, typeorm_1.Column)({ nullable: true, type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' }),
     __metadata("design:type", Date)
 ], Coupon.prototype, "created_at", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true, type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' }),
+    __metadata("design:type", Date)
+], Coupon.prototype, "date_at", void 0);
 exports.Coupon = Coupon = __decorate([
     (0, typeorm_1.Entity)({ name: 'coupons' })
 ], Coupon);

@@ -34,4 +34,8 @@ __decorate([
     (0, class_validator_1.IsInt)({ message: 'Phải là số nguyên', }),
     __metadata("design:type", Number)
 ], CreateCouponDto.prototype, "coupon_quantity", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)({ message: 'Không được để trống', }),
+    __metadata("design:type", Date)
+], CreateCouponDto.prototype, "date_at", void 0);
 //# sourceMappingURL=create-coupon.dto.js.map

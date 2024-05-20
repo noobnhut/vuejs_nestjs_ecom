@@ -17,7 +17,7 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const user_entity_1 = require("./entities/user.entity");
-const bcrypt = require("bcrypt");
+const bcryptjs_1 = require("bcryptjs");
 let UsersService = class UsersService {
     constructor(userRepository) {
         this.userRepository = userRepository;
@@ -32,9 +32,8 @@ let UsersService = class UsersService {
                 return { success: false, message: "Trùng địa chỉ email" };
             }
             else {
-                const saltOrRounds = 10;
-                const password = createUserDto.password;
-                const hash = await bcrypt.hash(password, saltOrRounds);
+                const salt = (0, bcryptjs_1.genSaltSync)(10);
+                const hash = (0, bcryptjs_1.hashSync)(createUserDto.password, salt);
                 createUserDto.password = hash;
                 await this.userRepository.save(createUserDto);
                 return { success: true, message: 'Tạo tài khoản thành công' };
@@ -67,6 +66,9 @@ let UsersService = class UsersService {
         const existingUser = await this.userRepository.findOneBy({ id });
         existingUser.refresh_token = token;
         await this.userRepository.save(existingUser);
+    }
+    isValidPassword(password, hash) {
+        return (0, bcryptjs_1.compareSync)(password, hash);
     }
 };
 exports.UsersService = UsersService;
