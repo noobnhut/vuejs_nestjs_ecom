@@ -25,6 +25,10 @@ __decorate([
     __metadata("design:type", Number)
 ], OrderDetail.prototype, "single_price", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ nullable: false, type: 'double' }),
+    __metadata("design:type", Number)
+], OrderDetail.prototype, "quantity", void 0);
+__decorate([
     (0, typeorm_1.ManyToOne)(() => order_entity_1.Order, (order) => order.ods),
     __metadata("design:type", order_entity_1.Order)
 ], OrderDetail.prototype, "order", void 0);

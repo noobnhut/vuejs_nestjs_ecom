@@ -36,13 +36,18 @@ export class OrdersController {
   }
 
   @Patch('/update/:id')
-  update(@Param('id') id: number, @Body() updateOrderDto: UpdateOrderDto, @Query('check_create') check_create: Boolean) {
+  update(@Param('id') id: number, @Body() updateOrderDto: UpdateOrderDto, @Query('check_create') check_create: string) {
     return this.ordersService.update(id, updateOrderDto, check_create);
   }
 
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.ordersService.remove(id);
+  remove(@Param('id') id: number,@Query('check')check:string) {
+    return this.ordersService.remove(id,check);
+  }
+
+  @Put(':id')
+  change(@Param('id') id: number) {
+    return this.ordersService.updateOrderStatus(id)
   }
 }

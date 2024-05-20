@@ -19,11 +19,19 @@ __decorate([
     __metadata("design:type", String)
 ], CreateCouponDto.prototype, "coupon_name", void 0);
 __decorate([
+    (0, class_validator_1.Allow)(),
+    (0, class_validator_1.Min)(0, { message: 'Tối thiểu là 0%', }),
+    (0, class_validator_1.Max)(50, { message: 'Phần trăm tối đa là 50%', }),
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsNotEmpty)({ message: 'Không được để trống', }),
+    (0, class_validator_1.IsInt)({ message: 'Phải là số nguyên', }),
     __metadata("design:type", Number)
 ], CreateCouponDto.prototype, "coupon_percent", void 0);
 __decorate([
+    (0, class_validator_1.Min)(1, { message: 'Số lượng tối thiểu là 1', }),
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsNotEmpty)({ message: 'Không được để trống', }),
+    (0, class_validator_1.IsInt)({ message: 'Phải là số nguyên', }),
     __metadata("design:type", Number)
 ], CreateCouponDto.prototype, "coupon_quantity", void 0);
 //# sourceMappingURL=create-coupon.dto.js.map

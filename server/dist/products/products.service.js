@@ -17,37 +17,60 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const product_entity_1 = require("./entities/product.entity");
+const categories_service_1 = require("../categories/categories.service");
+const img_products_service_1 = require("../img_products/img_products.service");
 let ProductsService = class ProductsService {
-    constructor(productoRepository) {
+    constructor(categoriesService, imgProductsService, productoRepository) {
+        this.categoriesService = categoriesService;
+        this.imgProductsService = imgProductsService;
         this.productoRepository = productoRepository;
     }
-    async create(createProductDto) {
+    async create(createProductDto, id) {
         try {
-            const check_name = await this.productoRepository.findOneBy({ name_product: createProductDto.name_product });
-            if (check_name) {
-                return 'Đã tồn tại tên sản phẩm này';
+            const check_name = await this.productoRepository.findOneBy({
+                name_product: createProductDto.name_product,
+                id: (0, typeorm_2.Not)(id)
+            });
+            const check_cat = await this.categoriesService.findOne(id);
+            if (check_cat) {
+                if (check_name) {
+                    return 'Đã tồn tại tên sản phẩm này';
+                }
+                else {
+                    createProductDto.cat = check_cat;
+                    const result = this.productoRepository.create(createProductDto);
+                    await this.productoRepository.save(result);
+                    return "Thêm thành công";
+                }
             }
             else {
-                const product = await this.productoRepository.save(createProductDto);
-                return product;
+                return "không tồn tại cat";
             }
         }
         catch (error) {
             console.log(error);
         }
     }
-    findAll() {
-        return this.productoRepository.find();
+    async findAll() {
+        return await this.productoRepository.find();
     }
     findOne(id) {
-        return `This action returns a #${id} product`;
+        return this.productoRepository.findOne({
+            relations: ['cat', 'imgs'],
+            where: { id: id },
+        });
     }
     async update(id, updateProductDto) {
         try {
             const check_id = await this.productoRepository.findOne({ where: { id } });
             if (check_id) {
-                const check_name = await this.productoRepository.findOneBy({ name_product: updateProductDto.name_product });
+                const check_name = await this.productoRepository.findOneBy({
+                    name_product: updateProductDto.name_product,
+                    id: (0, typeorm_2.Not)(id)
+                });
                 if (!check_name) {
+                    const quantity_new = updateProductDto.quantity;
+                    updateProductDto.quantity = quantity_new + check_id.quantity;
                     await this.productoRepository.update(id, updateProductDto);
                     return `Đã cập nhật`;
                 }
@@ -63,14 +86,82 @@ let ProductsService = class ProductsService {
             console.log(error);
         }
     }
-    remove(id) {
-        return `This action removes a #${id} product`;
+    async remove(id) {
+        try {
+            const check_id = await this.productoRepository.findOne({ where: { id } });
+            if (check_id) {
+                if (check_id.is_deleted == true) {
+                    check_id.is_deleted = false;
+                }
+                else {
+                    check_id.is_deleted = true;
+                }
+                await this.productoRepository.update(id, check_id);
+                return 'Thao tác thành công';
+            }
+            else {
+                return 'Không tìm thấy sản phẩm';
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+    async findProductByCat(id, page = 1, limit = 10) {
+        const skip = (page - 1) * limit;
+        const [products, total] = await this.productoRepository.findAndCount({
+            relations: ['cat', 'imgs'],
+            where: {
+                cat: { id: id },
+            },
+            skip,
+            take: limit,
+        });
+        return {
+            products,
+            total,
+            currentPage: page,
+            perPage: limit,
+            lastPage: Math.ceil(total / limit),
+        };
+    }
+    async findProductByName(name, page = 1, limit = 10) {
+        const skip = (page - 1) * limit;
+        const [products, total] = await this.productoRepository.findAndCount({
+            relations: ['cat', 'imgs'],
+            where: { name_product: (0, typeorm_2.Like)(`%${name}%`) },
+            skip,
+            take: limit,
+        });
+        return {
+            products,
+            total,
+            currentPage: page,
+            perPage: limit,
+            lastPage: Math.ceil(total / limit),
+        };
+    }
+    async updateQuantity(id, quantity) {
+        try {
+            const check_id = await this.productoRepository.findOneBy({ id });
+            if (check_id) {
+                check_id.out_quantity += quantity;
+                await this.productoRepository.update(id, check_id);
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
 };
 exports.ProductsService = ProductsService;
 exports.ProductsService = ProductsService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(product_entity_1.Product)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(0, (0, common_1.Inject)((0, common_1.forwardRef)(() => categories_service_1.CategoriesService))),
+    __param(1, (0, common_1.Inject)((0, common_1.forwardRef)(() => img_products_service_1.ImgProductsService))),
+    __param(2, (0, typeorm_1.InjectRepository)(product_entity_1.Product)),
+    __metadata("design:paramtypes", [categories_service_1.CategoriesService,
+        img_products_service_1.ImgProductsService,
+        typeorm_2.Repository])
 ], ProductsService);
 //# sourceMappingURL=products.service.js.map

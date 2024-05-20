@@ -17,40 +17,82 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const img_product_entity_1 = require("./entities/img_product.entity");
+const cloudinary_1 = require("cloudinary");
+const streamifier = require('streamifier');
+const products_service_1 = require("../products/products.service");
 let ImgProductsService = class ImgProductsService {
-    constructor(imgProductRepository) {
+    constructor(imgProductRepository, productsService) {
         this.imgProductRepository = imgProductRepository;
+        this.productsService = productsService;
     }
-    async create(createImgProductDto) {
+    uploadFile(file) {
+        return new Promise((resolve, reject) => {
+            const uploadStream = cloudinary_1.v2.uploader.upload_stream((error, result) => {
+                if (error)
+                    return reject(error);
+                resolve(result);
+            });
+            streamifier.createReadStream(file.buffer).pipe(uploadStream);
+        });
+    }
+    async create(createImgProductDto, file, id) {
         try {
-            await this.imgProductRepository.save(createImgProductDto);
+            const add_img = await this.uploadFile(file);
+            const product = await this.productsService.findOne(id);
+            if (product) {
+                createImgProductDto.img_public_key = add_img.public_id;
+                createImgProductDto.img_url = add_img.url;
+                createImgProductDto.product = product;
+                const result = this.imgProductRepository.create(createImgProductDto);
+                return this.imgProductRepository.save(result);
+            }
+            else {
+                return { message: 'Không tồn tại sản phẩm' };
+            }
         }
         catch (error) {
             console.log(error);
         }
-    }
-    findAll() {
-        return this.imgProductRepository.find();
     }
     findOne(id) {
-        return `This action returns a #${id} imgProduct`;
-    }
-    async update(id, updateImgProductDto) {
         try {
-            await this.imgProductRepository.update(id, updateImgProductDto);
+            return this.imgProductRepository.findOneBy({ id });
         }
         catch (error) {
             console.log(error);
         }
     }
-    remove(id) {
-        return `This action removes a #${id} imgProduct`;
+    async remove(id) {
+        try {
+            const check_img = await this.imgProductRepository.findOneBy({ id: id });
+            if (check_img) {
+                cloudinary_1.v2.api
+                    .delete_resources([check_img.img_public_key], { type: 'upload', resource_type: 'image' })
+                    .then(console.log);
+                await this.imgProductRepository.delete(check_img);
+                return { message: 'Xóa thành công rùi nè' };
+            }
+            else {
+                return { message: 'Không tồn tại ảnh này' };
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+    findByProduct(id) {
+        return this.imgProductRepository.find({
+            relations: ['product'],
+            where: { product: { id: id } }
+        });
     }
 };
 exports.ImgProductsService = ImgProductsService;
 exports.ImgProductsService = ImgProductsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(img_product_entity_1.ImgProduct)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(1, (0, common_1.Inject)((0, common_1.forwardRef)(() => products_service_1.ProductsService))),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        products_service_1.ProductsService])
 ], ImgProductsService);
 //# sourceMappingURL=img_products.service.js.map

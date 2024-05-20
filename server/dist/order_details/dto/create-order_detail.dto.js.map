@@ -1,1 +1,1 @@
-{"version":3,"file":"create-order_detail.dto.js","sourceRoot":"","sources":["../../../src/order_details/dto/create-order_detail.dto.ts"],"names":[],"mappings":";;;AAAA,MAAa,oBAAoB;CAEhC;AAFD,oDAEC"}
+{"version":3,"file":"create-order_detail.dto.js","sourceRoot":"","sources":["../../../src/order_details/dto/create-order_detail.dto.ts"],"names":[],"mappings":";;;AAEA,MAAa,oBAAoB;CAIhC;AAJD,oDAIC"}

@@ -20,7 +20,6 @@ const favourites_module_1 = require("./favourites/favourites.module");
 const orders_module_1 = require("./orders/orders.module");
 const order_details_module_1 = require("./order_details/order_details.module");
 const coupons_module_1 = require("./coupons/coupons.module");
-const reviews_module_1 = require("./reviews/reviews.module");
 const auth_module_1 = require("./auth/auth.module");
 let AppModule = class AppModule {
 };
@@ -40,7 +39,6 @@ exports.AppModule = AppModule = __decorate([
             orders_module_1.OrdersModule,
             order_details_module_1.OrderDetailsModule,
             coupons_module_1.CouponsModule,
-            reviews_module_1.ReviewsModule,
             auth_module_1.AuthModule,
         ],
         controllers: [app_controller_1.AppController],

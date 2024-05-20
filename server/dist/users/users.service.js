@@ -12,7 +12,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UsersService = void 0;
+exports.Role = exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
@@ -21,12 +21,15 @@ const bcrypt = require("bcrypt");
 let UsersService = class UsersService {
     constructor(userRepository) {
         this.userRepository = userRepository;
+        this.findUserByToken = async (token) => {
+            return await this.userRepository.findOneBy({ refresh_token: token });
+        };
     }
     async create(createUserDto) {
         try {
-            const check_user = await this.userRepository.findOneBy({ email: createUserDto.email });
+            const check_user = await this.userRepository.exists({ where: { email: createUserDto.email } });
             if (check_user) {
-                return 'Trùng tài khoản vui lòng tạo lại ?';
+                return { success: false, message: "Trùng địa chỉ email" };
             }
             else {
                 const saltOrRounds = 10;
@@ -34,7 +37,7 @@ let UsersService = class UsersService {
                 const hash = await bcrypt.hash(password, saltOrRounds);
                 createUserDto.password = hash;
                 await this.userRepository.save(createUserDto);
-                return 'Tạo tài khoản thành công';
+                return { success: true, message: 'Tạo tài khoản thành công' };
             }
         }
         catch (error) {
@@ -45,16 +48,25 @@ let UsersService = class UsersService {
         return await this.userRepository.find();
     }
     findOne(id) {
-        return `This action returns a #${id} user`;
+        return this.userRepository.findOneBy({ id });
     }
-    update(id, updateUserDto) {
-        return `This action updates a #${id} user`;
+    async update(id) {
+        const user = await this.userRepository.findOneBy({ id });
+        if (user) {
+            user.role = Role.Admin;
+            await this.userRepository.update(id, user);
+        }
     }
     remove(id) {
         return `This action removes a #${id} user`;
     }
     async findByEmail(email_get) {
         return await this.userRepository.findOneBy({ email: email_get });
+    }
+    async updateUserToken(token, id) {
+        const existingUser = await this.userRepository.findOneBy({ id });
+        existingUser.refresh_token = token;
+        await this.userRepository.save(existingUser);
     }
 };
 exports.UsersService = UsersService;
@@ -63,4 +75,9 @@ exports.UsersService = UsersService = __decorate([
     __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
     __metadata("design:paramtypes", [typeorm_2.Repository])
 ], UsersService);
+var Role;
+(function (Role) {
+    Role["User"] = "user";
+    Role["Admin"] = "admin";
+})(Role || (exports.Role = Role = {}));
 //# sourceMappingURL=users.service.js.map

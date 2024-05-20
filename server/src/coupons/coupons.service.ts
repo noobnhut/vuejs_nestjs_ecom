@@ -9,7 +9,7 @@ export class CouponsService {
   constructor(
     @InjectRepository(Coupon)
     private couponRepository: Repository<Coupon>,
-  ) {}
+  ) { }
 
   async create(createCouponDto: CreateCouponDto) {
     // return await this.couponRepository.save(createCouponDto);
@@ -39,7 +39,7 @@ export class CouponsService {
 
   findOne(id: number) {
     // return `This action returns a #${id} coupon`;
-    return this.couponRepository.findOneBy({id});
+    return this.couponRepository.findOneBy({ id });
   }
 
   async update(id: number, updateCouponDto: UpdateCouponDto) {
@@ -79,4 +79,50 @@ export class CouponsService {
       console.log(error);
     }
   }
+
+  async check_date(coupon_name: string) {
+    try {
+      if (coupon_name === '' || !coupon_name) {
+        return 'counpon ko được rỗng';
+      }
+      const coupon = await this.couponRepository.findOneBy({ coupon_name });
+      if (coupon) {
+        const now = new Date();
+        if (new Date(coupon.date_at) > now) {
+          return {coupon};
+        } else {
+          return 'counpon đã hết hạn';
+        }
+      } else {
+        return 'counpon không tồn tại';
+      }
+    } catch (error) {
+      console.log(error);
+      return 'Đã xảy ra lỗi';
+    }
+  }
+
+  async change_quantity(id:number,check_create:string)
+  {
+    if(check_create == 'true')
+      {
+        const check_id = await this.couponRepository.findOneBy({id})
+        if(check_id)
+          {
+            check_id.coupon_quantity--;
+            await this.couponRepository.update(id,check_id)
+            return 'xong'
+          }
+          else
+          {
+            return 'ko tồn tại'
+          }
+      }
+      else
+      {
+        return 'Đã thay đổi số lượng'
+      }
+    
+  }
+
 }

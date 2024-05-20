@@ -26,7 +26,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ nullable: false }),
     __metadata("design:type", String)
-], ImgProduct.prototype, "img_name", void 0);
+], ImgProduct.prototype, "img_public_key", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => product_entity_1.Product, product => product.imgs),
     __metadata("design:type", product_entity_1.Product)

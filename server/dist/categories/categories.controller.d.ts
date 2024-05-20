@@ -4,9 +4,13 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 export declare class CategoriesController {
     private readonly categoriesService;
     constructor(categoriesService: CategoriesService);
-    create(createCategoryDto: CreateCategoryDto): Promise<"Đã tồn tại tên cat này" | (CreateCategoryDto & import("./entities/category.entity").Category)>;
+    create(createCategoryDto: CreateCategoryDto): Promise<"Đã tồn tại tên cat này" | "Đã thêm thành công">;
     findAll(): Promise<import("./entities/category.entity").Category[]>;
-    findOne(id: string): string;
-    update(id: string, updateCategoryDto: UpdateCategoryDto): Promise<"Đã tồn tại tên cat này" | "Đã cập nhật" | "Không tìm thấy cat">;
-    remove(id: string): Promise<"Xóa danh mục thành công" | "không tìm thấy danh mục">;
+    findAllWithProduct(): Promise<import("./entities/category.entity").Category[]>;
+    findOne(id: number): Promise<import("./entities/category.entity").Category>;
+    update(id: number, updateCategoryDto: UpdateCategoryDto): Promise<"Đã cập nhật" | "Đã tồn tại tên cat này" | {
+        message: string;
+        statusCode: number;
+    }>;
+    remove(id: number): Promise<"Không thể xóa vì cat này chứ product" | "Xóa thành công" | "khong ton tai">;
 }

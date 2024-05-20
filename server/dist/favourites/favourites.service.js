@@ -17,15 +17,47 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const favourite_entity_1 = require("./entities/favourite.entity");
+const users_service_1 = require("../users/users.service");
+const products_service_1 = require("../products/products.service");
 let FavouritesService = class FavouritesService {
-    constructor(favouriteRepository) {
+    constructor(favouriteRepository, userService, productService) {
         this.favouriteRepository = favouriteRepository;
+        this.userService = userService;
+        this.productService = productService;
     }
-    async create(createFavouriteDto) {
-        return await this.favouriteRepository.save(createFavouriteDto);
+    async create(createFavouriteDto, user_id, product_id) {
+        try {
+            console.log(user_id);
+            const user_check = await this.userService.findOne(user_id);
+            const product_check = await this.productService.findOne(product_id);
+            if (user_check && product_check) {
+                const check_favourite = await this.favouriteRepository.find({
+                    where: {
+                        user: { id: user_id },
+                        product: { id: product_id }
+                    },
+                    relations: ['user', 'product']
+                });
+                if (check_favourite.length > 0) {
+                    await this.favouriteRepository.delete({ id: check_favourite[0].id });
+                    return { message: "Bỏ lưu sản phẩm" };
+                }
+                else {
+                    createFavouriteDto.user = user_check;
+                    createFavouriteDto.product = product_check;
+                    await this.favouriteRepository.save(createFavouriteDto);
+                    return { message: "Lưu sản phẩm" };
+                }
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
     findAll() {
-        return `This action returns all favourites`;
+        return this.favouriteRepository.find({
+            relations: ['user', 'product'],
+        });
     }
     findOne(id) {
         return `This action returns a #${id} favourite`;
@@ -41,6 +73,8 @@ exports.FavouritesService = FavouritesService;
 exports.FavouritesService = FavouritesService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(favourite_entity_1.Favourite)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        users_service_1.UsersService,
+        products_service_1.ProductsService])
 ], FavouritesService);
 //# sourceMappingURL=favourites.service.js.map

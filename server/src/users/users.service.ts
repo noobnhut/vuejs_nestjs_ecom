@@ -4,7 +4,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
-import * as bcrypt from 'bcrypt';
+import { genSaltSync, hashSync, compareSync } from 'bcryptjs';
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -19,9 +20,8 @@ export class UsersService {
         return { success:false, message:"Trùng địa chỉ email" };
       }
       else {
-        const saltOrRounds = 10;
-        const password = createUserDto.password;
-        const hash = await bcrypt.hash(password, saltOrRounds);
+        const salt = genSaltSync(10);
+        const hash = hashSync(createUserDto.password, salt);
         createUserDto.password = hash
         await this.userRepository.save(createUserDto);
         return {success:true,message:'Tạo tài khoản thành công'}
@@ -67,6 +67,10 @@ export class UsersService {
     {
       return await this.userRepository.findOneBy({ refresh_token:token });
 
+    }
+
+    isValidPassword(password: string, hash: string) {
+      return compareSync(password, hash);
     }
 }
 export enum Role {

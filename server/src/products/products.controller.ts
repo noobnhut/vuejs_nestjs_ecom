@@ -31,8 +31,9 @@ export class ProductsController {
   findName(
     @Query('name') name: string,
     @Query('page') page: number,
-    @Query('limit') limit: number,) {
-    return this.productsService.findProductByName(name, page, limit)
+    @Query('limit') limit: number,
+    @Query('check') check: string,) {
+    return this.productsService.findProductByName(name, page, limit,check)
   }
 
   @Get(':id')
@@ -45,8 +46,10 @@ export class ProductsController {
     @Param('id') catId: number,
     @Query('page') page: number,
     @Query('limit') limit: number,
+    @Query('check') check: string,
+
   ) {
-    return this.productsService.findProductByCat(catId, page, limit)
+    return this.productsService.findProductByCat(catId, page, limit,check)
   }
 
   @Patch(':id')

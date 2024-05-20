@@ -1,10 +1,10 @@
 import { BadGatewayException, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
-import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import ms = require('ms');
+import { genSaltSync, hashSync, compareSync } from 'bcrypt';
 @Injectable()
 export class AuthService {
   constructor(
@@ -15,12 +15,11 @@ export class AuthService {
 
   async validateUser(username: string, password: string): Promise<any> {
     const user = await this.usersService.findByEmail(username);
-
     if (user) {
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (isMatch === true) {
-        return user
-      }
+      const isValid = this.usersService.isValidPassword(password, user.password);
+            if (isValid === true) {
+                return user;
+            }
     }
     return null;
   }

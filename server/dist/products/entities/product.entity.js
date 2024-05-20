@@ -14,7 +14,6 @@ const category_entity_1 = require("../../categories/entities/category.entity");
 const favourite_entity_1 = require("../../favourites/entities/favourite.entity");
 const img_product_entity_1 = require("../../img_products/entities/img_product.entity");
 const order_detail_entity_1 = require("../../order_details/entities/order_detail.entity");
-const review_entity_1 = require("../../reviews/entities/review.entity");
 const typeorm_1 = require("typeorm");
 let Product = class Product {
 };
@@ -36,6 +35,14 @@ __decorate([
     __metadata("design:type", Number)
 ], Product.prototype, "price", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ nullable: false, type: 'double' }),
+    __metadata("design:type", Number)
+], Product.prototype, "quantity", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: false, type: 'double' }),
+    __metadata("design:type", Number)
+], Product.prototype, "out_quantity", void 0);
+__decorate([
     (0, typeorm_1.ManyToOne)(() => category_entity_1.Category, (cat) => cat.products),
     __metadata("design:type", category_entity_1.Category)
 ], Product.prototype, "cat", void 0);
@@ -47,10 +54,6 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => favourite_entity_1.Favourite, (favourite) => favourite.product),
     __metadata("design:type", Array)
 ], Product.prototype, "favourites", void 0);
-__decorate([
-    (0, typeorm_1.OneToMany)(() => review_entity_1.Review, (review) => review.product),
-    __metadata("design:type", Array)
-], Product.prototype, "reviews", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => order_detail_entity_1.OrderDetail, (orderDetail) => orderDetail.product),
     __metadata("design:type", Array)

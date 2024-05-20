@@ -16,5 +16,8 @@ export class Coupon {
 
     @Column({ nullable: true, type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     created_at: Date;
+
+    @Column({ nullable: true, type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
+    date_at: Date;
 }
 

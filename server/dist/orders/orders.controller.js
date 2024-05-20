@@ -21,30 +21,56 @@ let OrdersController = class OrdersController {
     constructor(ordersService) {
         this.ordersService = ordersService;
     }
-    create(createOrderDto) {
-        return this.ordersService.create(createOrderDto);
+    create(id, createOrderDto, carts) {
+        return this.ordersService.create(createOrderDto, id, carts);
+    }
+    async createVNP(createOrderDto, id, req, bank, carts) {
+        return this.ordersService.createVNP(createOrderDto, id, req, bank, carts);
+    }
+    getVNP(query) {
+        return this.ordersService.getVNP(query);
     }
     findAll() {
         return this.ordersService.findAll();
     }
     findOne(id) {
-        return this.ordersService.findOne(+id);
+        return this.ordersService.findOne(id);
     }
-    update(id, updateOrderDto) {
-        return this.ordersService.update(+id, updateOrderDto);
+    update(id, updateOrderDto, check_create) {
+        return this.ordersService.update(id, updateOrderDto, check_create);
     }
     remove(id) {
-        return this.ordersService.remove(+id);
+        return this.ordersService.remove(id);
     }
 };
 exports.OrdersController = OrdersController;
 __decorate([
-    (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)()),
+    (0, common_1.Post)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.Body)('carts')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_order_dto_1.CreateOrderDto]),
+    __metadata("design:paramtypes", [Number, create_order_dto_1.CreateOrderDto, Object]),
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "create", null);
+__decorate([
+    (0, common_1.Post)('/create-vnp/:id'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Param)('id')),
+    __param(2, (0, common_1.Req)()),
+    __param(3, (0, common_1.Body)('bank')),
+    __param(4, (0, common_1.Body)('carts')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_order_dto_1.CreateOrderDto, Number, Object, String, Object]),
+    __metadata("design:returntype", Promise)
+], OrdersController.prototype, "createVNP", null);
+__decorate([
+    (0, common_1.Get)('/vnpay_get'),
+    __param(0, (0, common_1.Query)('query')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], OrdersController.prototype, "getVNP", null);
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
@@ -55,22 +81,23 @@ __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.Patch)(':id'),
+    (0, common_1.Patch)('/update/:id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.Query)('check_create')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_order_dto_1.UpdateOrderDto]),
+    __metadata("design:paramtypes", [Number, update_order_dto_1.UpdateOrderDto, Boolean]),
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "remove", null);
 exports.OrdersController = OrdersController = __decorate([

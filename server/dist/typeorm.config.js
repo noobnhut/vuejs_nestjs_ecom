@@ -18,7 +18,6 @@ const favourite_entity_1 = require("./favourites/entities/favourite.entity");
 const coupon_entity_1 = require("./coupons/entities/coupon.entity");
 const order_entity_1 = require("./orders/entities/order.entity");
 const order_detail_entity_1 = require("./order_details/entities/order_detail.entity");
-const review_entity_1 = require("./reviews/entities/review.entity");
 let CustomTypeOrmModule = class CustomTypeOrmModule {
 };
 exports.CustomTypeOrmModule = CustomTypeOrmModule;
@@ -34,7 +33,7 @@ exports.CustomTypeOrmModule = CustomTypeOrmModule = __decorate([
                     username: configService.get('DB_USERNAME', 'root'),
                     password: configService.get('DB_PASSWORD', ''),
                     database: configService.get('DB_DATABASE', 'ecom'),
-                    entities: [user_entity_1.User, category_entity_1.Category, product_entity_1.Product, img_product_entity_1.ImgProduct, favourite_entity_1.Favourite, coupon_entity_1.Coupon, order_entity_1.Order, order_detail_entity_1.OrderDetail, review_entity_1.Review],
+                    entities: [user_entity_1.User, category_entity_1.Category, product_entity_1.Product, img_product_entity_1.ImgProduct, favourite_entity_1.Favourite, coupon_entity_1.Coupon, order_entity_1.Order, order_detail_entity_1.OrderDetail],
                     synchronize: true,
                 }),
                 inject: [config_1.ConfigService],

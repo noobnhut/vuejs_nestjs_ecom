@@ -17,8 +17,10 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const category_entity_1 = require("./entities/category.entity");
+const products_service_1 = require("../products/products.service");
 let CategoriesService = class CategoriesService {
-    constructor(catRepository) {
+    constructor(productService, catRepository) {
+        this.productService = productService;
         this.catRepository = catRepository;
     }
     async create(createCategoryDto) {
@@ -31,7 +33,7 @@ let CategoriesService = class CategoriesService {
             }
             else {
                 const cat = await this.catRepository.save(createCategoryDto);
-                return cat;
+                return 'Đã thêm thành công';
             }
         }
         catch (error) {
@@ -41,8 +43,16 @@ let CategoriesService = class CategoriesService {
     findAll() {
         return this.catRepository.find();
     }
+    async findCategoriesWithProducts() {
+        return await this.catRepository
+            .createQueryBuilder('category')
+            .innerJoin('category.products', 'product')
+            .select(['category.id', 'category.name_cat'])
+            .distinct(true)
+            .getMany();
+    }
     findOne(id) {
-        return `This action returns a #${id} category`;
+        return this.catRepository.findOneBy({ id });
     }
     async update(id, updateCategoryDto) {
         try {
@@ -57,11 +67,15 @@ let CategoriesService = class CategoriesService {
                     return `Đã cập nhật`;
                 }
                 else {
-                    return `Đã tồn tại tên cat này`;
+                    return 'Đã tồn tại tên cat này';
                 }
             }
             else {
-                return `Không tìm thấy cat`;
+                const errorResponse = {
+                    message: `Không tìm thấy cat`,
+                    statusCode: 404
+                };
+                return errorResponse;
             }
         }
         catch (error) {
@@ -70,13 +84,19 @@ let CategoriesService = class CategoriesService {
     }
     async remove(id) {
         try {
-            const check_id = await this.catRepository.findOne({ where: { id } });
-            if (check_id) {
-                await this.catRepository.delete({ id });
-                return 'Xóa danh mục thành công';
+            let check_cat = await this.catRepository.findOneBy({ id: id });
+            if (check_cat) {
+                const products = await this.productService.findProductByCat(id);
+                if (products.products.length > 0) {
+                    return 'Không thể xóa vì cat này chứ product';
+                }
+                else {
+                    await this.catRepository.delete({ id: check_cat.id });
+                    return 'Xóa thành công';
+                }
             }
             else {
-                return 'không tìm thấy danh mục';
+                return 'khong ton tai';
             }
         }
         catch (error) {
@@ -87,7 +107,9 @@ let CategoriesService = class CategoriesService {
 exports.CategoriesService = CategoriesService;
 exports.CategoriesService = CategoriesService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(category_entity_1.Category)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(0, (0, common_1.Inject)((0, common_1.forwardRef)(() => products_service_1.ProductsService))),
+    __param(1, (0, typeorm_1.InjectRepository)(category_entity_1.Category)),
+    __metadata("design:paramtypes", [products_service_1.ProductsService,
+        typeorm_2.Repository])
 ], CategoriesService);
 //# sourceMappingURL=categories.service.js.map

@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = exports.Role = void 0;
 const favourite_entity_1 = require("../../favourites/entities/favourite.entity");
 const order_entity_1 = require("../../orders/entities/order.entity");
-const review_entity_1 = require("../../reviews/entities/review.entity");
 const typeorm_1 = require("typeorm");
 var Role;
 (function (Role) {
@@ -47,6 +46,10 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "address", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ default: 'thisisrefreshtoken' }),
+    __metadata("design:type", String)
+], User.prototype, "refresh_token", void 0);
+__decorate([
     (0, typeorm_1.Column)({
         type: "enum",
         enum: Role,
@@ -58,10 +61,6 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => favourite_entity_1.Favourite, (favourite) => favourite.user),
     __metadata("design:type", Array)
 ], User.prototype, "favourites", void 0);
-__decorate([
-    (0, typeorm_1.OneToMany)(() => review_entity_1.Review, (review) => review.user),
-    __metadata("design:type", Array)
-], User.prototype, "reviews", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => order_entity_1.Order, (order) => order.user),
     __metadata("design:type", Array)

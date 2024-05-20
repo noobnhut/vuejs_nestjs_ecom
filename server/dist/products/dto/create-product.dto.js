@@ -21,9 +21,19 @@ __decorate([
     __metadata("design:type", String)
 ], CreateProductDto.prototype, "name_product", void 0);
 __decorate([
+    (0, class_validator_1.Min)(1, { message: 'Giá tiền tối thiểu là 1000', }),
+    (0, class_validator_1.IsInt)({ message: 'Phải là số nguyên', }),
     (0, class_validator_1.IsNotEmpty)({
         message: 'Vui lòng nhập giá tiền',
     }),
     __metadata("design:type", Number)
 ], CreateProductDto.prototype, "price", void 0);
+__decorate([
+    (0, class_validator_1.Min)(1, { message: 'Số lượng tối thiểu là 1', }),
+    (0, class_validator_1.IsInt)({ message: 'Phải là số nguyên', }),
+    (0, class_validator_1.IsNotEmpty)({
+        message: 'Vui lòng nhập số lượng',
+    }),
+    __metadata("design:type", Number)
+], CreateProductDto.prototype, "quantity", void 0);
 //# sourceMappingURL=create-product.dto.js.map

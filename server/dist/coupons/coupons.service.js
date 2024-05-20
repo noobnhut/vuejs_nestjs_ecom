@@ -26,16 +26,16 @@ let CouponsService = class CouponsService {
             const check_name = await this.couponRepository.findOneBy({
                 coupon_name: createCouponDto.coupon_name,
             });
-            if (createCouponDto.coupon_name.length == 0) {
+            if (createCouponDto.coupon_name.length < 0) {
                 return 'Không được để trống';
             }
             else {
                 if (check_name) {
-                    return 'Đã tồn tại tên coupon này';
+                    return 'Đã tồn tại mã coupon này';
                 }
                 else {
                     const coupon = await this.couponRepository.save(createCouponDto);
-                    return coupon;
+                    return 'Thêm coupon thành công';
                 }
             }
         }
@@ -47,7 +47,7 @@ let CouponsService = class CouponsService {
         return this.couponRepository.find();
     }
     findOne(id) {
-        return `This action returns a #${id} coupon`;
+        return this.couponRepository.findOneBy({ id });
     }
     async update(id, updateCouponDto) {
         try {
@@ -62,7 +62,7 @@ let CouponsService = class CouponsService {
                     return `Đã cập nhật`;
                 }
                 else {
-                    return `Đã tồn tại tên coupon này`;
+                    return `Đã tồn tại mã coupon này`;
                 }
             }
             else {
@@ -81,7 +81,7 @@ let CouponsService = class CouponsService {
                 return 'Xóa coupon thành công';
             }
             else {
-                return 'Không tìm thấy coupon';
+                return `Không tìm thấy coupon`;
             }
         }
         catch (error) {

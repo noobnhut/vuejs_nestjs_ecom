@@ -19,4 +19,8 @@ export class CreateCouponDto {
     @IsInt({ message: 'Phải là số nguyên', })
     // @Max(10000, { message: 'Không được lớn hơn 10000', })
     coupon_quantity: number;
+
+    @IsNotEmpty({ message: 'Không được để trống', })
+    date_at:Date
+
 }

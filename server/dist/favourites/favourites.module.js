@@ -12,12 +12,14 @@ const favourites_service_1 = require("./favourites.service");
 const favourites_controller_1 = require("./favourites.controller");
 const typeorm_1 = require("@nestjs/typeorm");
 const favourite_entity_1 = require("./entities/favourite.entity");
+const products_module_1 = require("../products/products.module");
+const users_module_1 = require("../users/users.module");
 let FavouritesModule = class FavouritesModule {
 };
 exports.FavouritesModule = FavouritesModule;
 exports.FavouritesModule = FavouritesModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([favourite_entity_1.Favourite])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([favourite_entity_1.Favourite]), products_module_1.ProductsModule, users_module_1.UsersModule],
         controllers: [favourites_controller_1.FavouritesController],
         providers: [favourites_service_1.FavouritesService]
     })

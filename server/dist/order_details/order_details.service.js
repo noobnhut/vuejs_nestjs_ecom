@@ -17,21 +17,27 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const order_detail_entity_1 = require("./entities/order_detail.entity");
+const products_service_1 = require("../products/products.service");
 let OrderDetailsService = class OrderDetailsService {
-    constructor(orderDetailRepository) {
+    constructor(orderDetailRepository, productService) {
         this.orderDetailRepository = orderDetailRepository;
+        this.productService = productService;
     }
-    async create(createOrderDetailDto) {
+    async create(createOrderDetailDto, id) {
+        const product_get = await this.productService.findOne(id);
+        createOrderDetailDto.product = product_get;
         return await this.orderDetailRepository.save(createOrderDetailDto);
     }
-    findAll() {
-        return `This action returns all orderDetails`;
-    }
-    findOne(id) {
-        return `This action returns a #${id} orderDetail`;
-    }
-    update(id, updateOrderDetailDto) {
-        return `This action updates a #${id} orderDetail`;
+    async creates(single_price, quantity, id, orders) {
+        const product_get = await this.productService.findOne(id);
+        await this.productService.updateQuantity(id, quantity);
+        let product = product_get;
+        return await this.orderDetailRepository.save({
+            product: product,
+            single_price: single_price,
+            quantity: quantity,
+            order: orders
+        });
     }
     remove(id) {
         return `This action removes a #${id} orderDetail`;
@@ -41,6 +47,7 @@ exports.OrderDetailsService = OrderDetailsService;
 exports.OrderDetailsService = OrderDetailsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(order_detail_entity_1.OrderDetail)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        products_service_1.ProductsService])
 ], OrderDetailsService);
 //# sourceMappingURL=order_details.service.js.map

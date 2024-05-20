@@ -1,13 +1,20 @@
+/// <reference types="multer" />
 import { CreateImgProductDto } from './dto/create-img_product.dto';
-import { UpdateImgProductDto } from './dto/update-img_product.dto';
 import { Repository } from 'typeorm';
 import { ImgProduct } from './entities/img_product.entity';
+import { CloudinaryResponse } from './cloudinary/cloudinary-response';
+import { ProductsService } from 'src/products/products.service';
 export declare class ImgProductsService {
     private imgProductRepository;
-    constructor(imgProductRepository: Repository<ImgProduct>);
-    create(createImgProductDto: CreateImgProductDto): Promise<void>;
-    findAll(): Promise<ImgProduct[]>;
-    findOne(id: number): string;
-    update(id: number, updateImgProductDto: UpdateImgProductDto): Promise<void>;
-    remove(id: number): string;
+    private productsService;
+    constructor(imgProductRepository: Repository<ImgProduct>, productsService: ProductsService);
+    uploadFile(file: Express.Multer.File): Promise<CloudinaryResponse>;
+    create(createImgProductDto: CreateImgProductDto, file: Express.Multer.File, id: number): Promise<ImgProduct | {
+        message: string;
+    }>;
+    findOne(id: number): Promise<ImgProduct>;
+    remove(id: number): Promise<{
+        message: string;
+    }>;
+    findByProduct(id: number): Promise<ImgProduct[]>;
 }
