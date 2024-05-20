@@ -148,10 +148,7 @@
                     </div>
                   </div>
                   <div class="max-w-full px-3 mt-12 ml-auto text-center lg:mt-0 lg:w-5/12 lg:flex-none">
-                    <div class="h-full bg-gradient-to-tl from-purple-700 to-pink-500 rounded-xl">
-                      <img src="../../assets/waves-white.svg" class="absolute top-0 hidden w-1/2 h-full lg:block" alt="waves" />
-                      
-                    </div>
+                  
                   </div>
                 </div>
               </div>
