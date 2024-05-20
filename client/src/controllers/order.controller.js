@@ -21,9 +21,12 @@ export default {
       try {
       const total_order = formData.get("total_order");
       const total_coupon = formData.get("total_coupon");
+      const total_bank = formData.get("total_bank");
+
       return axios.post(`${API_URL}/orders/${id}`, {
         total_order: total_order,
         total_coupon: total_coupon,    
+        total_bank: total_bank,    
         carts:JSON.parse(localStorage.getItem("cart"))
       });
     } catch (error) {
@@ -93,11 +96,32 @@ export default {
           "vnp_orderID": vnp_OrderInfo,
           "total_bank": vnp_Amount/100,
           "date_bank": vnp_PayDate,
+          "check_create":check_create
       })
     },
 
-    async changeDelete(id)
+    async changeDelete(id,check)
     {
-      return await axios.delete(`${API_URL}/orders/${id}`)
+      return await axios.delete(`${API_URL}/orders/${id}?check=${check}`,
+      )
+    },
+
+    async check_coupon(name)
+    {
+      return await axios.put(`${API_URL}/coupons/check`,
+        {
+          coupon_name:name
+        }
+      )
+    },
+
+    async changeCoupon(id,check_create)
+    {
+      return await axios.put(`${API_URL}/coupons/change/${id}?check_create=${check_create}`)
+    },
+
+    async changeStatus(id)
+    {
+      return await axios.put(`${API_URL}/orders/${id}`)
     }
 }

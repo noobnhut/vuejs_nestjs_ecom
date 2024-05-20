@@ -159,9 +159,11 @@
       </div>
     </div>
   </div>
+  <toast ref="toast"></toast>
 </template>
 
 <script>
+import toast from "../toast.component.vue"
 import cartController from "../../controllers/cart.controller";
 export default {
   emits: ["cancel"],
@@ -174,7 +176,7 @@ export default {
   mounted() {
     this.getCart();
   },
-  components: {},
+  components: {toast},
   methods: {
     onclose() {
       this.$emit("cancel");
@@ -193,10 +195,10 @@ export default {
 
     handlePage(index, value) {
       if (value == "increase") {
-        cartController.increaseQuantity(index);
+        cartController.increaseQuantity(index,this.$refs);
         this.getCart();
       } else if (value == "decrease") {
-        cartController.decreaseQuantity(index);
+        cartController.decreaseQuantity(index,this.$refs);
         this.getCart();
       }
       this.getValue()

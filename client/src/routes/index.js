@@ -10,6 +10,17 @@ import {
         name: '404error',
         component: () => import('../views/404error.view.vue')
       },
+      {
+        path: "/payment_return",
+        name: "payment_return",
+        component: () => import("../views/payment.return.vue"),
+      },
+
+      {
+        path: "/payment_cod",
+        name: "payment_cod",
+        component: () => import("../views/payment.cod.vue"),
+      },
     {
       path: '/login',
       name: 'login',
@@ -51,11 +62,7 @@ import {
           name: 'payments',
           component: () => import('../pages/client.page/payment.page.vue'),
         },
-        {
-          path: "/payment_return",
-          name: "payment_return",
-          component: () => import("../pages/client.page/payment.return.vue"),
-        },
+        
         {
           path: 'informations',
           name: 'information',
@@ -75,6 +82,11 @@ import {
           path: 'guarantees',
           name: 'guarantee',
           component: () => import('../pages/client.page/guarantee.page.vue'),
+        },
+        {
+          path: 'search',
+          name: 'search',
+          component: () => import('../pages/client.page/product.search.vue'),
         }
       ]
     },

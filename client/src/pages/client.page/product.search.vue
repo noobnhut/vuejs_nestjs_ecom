@@ -1,27 +1,28 @@
 <template>
+   <div class="px-4 py-4">
+
+   <div class="space-y-2 w-[300px] ml-auto">
+    <!--price-->
+    <div class="max-w-sm mx-auto">
+
+  <select v-model="check" @change="getProducts()" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    <option disabled value="new">Bộ lọc sản phẩm</option>
+    <option value="new">Mới nhất</option>
+    <option value="asc">Giá tăng dần</option>
+    <option value="desc">Giá giảm dần</option>
+  </select>
+</div>
+  </div>
+
   <div class="product_view mt-5 mb-2">
-    <div class="mx-auto max-w-lg text-center">
-      <h2
-        class="text-2xl font-bold text-gray-600 md:text-3xl"
-        v-if="isCatTitle2"
-      >
-        DANH MỤC SẢN PHẨM {{ cat.name_cat.toUpperCase() }}
-      </h2>
-      <p
-        @click="goProductByCat()"
-        class="font-bold text-gray-400 underline cursor-pointer text-sm md:text-base"
-        v-if="isCatTitle"
-      >
-        Xem thêm
-      </p>
-    </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 p-4">
       <!-- render list product -->
       <div v-for="(product, index) in products" :key="index">
         <div
           class="group block overflow-hidden shadow-xl"
-          v-if="product.imgs.length > 0">
+          v-if="product.imgs.length > 0"
+        >
           <div class="relative h-[250px] sm:h-[300px]">
             <!-- Product images -->
             <img
@@ -76,13 +77,12 @@
                       (item) =>
                         item.product.id == product.id && item.user.id == user.id
                     )"
-                  > 
-                 
+                  >
                     <!-- Kiểm tra trạng thái của sản phẩm và sử dụng màu đỏ hoặc #ccc tương ứng -->
-                    
-                    <i v-if="favourite.status == true"
+
+                    <i
+                      v-if="favourite.status == true"
                       class="fa-solid fa-bookmark text-xl text-black"
-                      
                       @click="unfavourite(favourite, product.id)"
                     ></i>
                   </span>
@@ -104,7 +104,7 @@
   </div>
 
   <!--pagination-->
-  <ol class="flex justify-center gap-1 text-xs font-medium" v-if="!isCatTitle">
+  <ol class="flex justify-center gap-1 text-xs font-medium">
     <!--prev-->
     <li @click="handlePage('prev')">
       <a
@@ -158,48 +158,19 @@
     </li>
   </ol>
 
+</div>
   <MiniCart @cancel="openCart()" v-if="isOpenCart" />
   <toast ref="toast"></toast>
-
 </template>
 
 <script>
-import MiniCart from "./minicart.component.vue";
+import MiniCart from "../../components/client/minicart.component.vue";
 import extensiveController from "../../controllers/extensive.controller";
 import productController from "../../controllers/product.controller";
 import cartController from "../../controllers/cart.controller";
 import favouriteController from "../../controllers/favourite.controller";
-import toast from "../toast.component.vue"
+import toast from "../../components/toast.component.vue";
 export default {
-  props: {
-    isCatTitle: {
-      type: Boolean,
-      default() {
-        return true;
-      },
-    },
-
-    isCatTitle2: {
-      type: Boolean,
-      default() {
-        return true;
-      },
-    },
-
-    check:{
-      type:String,
-      default()
-      {
-        return "new"
-      }
-    },
-
-    cat: {},
-
-    page: {},
-
-    limit: {},
-  },
 
   data() {
     return {
@@ -215,9 +186,9 @@ export default {
         single_price: 0,
         quantity: 1,
         real_quantity: 1,
-        out_quantity:0,
         img: "",
       },
+      check:"new"
     };
   },
 
@@ -225,8 +196,9 @@ export default {
     this.getProducts();
     this.user = JSON.parse(localStorage.getItem("user"));
     this.getFavouti();
+    console.log(this.$route.query)
   },
-  components: { MiniCart,toast },
+  components: { MiniCart, toast },
   methods: {
     openCart() {
       this.isOpenCart = !this.isOpenCart;
@@ -244,7 +216,7 @@ export default {
         id_user,
         productid
       );
-      this.getFavouti()
+      this.getFavouti();
     },
 
     async addfavourite(productid) {
@@ -253,28 +225,23 @@ export default {
         id_user,
         productid
       );
-        this.getFavouti();
-      
+      this.getFavouti();
     },
 
     async getProducts() {
-      const result = await productController.getProductByCat(
-        this.cat.id,
-        this.page,
-        this.limit,
-        this.check
+      
+      const result = await productController.searchProduct(
+         this.$route.query.key,1,10,this.check
       );
       this.products = result.data.products;
       this.last_page = result.data.lastPage;
-
     },
 
     async changePage(pageNumber) {
       this.page_number = pageNumber;
-      const result = await productController.getProductByCat(
-        this.cat.id,
-        pageNumber,
-        this.limit
+      const result = await productController.searchProduct(
+         this.$route.query.key,
+        pageNumber,10,this.check
       );
       this.products = result.data.products;
       this.last_page = result.data.lastPage;
@@ -286,17 +253,13 @@ export default {
       } else if (value == "prev" && this.page_number > 1) {
         this.page_number--;
       }
-      const result = await productController.getProductByCat(
+      const result = await productController.searchProduct(
         this.cat.id,
         this.page_number,
-        this.limit
+        10,this.check
       );
       this.products = result.data.products;
       this.last_page = result.data.lastPage;
-    },
-
-    goProductByCat() {
-      this.$router.push(`/category/${this.cat.id}`);
     },
 
     goToDetail(id) {
@@ -309,10 +272,9 @@ export default {
       this.newItem.name_product = product.name_product;
       this.newItem.single_price = product.price;
       this.newItem.quantity = 1;
-      this.newItem.real_quantity = product.quantity
-      this.newItem.out_quantity = product.out_quantity
-      cartController.addItem(this.newItem,this.$refs);
-      
+      this.newItem.real_quantity = product.quantity;
+      cartController.addItem(this.newItem, this.$refs);
+
       this.openCart();
     },
 

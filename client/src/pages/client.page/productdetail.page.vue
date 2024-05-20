@@ -31,15 +31,15 @@
               >Giá sản phẩm: {{ formatPrice(product.price) }}</span
             >
           </div>
-          // chổ này để cái tăng giảm sl sp ? t chỉ sau
-          <button
+
+          <button @click="goToCart(product)"
             type="button"
             class="mb-2 text-white bg-gray-500 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-xl px-10 py-2 w-full text-center"
           >
             Đặt hàng
           </button>
 
-          <button
+          <button @click="addCart(product);openCart()"
             type="button"
             class="text-white bg-gray-500 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-xl px-10 py-2 w-full text-center"
           >
@@ -68,20 +68,6 @@
             >Hình ảnh sản phẩm</a
           >
         </li>
-        <li class="mr-2 cursor-pointer">
-          <a
-            @click="unActiveHotel()"
-            :class="[
-              'inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300',
-              {
-                'text-gray-600 border-gray-600 rounded-t-lg font-bold bg-gray-100':
-                  activeTab === 'unactive',
-              },
-            ]"
-            class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-            >Đánh giá sản phẩm</a
-          >
-        </li>
       </ul>
     </div>
 
@@ -97,11 +83,6 @@
           alt=""
         />
       </div>
-    </div>
-
-    <!--list đánh giá sp-->
-    <div v-if="isUnActive">
-      <Review />
     </div>
 
     <!--list sản phâm tương tự-->
@@ -121,10 +102,16 @@
     <Product :isCatTitle="false" :isCatTitle2="false" :cat="cat" page="1" limit="4"/>
     </div>
   </section>
+  <toast ref="toast"></toast>
+  <MiniCart @cancel="openCart()" v-if="isOpenCart" />
+
 </template>
 <script>
+import toast from "../../components/toast.component.vue"
+import MiniCart from "../../components/client/minicart.component.vue";
+
+import cartController from "../../controllers/cart.controller";
 import Product from "../../components/client/product.component.vue";
-import Review from "../../components/client/review.component.vue";
 import categoryController from "../../controllers/category.controller";
 import extensiveController from "../../controllers/extensive.controller";
 import productController from "../../controllers/product.controller";
@@ -137,14 +124,23 @@ export default {
       product: [],
       cat: "",
       imgs: [],
-      cats:[]
+      cats:[],
+      isOpenCart: false,
+      newItem: {
+        id_product: 0,
+        name_product: "",
+        single_price: 0,
+        quantity: 1,
+        real_quantity: 1,
+        img: "",
+      },
     };
   },
   mounted() {
     this.getProducts();
     this.getCat()
   },
-  components: { Product, Review },
+  components: { Product, toast,MiniCart },
   methods: {
     async getProducts() {
       const result = await productController.getProduct(this.$route.params.id);
@@ -172,6 +168,24 @@ export default {
     formatPrice(value) {
       return extensiveController.formatCurrency(value);
     },
+
+    addCart(product) {
+      this.newItem.img = product.imgs[0].img_url;
+      this.newItem.id_product = product.id;
+      this.newItem.name_product = product.name_product;
+      this.newItem.single_price = product.price;
+      this.newItem.quantity = 1;
+      this.newItem.real_quantity = product.quantity
+      cartController.addItem(this.newItem,this.$refs);
+    },
+    openCart() {
+      this.isOpenCart = !this.isOpenCart;
+    },
+    goToCart(product)
+    {
+      this.addCart(product)
+      this.$router.push({name:"carts"})
+    }
   },
 };
 </script>

@@ -52,11 +52,13 @@
 
     </main>
   </section>
+  <toast ref="toast"/>
 </template>
 
 
 <script>
 import userController from '../controllers/user.controller'
+import toast from '../components/toast.component.vue'
 export default {
   data() {
     return {
@@ -64,10 +66,11 @@ export default {
     };
   },
   mounted() { },
-  components: {},
+  components: {toast},
   methods: {
     async login() {
-      const formData = new FormData();
+      try {
+        const formData = new FormData();
       formData.append("email", this.email);
       formData.append("password", this.password);
       const result = await userController.login(formData)
@@ -81,6 +84,14 @@ export default {
         localStorage.setItem("token_admin", JSON.stringify(result.data.access_token));
         localStorage.setItem("admin", JSON.stringify(result.data.user))
         window.location.href = `${import.meta.env.VITE_API_BASE_FE}admin`
+      }
+      } catch (error) {
+        if (error.response.status === 401) {
+          this.$refs.toast.showToast("Thông tin đăng nhập bị sai");
+          console.clear()
+        } else {
+            console.log(error);
+        }
       }
     }
   },

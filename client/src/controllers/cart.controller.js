@@ -2,7 +2,7 @@
 export default {
   cart: [],
 
-  addItem(newItem) {
+  addItem(newItem,reft) {
     const check = JSON.parse(localStorage.getItem("cart"));
 
     if (check) {
@@ -16,25 +16,26 @@ export default {
       // Kiểm tra số lượng
       const totalQuantity =
         this.cart[existingItemIndex].quantity + newItem.quantity;
-      if (totalQuantity <= newItem.real_quantity) {
+      if (totalQuantity <= (newItem.real_quantity - newItem.out_quantity)) {
         // Nếu số lượng thêm vào không vượt quá số lượng thực tế
         this.cart[existingItemIndex].quantity = totalQuantity;
       } else {
         // Nếu số lượng vượt quá số lượng thực tế, hiển thị thông báo
-        alert("Số lượng sản phẩm vượt quá số lượng thực tế!");
+        reft.toast.showToast("Số lượng sản phẩm vượt quá số lượng thực tế!");
       }
     } else {
       this.cart.push({ ...newItem });
+      reft.toast.showToast("Thểm sản phẩm thành công");
     }
     this.saveCartToLocal();
   },
 
-  increaseQuantity(index) {
-    if (this.cart[index].quantity < this.cart[index].real_quantity) {
+  increaseQuantity(index,reft) {
+    if (this.cart[index].quantity < (this.cart[index].real_quantity-this.cart[index].out_quantity)) {
       this.cart[index].quantity += 1;
       this.saveCartToLocal();
     } else {
-      alert("Số lượng sản phẩm đã đạt tối đa!");
+      reft.toast.showToast("Số lượng sản phẩm vượt quá số lượng thực tế!");
     }
   },
 
@@ -47,12 +48,12 @@ export default {
     this.saveCartToLocal();
   },
 
-  changeQuantity(index, newQuantity) {
-    if (newQuantity > 0 && newQuantity <= this.cart[index].real_quantity) {
+  changeQuantity(index, newQuantity,reft) {
+    if (newQuantity > 0 && newQuantity <= this.cart[index].quantity) {
       this.cart[index].quantity = newQuantity;
       this.saveCartToLocal();
     } else {
-      alert("Số lượng sản phẩm đã đạt tối đa!");
+      reft.toast.showToast("Số lượng sản phẩm vượt quá số lượng thực tế!");
     }
   },
 

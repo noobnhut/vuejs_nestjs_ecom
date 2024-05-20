@@ -152,12 +152,23 @@
                       getdetail(order.ods);
                       is_detail = true;
                     "
-                    
                     class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
                   >
                     Chi tiết
                   </a>
                 </td>
+
+                <td class="whitespace-nowrap px-4 py-2" v-if="order.status != 'Đã thanh toán' && order.status != 'Thanh toán thất bại' && order.status != 'Đã hủy'">
+                  <a
+                  @click="
+                      changeDeleteOrder(order.id);
+                    "
+                    class="inline-block rounded bg-red-600 px-4 py-2 text-xs font-medium text-white hover:bg-red-700"
+                  >
+                    Hủy
+                  </a>
+                </td>
+
               </tr>
             </tbody>
           </table>
@@ -295,12 +306,15 @@
       </div>
     </div>
   </div>
+  <toast ref="toast"/>
 </template>
 
 <script>
   import favouriteController from "../../controllers/favourite.controller";
   import orderController from "../../controllers/order.controller"
   import extensiveController from "../../controllers/extensive.controller";
+  import toast from "../../components/toast.component.vue";
+
 export default {
   data() {
     return {
@@ -314,7 +328,7 @@ export default {
    this.favourites =  ( await favouriteController.getFavourites()).data
    this.orders = (await orderController.getOrders()).data
   },
-  components: {},
+  components: {toast},
   methods: {
     activeInfor() {
       this.activeTab = 'infor'
@@ -353,6 +367,15 @@ export default {
     formatTime(value) {
       return extensiveController.formatTime(value);
     },
+
+    async changeDeleteOrder(order)
+    {
+    const check ="HUY_2"
+     const result = await  orderController.changeDelete(order,check);
+     this.orders = (await orderController.getOrders()).data
+     this.$refs.toast.showToast(result.data);
+
+    }
   },
 };
 </script>

@@ -33,7 +33,7 @@
                   v-on:keyup.enter="search()"
                   v-model="value_search"
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  placeholder="Tìm theo theo tên..."
+                  placeholder="Tìm theo theo  tên..."
                   required=""
                 />
               </div>
@@ -75,6 +75,8 @@
                 <th scope="col" class="px-4 py-3">Tổng tiền</th>
                 <th scope="col" class="px-4 py-3">Trạng thái</th>
                 <th scope="col" class="px-4 py-3">Ngày tạo</th>
+                <th scope="col" class="px-4 py-3"></th>
+
               </tr>
             </thead>
 
@@ -87,7 +89,7 @@
                   {{ index + 1 }}
                 </th>
                 <td class="px-4 py-3">
-                  {{ order.user.fullname}}
+                  {{ order.user.fullname }}
                 </td>
 
                 <td class="px-4 py-3 cursor-pointer">
@@ -107,10 +109,26 @@
                 </td>
 
                 <td class="px-4 py-3">
-                {{order.status}}</td>
+                  {{ order.status }}
+                </td>
 
                 <td class="px-4 py-3">
                   {{ formatTime(order.created_at) }}
+                </td>
+
+                <td
+                  class="whitespace-nowrap px-4 py-2"
+                  v-if="
+                    order.status != 'Thanh toán thất bại' &&
+                    order.status != 'Đã hủy' && order.status != 'Đã giao hàng'
+                  "
+                >
+                  <a
+                    @click="changeDeleteOrder(order.id)"
+                    class="inline-block rounded bg-green-600 px-4 py-2 text-xs font-medium text-white hover:bg-green-700"
+                  >
+                    Chuyển đơn hàng
+                  </a>
                 </td>
               </tr>
             </tbody>
@@ -171,7 +189,7 @@
               class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
             >
               <tr>
-                <th scope="col" class="px-4 py-4">STT</th>
+                <th scope="col" class="px-4 py-4">STT </th>
                 <th scope="col" class="px-4 py-3">Tên sản phẩm</th>
                 <th scope="col" class="px-4 py-3">Giá tiền</th>
                 <th scope="col" class="px-4 py-3">Ngày tạo</th>
@@ -187,7 +205,7 @@
                   {{ index + 1 }}
                 </th>
                 <td class="px-4 py-3">
-                  {{ od.product.name_product}}
+                  {{ od.product.name_product }}
                 </td>
 
                 <td class="px-4 py-3">
@@ -197,6 +215,8 @@
                 <td class="px-4 py-3">
                   {{ formatTime(od.created_at) }}
                 </td>
+
+                
               </tr>
             </tbody>
           </table>
@@ -204,34 +224,36 @@
       </div>
     </div>
   </div>
+  <toast ref="toast" />
 </template>
 
 <script>
 import extensiveController from "../../controllers/extensive.controller";
 import orderController from "../../controllers/order.controller";
+import toast from "../../components/toast.component.vue";
 
 export default {
   data() {
     return {
-      orders: [],ods:[],
+      orders: [],
+      ods: [],
       get_order: "",
       value_search: "",
-      is_detail:false
+      is_detail: false,
     };
   },
   mounted() {
     this.getOrder();
   },
-  components: {},
+  components: { toast },
   methods: {
     async getOrder() {
       const result = await orderController.getOrders();
       this.orders = result.data;
     },
 
-    getdetail(od)
-    {
-      this.ods = od
+    getdetail(od) {
+      this.ods = od;
     },
 
     formatPrice(value) {
@@ -240,6 +262,12 @@ export default {
 
     formatTime(value) {
       return extensiveController.formatTime(value);
+    },
+
+    async changeDeleteOrder(order) {
+      const result = await orderController.changeStatus(order);
+      this.getOrder()
+      this.$refs.toast.showToast(result.data);
     },
   },
 };

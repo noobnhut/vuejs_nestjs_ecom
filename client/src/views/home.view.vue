@@ -20,19 +20,15 @@
               <span class="text-sm font-medium w-max">Danh mục sản phẩm</span>
             </div>
             <!-- Dropdown menu -->
-            <div v-show="openMenu"
+            <div v-show="openMenu" v-for="cat in cats"
               class="absolute  mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
               <!-- Các mục trong dropdown -->
-              <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mục 1</a>
-              <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mục 2</a>
-              <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mục 3</a>
-              <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mục 4</a>
-              <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mục 5</a>
+              <a  @click="gotoCat(cat.id);openMenu=false" class=" cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ cat.name_cat }}</a >
             </div>
           </div>
           <!--thanh search-->
           <input type="text" class="md:block hidden w-full rounded-md border border-[#DDE2E4] px-3 py-2 text-sm"
-            value="Tìm kiếm sản phẩm ..." />
+            placeholder="Tìm kiếm sản phẩm ..." v-on:keyup.enter="submit()" v-model="search_value"/>
         </div>
 
         <!--icon + login-->
@@ -91,14 +87,10 @@
               </svg>
             </div>
             <!-- Dropdown menu -->
-            <div v-show="openMenu"
+            <div v-show="openMenu" v-for="cat in cats"
               class="absolute  mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
               <!-- Các mục trong dropdown -->
-              <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mục 1</a>
-              <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mục 2</a>
-              <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mục 3</a>
-              <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mục 4</a>
-              <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mục 5</a>
+              <a  @click="gotoCat(cat.id);openMenu=false" class=" cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ cat.name_cat }}</a >
             </div>
           </div>
 
@@ -200,17 +192,20 @@
 <script>
 import MiniCart from "../components/client/minicart.component.vue";
 import userController from "../controllers/user.controller";
-
+import categoryController from "../controllers/category.controller";
 export default {
   data() {
     return {
       openMenu: false,
       isOpenCart: false,
-      user: null
+      user: null,
+      cats:[],
+      search_value:''
     };
   },
-  mounted() {
+  async mounted() {
     this.getProfile()
+    this.cats = (await categoryController.getCats()).data
   },
   components: { MiniCart },
   methods: {
@@ -231,7 +226,7 @@ export default {
 
     async getProfile() {
       try {
-        let token = localStorage.getItem("token");
+      let token = localStorage.getItem("token");
       if (token) {
       const result = await userController.getProfile('user')
       this.user = JSON.parse(localStorage.getItem("user"));
@@ -255,6 +250,17 @@ export default {
       this.$router.push({name:'login'})
     },
 
+    gotoCat(id)
+    {
+      this.$router.push({ name: 'productbycat', params: { 'id': id } })
+    },
+
+    submit()
+    {
+      //this.$router.push({name:"search",query: { key: this.search_value }})
+      window.location.href = `${import.meta.env.VITE_API_BASE_FE}search?key=${this.search_value}`
+      console.log(this.search_value)
+    }
 
   },
 };

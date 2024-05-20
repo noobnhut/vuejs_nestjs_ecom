@@ -108,6 +108,7 @@
             >Email</label
           >
           <input
+          disabled
             type="text"
             id="email"
             name="email"
@@ -123,6 +124,7 @@
             >Họ và tên</label
           >
           <input
+          disabled
             type="text"
             id="fullname"
             v-model="fullname"
@@ -138,6 +140,7 @@
             >Địa chỉ nhận hàng</label
           >
           <input
+          disabled
             type="text"
             id="address"
             v-model="address"
@@ -153,6 +156,7 @@
             >Số điện thoại</label
           >
           <input
+          disabled
             type="text"
             id="numberphone"
             v-model="numberphone"
@@ -354,6 +358,8 @@ export default {
 
       formData.append("total_order", this.total.total_order);
       formData.append("total_coupon", this.total.total_coupoun);
+      formData.append("total_bank", this.total.finalPrice);
+
       if (this.selectedPayment == "COD") {
         const result = await orderController.addPaymentCOD(
           formData,
@@ -361,8 +367,8 @@ export default {
         );
         localStorage.removeItem("total");
         localStorage.removeItem("cart");
-        window.location.href = `${import.meta.env.VITE_API_BASE_FE}`;
-        console.log(result.data.redirectUrl);
+        window.location.href = `${import.meta.env.VITE_API_BASE_FE}payment_cod`;
+        sessionStorage.setItem("order", JSON.stringify(result.data.order));
       } else {
         this.is_bank = true;
       }
@@ -382,7 +388,7 @@ export default {
       const paymentUrl = result.data.redirectUrl;
 
       // Chuyển hướng đến trang thanh toán của VNPAY
-      localStorage.setItem("order", JSON.stringify(result.data.order));
+      sessionStorage.setItem("order", JSON.stringify(result.data.order));
       localStorage.setItem(
         "check_create",
         JSON.stringify(result.data.check_create)

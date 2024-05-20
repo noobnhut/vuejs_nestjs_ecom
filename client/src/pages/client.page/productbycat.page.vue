@@ -3,52 +3,35 @@
     <!--filter-->
 
     <div class="space-y-2 w-[300px] ml-auto">
-      <!--price-->
-      <details
-        class="overflow-hidden rounded border border-gray-300 [&_summary::-webkit-details-marker]:hidden"
-      >
-        <summary
-          class="flex cursor-pointer items-center justify-between gap-2 bg-white p-4 text-gray-900 transition"
-        >
-          <span class="text-sm font-medium"> Bộ lọc </span>
+    <!--price-->
+    <div class="max-w-sm mx-auto">
 
-          <span class="transition group-open:-rotate-180">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="h-4 w-4"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-              />
-            </svg>
-          </span>
-        </summary>
-
-        <div class="border-t border-gray-200 bg-white ">
-          <div class="border-t border-gray-200 p-4">
-            <div class="gap-4">
-            <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mới nhất</a>
-            <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Giá tăng dần</a>
-            <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Giá giảm nhất</a>
-            </div>
-          </div>
-
-          
-        </div>
-        
-      </details>
-    </div>
+  <select v-model="check" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    <option disabled value="new">Bộ lọc sản phẩm</option>
+    <option value="new">Mới nhất</option>
+    <option value="asc">Giá tăng dần</option>
+    <option value="desc">Giá giảm dần</option>
+  </select>
+</div>
+  </div>
     
-    <div v-for="cat in cats.filter(item=>item.id == this.$route.params.id)">
-      <Product :isCatTitle="false" :cat=cat page="1" limit="2"/>
+    <template v-if="check=='new'">
+      <div v-for="cat in cats.filter(item=>item.id == this.$route.params.id)">
+      <Product :isCatTitle="false" :cat=cat page="1" limit="8" check="new"/>
     </div>
+    </template>
     
+    <template v-if="check=='desc'">
+      <div v-for="cat in cats.filter(item=>item.id == this.$route.params.id)">
+      <Product :isCatTitle="false" :cat=cat page="1" limit="8" check="desc"/>
+    </div>
+    </template>
+
+    <template v-if="check=='asc'">
+      <div v-for="cat in cats.filter(item=>item.id == this.$route.params.id)">
+      <Product :isCatTitle="false" :cat=cat page="1" limit="8" check="asc"/>
+    </div>
+    </template>
   </div>
 </template>
 
@@ -58,7 +41,10 @@ import categoryController from "../../controllers/category.controller";
 
 export default {
   data() {
-    return {cats:[]};
+    return {
+      cats:[],
+      check:"new"
+    };
   },
   mounted() {
     this.getCat()
@@ -69,6 +55,9 @@ export default {
     {
       const result = await categoryController.getCats()
       this.cats = result.data
+    },
+    setCheck(value) {
+      this.check = value;
     }
   },
 };

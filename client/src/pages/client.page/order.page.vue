@@ -137,13 +137,14 @@
               <div class="sm:flex sm:gap-4">
                 <div class="sm:flex-1">
                   <input
+                  v-model="coupon_name"
                     type="text"
                     placeholder="Nhập mã khuyến mãi"
                     class="w-full rounded-md border-gray-200 bg-white p-3 text-gray-700 shadow-sm transition focus:border-white focus:outline-none focus:ring focus:ring-gray-400"
                   />
                 </div>
 
-                <button
+                <button @click="checkCoupon()"
                   type="submit"
                   class="group mt-4 flex w-full items-center justify-center gap-2 rounded-md bg-gray-700 px-5 py-3 text-white transition focus:outline-none focus:ring focus:ring-gray-400 sm:mt-0 sm:w-auto"
                 >
@@ -189,6 +190,7 @@
 <script>
 import cartController from "../../controllers/cart.controller";
 import extensiveController from "../../controllers/extensive.controller";
+import orderController from "../../controllers/order.controller";
 export default {
   data() {
     return {
@@ -196,7 +198,8 @@ export default {
       totalPrice: 0,
       discount: 0,
       finalPrice: 0,
-      user:''
+      user:'',
+      coupon_name:''
     };
   },
   mounted() {
@@ -241,6 +244,7 @@ export default {
     getFinalPrice() {
       this.finalPrice = this.totalPrice - this.discount;
     },
+
     setTotal()
     {
       if(this.user)
@@ -257,7 +261,21 @@ export default {
       {
         alert('Vui lòng đăng nhập để thanh toán đơn hàng')
       }
-      
+    },
+
+    async checkCoupon()
+    {
+      const result = await orderController.check_coupon(this.coupon_name)
+      if(result.data.coupon)
+      {
+        this.discount = (this.totalPrice * result.data.coupon.coupon_percent/100)
+        sessionStorage.setItem("coupon", JSON.stringify(result.data.coupon));
+        this.getFinalPrice()  
+      }
+      else
+      {
+        alert(result.data)
+      }
     }
   },
 };

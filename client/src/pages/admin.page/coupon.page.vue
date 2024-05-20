@@ -9,7 +9,7 @@
         >
           <div class="w-full md:w-1/2">
             <div class="flex items-center">
-              <label for="simple-search" class="sr-only">Tìm kiếm</label>
+              <label for="simple-search" class="sr-only">Tìm kiếm </label>
               <div class="relative w-full">
                 <div
                   class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
@@ -57,7 +57,8 @@
                 stroke-linejoin="round"
                 stroke-width="1.5"
                 d="M12 5.75v12.5M18.25 12H5.75"
-              ></path></svg><span>Thêm mới</span>
+              ></path></svg
+            ><span>Thêm mới</span>
           </button>
         </div>
 
@@ -74,6 +75,8 @@
                 <th scope="col" class="px-4 py-3">Mã coupon</th>
                 <th scope="col" class="px-4 py-3">Phần trăm %</th>
                 <th scope="col" class="px-4 py-3">Số lượng</th>
+                <th scope="col" class="px-4 py-3">Ngày hết hạn</th>
+
                 <th scope="col" class="px-4 py-3"></th>
                 <th scope="col" class="px-4 py-3"></th>
               </tr>
@@ -96,7 +99,9 @@
                 <td class="px-4 py-3">
                   {{ coupon.coupon_quantity }}
                 </td>
-
+                <td class="px-4 py-3">
+                  {{ formatTime(coupon.date_at) }}
+                </td>
                 <td class="px-4 py-3">
                   <button
                     @click="
@@ -226,6 +231,21 @@
               required=""
             />
           </div>
+
+          <div class="py-2">
+            <label
+              for="name"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Ngày hết hạn</label
+            >
+            <input
+              v-model="date_at"
+              type="date"
+              @change="handleDateChange"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="Select date"
+            />
+          </div>
         </div>
 
         <button
@@ -250,8 +270,8 @@
     </div>
   </div>
 
-   <!--update-->
-   <div
+  <!--update-->
+  <div
     v-if="isUpdate"
     id="createProductModal"
     class="overflow-y-auto overflow-x-hidden fixed w-full h-full top-0 left-0 flex items-center justify-center z-50"
@@ -270,9 +290,7 @@
           </h3>
 
           <button
-            @click="
-              isUpdate = false;
-            "
+            @click="isUpdate = false"
             type="button"
             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
             data-modal-target="createProductModal"
@@ -382,9 +400,7 @@
         class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5"
       >
         <button
-          @click="
-            isDelete = false;
-          "
+          @click="isDelete = false"
           type="button"
           class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
           data-modal-toggle="deleteModal"
@@ -424,9 +440,7 @@
           <button
             data-modal-toggle="deleteModal"
             type="button"
-            @click="
-              isDelete = false;
-            "
+            @click="isDelete = false"
             class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
           >
             Hủy
@@ -451,6 +465,8 @@
 
 <script>
 import couponController from "../../controllers/coupon.controller";
+import extensiveController from "../../controllers/extensive.controller";
+
 import toast from "../../components/toast.component.vue";
 export default {
   data() {
@@ -462,6 +478,7 @@ export default {
       coupon_percent: null,
       coupon_quantity: null,
       select_coupon: null,
+      date_at: null,
       isAdd: false,
       isUpdate: false,
       isDelete: false,
@@ -474,6 +491,9 @@ export default {
     toast,
   },
   methods: {
+    formatTime(value) {
+      return extensiveController.formatTime(value);
+    },
     openAdd() {
       this.isAdd = true;
       this.coupon_name = "";
@@ -489,9 +509,9 @@ export default {
     },
 
     // dùng để loại bỏ 2 dấu [] và "" trong thông báo error
-    throwError(errorMessage){ 
-      errorMessage = errorMessage.join(', ');
-      return this.$refs.toast.showToast(errorMessage);   
+    throwError(errorMessage) {
+      errorMessage = errorMessage.join(", ");
+      return this.$refs.toast.showToast(errorMessage);
     },
 
     async getCoupon() {
@@ -509,6 +529,7 @@ export default {
           coupon_name: this.coupon_name,
           coupon_percent: parseInt(this.coupon_percent),
           coupon_quantity: parseInt(this.coupon_quantity),
+          date_at: this.date_at,
         };
         console.log(this.coupon_name);
         const result = await couponController.createCoupon(requestData);
@@ -578,6 +599,16 @@ export default {
       try {
       } catch (error) {
         console.log(error);
+      }
+    },
+
+    handleDateChange() {
+      const currentDate = new Date(); // Lấy ngày hiện tại
+      const selectedDate = new Date(this.date_coupon); // Lấy giá trị ngày từ input
+      if (selectedDate <= currentDate) {
+        currentDate.setDate(currentDate.getDate() + 1); // Nếu ngày đã chọn nhỏ hơn hoặc bằng ngày hiện tại, thì cộng thêm 1 ngày
+        const formattedDate = currentDate.toISOString().split("T")[0]; // Format lại ngày để có định dạng YYYY-MM-DD
+        this.date_coupon = formattedDate;
       }
     },
   },

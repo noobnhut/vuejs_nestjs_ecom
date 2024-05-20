@@ -74,7 +74,7 @@
                 <th scope="col" class="px-4 py-3">Thông tin sản phẩm</th>
                 <th scope="col" class="px-4 py-3">Ảnh sản phẩm</th>
                 <th scope="col" class="px-4 py-3">Số lượng nhập</th>
-                <th scope="col" class="px-4 py-3">Số lượng tồn</th>
+                <th scope="col" class="px-4 py-3">Số lượng đã bán</th>
 
                 <th scope="col" class="px-4 py-3">Giá tiền</th>
                 <th scope="col" class="px-4 py-3">Ngày tạo</th>
@@ -118,7 +118,7 @@
                 </td>
 
                 <td class="px-4 py-3">
-                  {{ product.real_quantity }}
+                  {{ product.out_quantity }}
                 </td>
 
                 <td class="px-4 py-3">
@@ -158,6 +158,7 @@
                     ><span class="text-xs">{{product.is_deleted == 0 ? 'Xóa' : 'Bán lại' }}</span>
                   </div>
                 </td>
+                
               </tr>
             </tbody>
           </table>
@@ -585,6 +586,7 @@
       </div>
     </div>
   </div>
+
   <toast ref="toast"></toast>
 </template>
 
