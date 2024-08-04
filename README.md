@@ -26,22 +26,22 @@ This project is an ecommerce website built using modern web technologies. It lev
 ## Installation
 
 1. Clone the repository:
-   \`\`\`bash
+```bash
    git clone https://github.com/noobnhut/404nfp.git
    cd 404nfp
-   \`\`\`
+```
 
 2. Install the dependencies:
-   \`\`\`bash
+```bash
    npm install
-   \`\`\`
+```
 
 3. Set up the environment variables. Rename the \`.env.example\` file to \`.env\` and configure the necessary settings.
 
 4. Run the development server:
-   \`\`\`bash
+```bash
    npm run dev
-   \`\`\`
+```
 
 ## Usage
 
